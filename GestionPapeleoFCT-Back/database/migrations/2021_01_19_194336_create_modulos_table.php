@@ -21,6 +21,7 @@ class CreateModulosTable extends Migration {
                     ->onDelete('cascade');
             $table->string('familiaProfesional');
             $table->string('cicloFormativo');
+            $table->string('cicloFormativoA');
             $table->string('cursoAcademico');
             $table->integer('nHoras');
             $table->timestamps();

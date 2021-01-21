@@ -13,7 +13,6 @@ class CreateModuloAlumnoTable extends Migration {
      */
     public function up() {
         Schema::create('modulo_alumno', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('idModulo');
             $table->foreign('idModulo')
                     ->references('id')

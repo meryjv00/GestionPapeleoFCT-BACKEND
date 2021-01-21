@@ -9,12 +9,24 @@
 
                 <div class="card-body">
                     @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
+                    <div class="alert alert-success" role="alert">
+                        {{ session('status') }}
+                    </div>
                     @endif
 
                     {{ __('You are logged in!') }}
+                    {{ Auth::user() }}
+                    <?php
+                    if (Auth::check()) { //Si está logeado muestra su dni
+                        echo Auth::user()->dni;
+                    }
+
+                    echo '<br> Rol:';
+                    $rolesActuales = Auth::user()->rolesQueTienes(Auth::user()->dni);
+                    foreach ($rolesActuales as $rolAct) {
+                        echo $rolAct['id'] . ' -> ' . $rolAct['nombre'] . '<br>';
+                    }
+                    ?>
                 </div>
             </div>
         </div>

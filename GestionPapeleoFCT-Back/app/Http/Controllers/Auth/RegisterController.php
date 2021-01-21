@@ -5,24 +5,24 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use App\Models\Role;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class RegisterController extends Controller
-{
+class RegisterController extends Controller {
     /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
+      |--------------------------------------------------------------------------
+      | Register Controller
+      |--------------------------------------------------------------------------
+      |
+      | This controller handles the registration of new users as well as their
+      | validation and creation. By default this controller uses a trait to
+      | provide this functionality without requiring any additional code.
+      |
+     */
 
-    use RegistersUsers;
+use RegistersUsers;
 
     /**
      * Where to redirect users after registration.
@@ -36,8 +36,7 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('guest');
     }
 
@@ -47,12 +46,11 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
+    protected function validator(array $data) {
         return Validator::make($data, [
-            'dni' => ['required', 'string', 'max:9'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+                    'dni' => ['required', 'string', 'max:9', 'unique:users'],
+                    'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                    'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
@@ -62,13 +60,16 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    
-    protected function create(array $data)
-    {
-        return User::create([
-            'dni' => $data['dni'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+    protected function create(array $data) {
+        $user = User::create([
+                    'dni' => $data['dni'],
+                    'email' => $data['email'],
+                    'password' => Hash::make($data['password']),
         ]);
+        //Se asigna el rol 2
+        $user->roles()->attach(2); 
+        return $user;
+        
     }
+
 }

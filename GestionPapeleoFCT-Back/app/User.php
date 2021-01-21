@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -36,4 +37,50 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    public function roles() {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    /*
+     * Estos métodos siguientes servirán para utilizarlos en los controladores y proporcionar acceso o no a las rutas.
+     */
+
+    public function authorizeRoles($roles) {
+        abort_unless($this->hasAnyRole($roles), 401);
+        return true;
+    }
+
+    public function hasAnyRole($roles) {
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if ($this->hasRole($role)) {
+                    return true;
+                }
+            }
+        } else {
+            if ($this->hasRole($roles)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasRole($role) {
+        if ($this->roles()->where('name', $role)->first()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function rolesQueTienes($id) {
+        $datos = $this->roles()->where('user_id', $id)->get();
+        $rolesUsuario = [];
+        foreach ($datos as $dato) {
+            $rolesUsuario[] = ['id' => $dato->attributes['id'],
+                'nombre' => $dato->attributes['nombre']];
+        }
+        return $rolesUsuario;
+    }
+
 }
