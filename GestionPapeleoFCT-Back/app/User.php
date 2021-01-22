@@ -73,7 +73,7 @@ class User extends Authenticatable
         return false;
     }
 
-    public function rolesQueTienes($id) {
+       public function rolesQueTienes($id) {
         $datos = $this->roles()->where('user_id', $id)->get();
         $rolesUsuario = [];
         foreach ($datos as $dato) {

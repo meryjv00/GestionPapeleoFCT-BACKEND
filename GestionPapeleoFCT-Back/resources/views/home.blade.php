@@ -22,7 +22,7 @@
                     }
 
                     echo '<br> Rol:';
-                    $rolesActuales = Auth::user()->rolesQueTienes(Auth::user()->dni);
+                    $rolesActuales = Auth::user()->rolesQueTienes(Auth::user()->id);
                     foreach ($rolesActuales as $rolAct) {
                         echo $rolAct['id'] . ' -> ' . $rolAct['nombre'] . '<br>';
                     }
