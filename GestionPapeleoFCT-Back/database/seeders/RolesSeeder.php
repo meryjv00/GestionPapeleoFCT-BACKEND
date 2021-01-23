@@ -1,16 +1,17 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
-class RolesSeeder extends Seeder
-{
+class RolesSeeder extends Seeder {
+
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
+    public function run() {
         $rol = new \App\Models\Role;
         $rol->id = '1';
         $rol->nombre = 'Director';
@@ -31,4 +32,5 @@ class RolesSeeder extends Seeder
         $rol->nombre = 'Alumno';
         $rol->save();
     }
+
 }
