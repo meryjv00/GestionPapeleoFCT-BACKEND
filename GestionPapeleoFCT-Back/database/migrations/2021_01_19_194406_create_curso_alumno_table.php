@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModuloAlumnoTable extends Migration {
+class CreateCursoAlumnoTable extends Migration {
 
     /**
      * Run the migrations.
@@ -12,11 +12,11 @@ class CreateModuloAlumnoTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('modulo_alumno', function (Blueprint $table) {
-            $table->unsignedBigInteger('idModulo');
-            $table->foreign('idModulo')
+        Schema::create('curso_alumno', function (Blueprint $table) {
+            $table->unsignedBigInteger('idCurso');
+            $table->foreign('idCurso')
                     ->references('id')
-                    ->on('modulos')
+                    ->on('cursos')
                     ->onDelete('cascade');
             $table->string('dniAlumno');
             $table->foreign('dniAlumno')
@@ -33,7 +33,7 @@ class CreateModuloAlumnoTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('modulo_alumno');
+        Schema::dropIfExists('curso_alumno');
     }
 
 }

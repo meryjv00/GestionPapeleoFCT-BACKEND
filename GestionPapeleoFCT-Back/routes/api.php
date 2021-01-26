@@ -2,8 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\ProjectController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CursosController;
+use App\Http\Controllers\API\PersonaController;
 
 /*
   |--------------------------------------------------------------------------
@@ -22,9 +23,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('login', [AuthController::class, 'login']);
+
+Route::post('cursos', [CursosController::class, 'index']);
+Route::get('cursos', [CursosController::class, 'index']);
+
+Route::post('alumnos/{idCurso}', [PersonaController::class, 'show']);
+Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
 
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('personas', [ProjectController::class, 'index']);
-    Route::get('personas/{id}', [ProjectController::class, 'show']);
 });
 

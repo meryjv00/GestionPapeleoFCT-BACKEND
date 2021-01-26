@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModulosTable extends Migration {
+class CreateCursosTable extends Migration {
 
     /**
      * Run the migrations.
@@ -12,12 +12,12 @@ class CreateModulosTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('modulos', function (Blueprint $table) {
+        Schema::create('cursos', function (Blueprint $table) {
             $table->id();
             $table->string('dniTutor');
             $table->foreign('dniTutor')
                     ->references('dni')
-                    ->on('personas')
+                    ->on('users')
                     ->onDelete('cascade');
             $table->string('familiaProfesional');
             $table->string('cicloFormativo');
@@ -34,7 +34,7 @@ class CreateModulosTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('modulos');
+        Schema::dropIfExists('cursos');
     }
 
 }
