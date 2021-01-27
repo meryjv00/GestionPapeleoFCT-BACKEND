@@ -13,7 +13,8 @@ class CreatePersonasTable extends Migration {
      */
     public function up() {
         Schema::create('personas', function (Blueprint $table) {
-            $table->string('dni')->primary();
+            $table->id();
+            $table->string('dni')->unique();
             $table->string('apellidos');
             $table->string('nombre');
             $table->string('localidad');

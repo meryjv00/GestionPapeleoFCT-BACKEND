@@ -23,13 +23,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
-Route::get('login', [AuthController::class, 'login']);
 
-Route::post('cursos', [CursosController::class, 'index']);
 Route::get('cursos', [CursosController::class, 'index']);
-
-Route::post('alumnos/{idCurso}', [PersonaController::class, 'show']);
 Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
+
+Route::post('insertAlumno', [PersonaController::class, 'store']);
+Route::put('updateAlumno/{idAlumno}', [PersonaController::class, 'update']);
+Route::delete('deleteAlumno/{idAlumno}', [PersonaController::class, 'destroy']);
 
 Route::group(['middleware' => 'auth:api'], function() {
 });
