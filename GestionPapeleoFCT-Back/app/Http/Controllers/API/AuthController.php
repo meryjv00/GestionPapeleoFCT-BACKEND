@@ -29,7 +29,7 @@ class AuthController extends Controller
         $validatedData['password'] = \Hash::make($request->password);
 
         $user = User::create($validatedData);
-        $user->roles()->attach(2); 
+        $user->roles()->attach($request->get('rol')); 
 
         $accessToken = $user->createToken('authToken')->accessToken;
 
