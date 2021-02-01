@@ -5,12 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Curso extends Model {
+class RolUsuario extends Model {
 
     use HasFactory;
+    protected $table = 'role_user';
 
-    public function cursos() {
-        return $this->hasOne(Persona::class, 'dni', 'dniTutor');
-    }
-    
 }

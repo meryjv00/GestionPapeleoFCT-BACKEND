@@ -25,6 +25,7 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::get('cursos', [CursosController::class, 'index']);
+Route::get('cursos/{dniTutor}', [CursosController::class, 'index2']);
 Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
 
 Route::post('insertAlumno', [PersonaController::class, 'store']);

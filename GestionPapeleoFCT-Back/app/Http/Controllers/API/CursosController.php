@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Curso;
 
-
 class CursosController extends Controller {
 
     /**
@@ -17,6 +16,14 @@ class CursosController extends Controller {
     public function index() {
         //Todos los cursos incluyendo los datos del tutor
         $cursos = Curso::with('cursos')->get();
+        return response()->json(['code' => 200, 'message' => $cursos]);
+    }
+
+    public function index2($dniTutor) {
+        //Los cursos pertenecientes a un tutor incluyendo los datos del tutor
+        $cursos = Curso::where('dniTutor','=',$dniTutor)
+                ->with('cursos')
+                ->get();
         return response()->json(['code' => 200, 'message' => $cursos]);
     }
 
