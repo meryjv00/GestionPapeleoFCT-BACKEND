@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 
-class AuthController extends Controller
-{
-     public function register(Request $request) {
+class AuthController extends Controller {
+
+    public function register(Request $request) {
         //return response()->json([$request->all()]);
 //        $validatedData = $request->validate([
 //            'dni' => 'required|unique:users',
@@ -16,24 +16,20 @@ class AuthController extends Controller
 //            'password' => 'required|confirmed'
 //        ]);
 
-        if (User::where('email', $request->get('email'))->count() == 1) {
+        if (User::where('email', $request->input('email'))->count() == 1) {
             return response()->json(['message' => 'Registro incorrecto. Revise las credenciales.', 'code' => 400], 400);
         }
-        
+
         $validatedData = [
-            'dni' => $request->get('dni'),
-            'email' => $request->get('email'),
-            'password' => $request->get('password'),
+            'dni' => $request->input("dni"),
+            'email' => $request->input("email"),
+            'password' => $request->input("password"),
         ];
 
-        $validatedData['password'] = \Hash::make($request->password);
-
+        $validatedData['password'] = \Hash::make($request->input("password"));
         $user = User::create($validatedData);
-        $user->roles()->attach($request->get('rol')); 
-
+        $user->roles()->attach($request->input("rol"));
         $accessToken = $user->createToken('authToken')->accessToken;
-
-        //return response(['user' => $user, 'access_token' => $accessToken], 201);
         return response()->json(['message' => ['user' => $user, 'access_token' => $accessToken], 'code' => 201], 201);
     }
 
@@ -53,4 +49,5 @@ class AuthController extends Controller
         //return response(['user' => auth()->user(), 'access_token' => $accessToken]);
         return response()->json(['message' => ['user' => auth()->user(), 'access_token' => $accessToken], 'code' => 200], 200);
     }
+
 }
