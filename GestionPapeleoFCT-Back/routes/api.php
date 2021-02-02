@@ -20,10 +20,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('register_persona', [AuthController::class, 'register_persona']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-Route::get('register', [AuthController::class, 'register2']);
 Route::group(['middleware' => 'auth:api'], function() {
     Route::get('personas', [ProjectController::class, 'index']);
     Route::get('personas/{id}', [ProjectController::class, 'show']);
