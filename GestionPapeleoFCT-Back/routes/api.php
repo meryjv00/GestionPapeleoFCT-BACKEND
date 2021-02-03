@@ -28,6 +28,10 @@ Route::get('empresas', [EmpresasController::class, 'index']);
 
 Route::post('insertEmpresa', [EmpresasController::class, 'store']);
 
+Route::put('updateEmpresa/{id}', [EmpresasController::class, 'update']);
+
+Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
+
 Route::group(['middleware' => 'auth:api'], function() {
     Route::get('personas', [ProjectController::class, 'index']);
     Route::get('personas/{id}', [ProjectController::class, 'show']);

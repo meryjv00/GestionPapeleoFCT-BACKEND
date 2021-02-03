@@ -62,7 +62,21 @@ class EmpresasController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        $empresa = Empresa::find($id);
+        if (!$empresa) {
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se encuentra ninguna empresa con este id: ' . $idAlumno])], 404);
+        }
+        $empresa->update([
+            'nombre' => $request->input('empresa')['nombre'],
+            'provincia' => $request->input('empresa')['provincia'],
+            'localidad' => $request->input('empresa')['localidad'],
+            'calle' => $request->input('empresa')['calle'],
+            'cp' => $request->input('empresa')['cp'],
+            'cif' => $request->input('empresa')['cif'],
+            'tlf' => $request->input('empresa')['tlf'],
+            'email' => $request->input('empresa')['email']
+        ]);
+        return response()->json($empresa, 200);
     }
 
     /**
@@ -72,7 +86,12 @@ class EmpresasController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $eliminar = Empresa::destroy($id);
+        if (!$eliminar) {
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido eliminar la empresa ' . $persona])], 404);
+        } else {
+            return response()->json(['code' => 201, 'message' => 'Empresa eliminada correctamente'], 201);
+        }
     }
 
 }
