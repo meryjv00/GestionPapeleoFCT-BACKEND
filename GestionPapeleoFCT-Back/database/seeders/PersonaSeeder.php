@@ -51,6 +51,16 @@ class PersonaSeeder extends Seeder {
             'correo' => 'joseluis@gmail.com',
             'tlf' => '767578798'
         ]);
+        Persona::create([
+            'dni' => '00',
+            'apellidos' => 'Lopez Lopez',
+            'nombre' => 'Sra Directora',
+            'localidad' => 'Puertollano',
+            'residencia' => 'Puertollano',
+            'correo' => 'directora@gmail.com',
+            'tlf' => '000000000'
+        ]);
+
         //ALUMNOS
         Persona::create([
             'dni' => '99999999A',

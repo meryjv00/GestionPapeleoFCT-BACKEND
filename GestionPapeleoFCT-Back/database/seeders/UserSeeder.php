@@ -15,7 +15,7 @@ class UserSeeder extends Seeder {
     public function run() {
         //User::truncate();
         $contra = '12345678';
-        
+
         User::create([
             'dni' => '1A',
             'email' => 'fernando@gmail.com',
@@ -37,6 +37,12 @@ class UserSeeder extends Seeder {
         User::create([
             'dni' => '4D',
             'email' => 'joseluis@gmail.com',
+            'password' => \Hash::make($contra)
+        ]);
+
+        User::create([
+            'dni' => '00',
+            'email' => 'directora@gmail.com',
             'password' => \Hash::make($contra)
         ]);
     }

@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder {
             PersonaSeeder::class,
             CursosSeeder::class,
             CursoAlumnos::class,
-            EmpresasSeeder::class
+            EmpresasSeeder::class,
+            CentroSeeder::class
         ]);
     }
 
