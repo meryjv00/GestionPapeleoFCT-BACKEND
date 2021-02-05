@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CursosController;
 use App\Http\Controllers\API\PersonaController;
+use App\Http\Controllers\API\AnexosController;
 
 /*
   |--------------------------------------------------------------------------
@@ -31,6 +32,9 @@ Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
 Route::post('insertAlumno', [PersonaController::class, 'store']);
 Route::put('updateAlumno/{idAlumno}', [PersonaController::class, 'update']);
 Route::delete('deleteAlumno/{idAlumno}', [PersonaController::class, 'destroy']);
+
+Route::get('anexos', [AnexosController::class, 'index']);
+
 
 Route::group(['middleware' => 'auth:api'], function() {
 });

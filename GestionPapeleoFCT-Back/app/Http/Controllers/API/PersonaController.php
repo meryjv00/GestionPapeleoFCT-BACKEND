@@ -81,6 +81,9 @@ class PersonaController extends Controller {
         }
         //$persona->update($request->all());
         $persona->update([
+            'dni' => $request->input('alumno')['dni'],
+            'nombre' => $request->input('alumno')['nombre'],
+            'apellidos' => $request->input('alumno')['apellidos'],
             'localidad' => $request->input('alumno')['localidad'],
             'residencia' => $request->input('alumno')['residencia'],
             'correo' => $request->input('alumno')['correo'],
