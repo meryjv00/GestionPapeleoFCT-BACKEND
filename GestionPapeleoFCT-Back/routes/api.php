@@ -37,7 +37,6 @@ Route::delete('deleteAlumno/{idAlumno}', [PersonaController::class, 'destroy']);
 
 Route::get('anexos', [AnexosController::class, 'index']);
 
-
 Route::get('empresas', [EmpresasController::class, 'index']);
 
 Route::post('insertEmpresa', [EmpresasController::class, 'store']);

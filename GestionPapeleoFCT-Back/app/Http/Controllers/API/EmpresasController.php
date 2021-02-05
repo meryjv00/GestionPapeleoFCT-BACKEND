@@ -38,7 +38,7 @@ class EmpresasController extends Controller {
                     'email' => $empresa['email'],
         ]);
         if (!$empresaBD) {
-            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido registrar al usuario ' . $persona])], 404);
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido registrar la empresa ' . $empresa])], 404);
         }
 
         return response()->json(['code' => 201, 'message' => 'Datos insertados correctamente'], 201);
@@ -64,7 +64,7 @@ class EmpresasController extends Controller {
     public function update(Request $request, $id) {
         $empresa = Empresa::find($id);
         if (!$empresa) {
-            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se encuentra ninguna empresa con este id: ' . $idAlumno])], 404);
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se encuentra ninguna empresa con este id: ' . $id])], 404);
         }
         $empresa->update([
             'nombre' => $request->input('empresa')['nombre'],
@@ -88,7 +88,7 @@ class EmpresasController extends Controller {
     public function destroy($id) {
         $eliminar = Empresa::destroy($id);
         if (!$eliminar) {
-            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido eliminar la empresa ' . $persona])], 404);
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido eliminar la empresa ' . $id])], 404);
         } else {
             return response()->json(['code' => 201, 'message' => 'Empresa eliminada correctamente'], 201);
         }
