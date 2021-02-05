@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Role;
 
 class RolesSeeder extends Seeder {
 
@@ -12,25 +13,15 @@ class RolesSeeder extends Seeder {
      * @return void
      */
     public function run() {
-        $rol = new \App\Models\Role;
-        $rol->id = '1';
-        $rol->nombre = 'Director';
-        $rol->save();
+        // Role::truncate();
 
-        $rol = new \App\Models\Role;
-        $rol->id = '2';
-        $rol->nombre = 'JefeEstudios';
-        $rol->save();
+        $roles = ['Director', 'JefeEstudios', 'Tutor', 'Alumno'];
 
-        $rol = new \App\Models\Role;
-        $rol->id = '3';
-        $rol->nombre = 'Tutor';
-        $rol->save();
-
-        $rol = new \App\Models\Role;
-        $rol->id = '4';
-        $rol->nombre = 'Alumno';
-        $rol->save();
+        for ($i = 0; $i < count($roles); $i++) {
+            $rol = new Role;
+            $rol->nombre = $roles[$i];
+            $rol->save();
+        }
     }
 
 }

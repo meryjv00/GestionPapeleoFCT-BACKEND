@@ -4,25 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Passport\HasApiTokens;
 
 class Persona extends Model {
 
-    use HasFactory,HasApiTokens;
+    use HasFactory;
 
     protected $fillable = [
-        'correo',
         'dni',
-        'nombre',
         'apellidos',
+        'nombre',
         'localidad',
         'residencia',
+        'correo',
         'tlf',
     ];
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-    protected $hidden = [
-        'remember_token',
-    ];
+
 }

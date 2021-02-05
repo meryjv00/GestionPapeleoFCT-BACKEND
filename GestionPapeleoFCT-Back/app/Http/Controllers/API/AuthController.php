@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Persona;
+use App\Models\RolUsuario;
 
 class AuthController extends Controller {
 
@@ -65,9 +66,19 @@ class AuthController extends Controller {
         }
 
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
+        //Obtener todos los datos del usuario
+        $persona = Persona::where("correo", "=", $request->input('email'))->first();
 
+        //Obtener el rol del usuario
+
+        $rol = RolUsuario::where("user_id", "=", auth()->user()->id)->get();
+        if ($rol[0]->role_id == 2) {
+            $rolDescripcion = "Jefe de estudios";
+        } else {
+            $rolDescripcion = "Tutor";
+        }
         //return response(['user' => auth()->user(), 'access_token' => $accessToken]);
-        return response()->json(['message' => ['user' => auth()->user(), 'access_token' => $accessToken], 'code' => 200], 200);
+        return response()->json(['message' => ['user' => auth()->user(), 'access_token' => $accessToken, 'datos_user' => $persona, 'rol' => $rolDescripcion], 'code' => 200], 200);
     }
 
 }
