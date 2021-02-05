@@ -18,5 +18,4 @@ class Persona extends Model {
         'correo',
         'tlf',
     ];
-
 }
