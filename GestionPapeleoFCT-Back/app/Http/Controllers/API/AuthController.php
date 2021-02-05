@@ -11,21 +11,16 @@ use App\Models\RolUsuario;
 class AuthController extends Controller {
 
     public function register(Request $request) {
-//        $validatedData = $request->validate([
-//            'dni' => 'required|unique:users',
-//            'email' => 'email|required|unique:users',
-//            'password' => 'required'
-//        ]);
 
         if (User::where('email', $request->input('email'))->count() == 1) {
             return response()->json(['message' => 'Registro incorrecto. Revise las credenciales.', 'code' => 400], 400);
         }
 
-        $validatedData = [
-            'dni' => $request->input("dni"),
-            'email' => $request->input("email"),
-            'password' => $request->input("password"),
-        ];
+        $validatedData = $request->validate([
+            'dni' => 'required|unique:users',
+            'email' => 'email|required|unique:users',
+            'password' => 'required'
+        ]);
 
         $validatedData['password'] = \Hash::make($request->input("password"));
         $user = User::create($validatedData);
@@ -51,8 +46,7 @@ class AuthController extends Controller {
         ];
 
         $persona = Persona::create($validatedData);
-        $accessToken = $persona->createToken('authToken')->accessToken;
-        return response()->json(['message' => ['user' => $persona, 'access_token' => $accessToken], 'code' => 201], 201);
+        return response()->json(['message' => ['user' => $persona], 'code' => 201], 201);
     }
     public function login(Request $request) {
         $loginData = $request->validate([
