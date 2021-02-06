@@ -11,3 +11,4 @@ docker-compose up -d
 #Inicia la bd
 docker exec api_laravel php artisan migrate
 docker exec api_laravel php artisan db:seed
+docker exec api_laravel php artisan passport:client --personal

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Anexo;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 
 class AnexosController extends Controller
@@ -144,7 +145,7 @@ class AnexosController extends Controller
         $templateProcessor->setValue('cpCentro', $cpCentro);
         $templateProcessor->setValue('cifCentro', $cifCentro);
         $templateProcessor->setValue('tlfCentro', $tlfCentro);
-        $templateProcessor->setValue('correoCentro', $emailCentro);
+        $templateProcessor->setValue('emailCentro', $emailCentro);
         $templateProcessor->setValue('nombreRepresentante', $nombreRepresentante);
         $templateProcessor->setValue('dniRepresentante', $dniRepresentante);
         $templateProcessor->setValue('nombreEmpresa', $nombreEmpresa);
@@ -160,7 +161,7 @@ class AnexosController extends Controller
         $fileName = "Anexo0Empresa" . $nombreEmpresa;
         $templateProcessor->saveAs($fileName . '.docx');
         //return response()->download($fileName . '.docx')->deleteFileAfterSend(false);
-        return response()->json(['code' => 201, 'message' => 'HOLA'], 201);
+        return response()->json(['code' => 201, 'message' => $fileName], 201);
     }
 
 }
