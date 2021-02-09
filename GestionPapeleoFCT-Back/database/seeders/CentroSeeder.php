@@ -14,14 +14,14 @@ class CentroSeeder extends Seeder {
      */
     public function run() {
         Centro::create([
-            'codigo' => '11111X',
+            'codigo' => '13002691',
             'nombre' => 'CIFP Virgen de Gracia',
             'provincia' => 'Ciudad Real',
             'localidad' => 'Puertollano',
-            'calle' => 'Calle Manzana',
-            'cp' => '13570',
-            'cif' => '11111',
-            'tlf' => '999999999',
+            'calle' => 'Paseo de San Gregorio, 82b',
+            'cp' => '13500',
+            'cif' => 'S1300166D',
+            'tlf' => '926426250',
             'email' => 'cifpvirgendegracia@gmail.com'
         ]);
     }

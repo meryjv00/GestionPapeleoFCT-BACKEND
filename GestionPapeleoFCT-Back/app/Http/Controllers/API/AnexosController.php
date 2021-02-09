@@ -7,16 +7,14 @@ use Illuminate\Http\Request;
 use App\Models\Anexo;
 use PhpOffice\PhpWord\TemplateProcessor;
 
+class AnexosController extends Controller {
 
-class AnexosController extends Controller
-{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         $anexos = Anexo::all();
         return response()->json(['code' => 200, 'message' => $anexos]);
     }
@@ -27,8 +25,7 @@ class AnexosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         //
     }
 
@@ -38,8 +35,7 @@ class AnexosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 
@@ -50,8 +46,7 @@ class AnexosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         //
     }
 
@@ -61,11 +56,9 @@ class AnexosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
     }
-
 
     /**
      * Genera un ANEXO 0 con los datos del DIRECTOR (BD)
@@ -74,7 +67,7 @@ class AnexosController extends Controller
      */
     public function anexo0($id) {
         //Recupera el nombre y dni del director del centro
-        $consulta = \DB::select('SELECT * FROM personas WHERE dni LIKE (SELECT dni FROM users WHERE id=(SELECT user_id FROM role_user WHERE role_id=1))');
+        $consulta = \DB::select('SELECT * FROM personas WHERE dni LIKE (SELECT user_dni FROM role_user WHERE role_id=1)');
         $nombre;
         $apellidos;
         $dniDirector;
@@ -109,8 +102,8 @@ class AnexosController extends Controller
         }
 
         //Recupera los datos del REPRESENTANTE de la empresa (próximamente)
-        $nombreRepresentante = 'Pepito';
-        $dniRepresentante = '123A';
+        //$nombreRepresentante = 'Pepito';
+        //$dniRepresentante = '123A';
 
         //Recupera los datos de la empresa
         $consulta = \DB::select('SELECT * FROM empresas WHERE id=' . $id);
@@ -122,6 +115,8 @@ class AnexosController extends Controller
         $cifEmpresa;
         $tlfEmpresa;
         $emailEmpresa;
+        $dniRepresentante;
+        $nombreRepresentante;
         foreach ($consulta as $datos) {
             $nombreEmpresa = $datos->nombre;
             $localidadEmpresa = $datos->localidad;
@@ -131,6 +126,8 @@ class AnexosController extends Controller
             $cifEmpresa = $datos->cif;
             $tlfEmpresa = $datos->tlf;
             $emailEmpresa = $datos->email;
+            $dniRepresentante = $datos->dniRepresentante;
+            $nombreRepresentante = $datos->nombreRepresentante;
         }
 
         //Pinta el archivo .docx
@@ -156,7 +153,7 @@ class AnexosController extends Controller
         $templateProcessor->setValue('cifEmpresa', $cifEmpresa);
         $templateProcessor->setValue('tlfEmpresa', $tlfEmpresa);
         $templateProcessor->setValue('emailEmpresa', $emailEmpresa);
-        
+
         //Guardar
         $fileName = "Anexo0Empresa" . $nombreEmpresa;
         $templateProcessor->saveAs($fileName . '.docx');

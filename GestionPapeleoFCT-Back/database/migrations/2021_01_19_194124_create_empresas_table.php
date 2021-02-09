@@ -22,6 +22,8 @@ class CreateEmpresasTable extends Migration {
             $table->string('cif');
             $table->string('tlf')->unique();
             $table->string('email')->unique();
+            $table->string('dniRepresentante');
+            $table->string('nombreRepresentante');
             $table->timestamps();
         });
     }

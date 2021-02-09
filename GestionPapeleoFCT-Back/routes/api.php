@@ -7,6 +7,7 @@ use App\Http\Controllers\API\CursosController;
 use App\Http\Controllers\API\PersonaController;
 use App\Http\Controllers\API\AnexosController;
 use App\Http\Controllers\API\EmpresasController;
+use App\Http\Controllers\AdminController;
 
 /*
   |--------------------------------------------------------------------------
@@ -23,9 +24,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('register_persona', [AuthController::class, 'register_persona']);
-Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('isPersona', [AuthController::class, 'isPersona']);
+Route::post('register_persona', [AuthController::class, 'register_persona']);
 
 Route::get('cursos', [CursosController::class, 'index']);
 Route::get('cursos/{dniTutor}', [CursosController::class, 'index2']);
@@ -46,6 +48,10 @@ Route::put('updateEmpresa/{id}', [EmpresasController::class, 'update']);
 Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
 
 Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
+
+//ADMINISTRACION
+Route::post('generarCursos', [AdminController::class, 'insertCursos']);
+Route::post('generarAlumnos', [AdminController::class, 'insertAlumnos']);
 
 Route::group(['middleware' => 'auth:api'], function() {
 });

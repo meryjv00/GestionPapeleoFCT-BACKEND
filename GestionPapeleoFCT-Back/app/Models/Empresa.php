@@ -18,7 +18,9 @@ class Empresa extends Model {
         'cp',
         'cif',
         'tlf',
-        'email'
+        'email',
+        'dniRepresentante',
+        'nombreRepresentante'
     ];
 
 }

@@ -19,8 +19,8 @@ class CreatePersonasTable extends Migration {
             $table->string('nombre');
             $table->string('localidad');
             $table->string('residencia');
-            $table->string('correo')->unique();
-            $table->string('tlf')->unique();
+            $table->string('correo');
+            $table->string('tlf');
             $table->timestamps();
         });
     }

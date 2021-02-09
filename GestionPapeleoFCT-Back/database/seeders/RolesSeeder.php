@@ -15,7 +15,7 @@ class RolesSeeder extends Seeder {
     public function run() {
         // Role::truncate();
 
-        $roles = ['Director', 'JefeEstudios', 'Tutor', 'Alumno'];
+        $roles = ['Director', 'JefeEstudios', 'Tutor', 'Alumno','Profesor'];
 
         for ($i = 0; $i < count($roles); $i++) {
             $rol = new Role;

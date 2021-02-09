@@ -18,30 +18,34 @@ class EmpresasSeeder extends Seeder {
             'nombre' => 'Indra',
             'provincia' => 'Ciudad Real',
             'localidad' => 'Ciudad Real',
-            'calle' => 'Calle x',
-            'cp' => '1111',
-            'cif' => '1111',
-            'tlf' => '999999999',
-            'email' => 'indra@gmail.com'
+            'calle' => 'Ronda de Toledo, s/n',
+            'cp' => '13005',
+            'cif' => 'B84065820',
+            'tlf' => '926270800',
+            'email' => 'indra@indra.es',
+            'dniRepresentante' => '11',
+            'nombreRepresentante' => 'Indra_Rep'
         ]);
         EmpresaPerfiles::create([
             'idEmpresa' => 1,
-            'nombreRepresentante' => 'Indra_Rep1',
+            'dniResponsable' => '22',
             'nombreResponsable' => 'Indra_Resp1'
         ]);
         Empresa::create([
             'nombre' => 'Enova',
             'provincia' => 'Ciudad Real',
             'localidad' => 'Ciudad Real',
-            'calle' => 'Calle y',
+            'calle' => 'Ronda del Carmen, 21',
             'cp' => '2222',
             'cif' => '2222',
-            'tlf' => '888888888',
-            'email' => 'enova@gmail.com'
+            'tlf' => '926921363',
+            'email' => 'enova@gmail.com',
+            'dniRepresentante' => '33',
+            'nombreRepresentante' => 'Enova_Rep'
         ]);
         EmpresaPerfiles::create([
             'idEmpresa' => 2,
-            'nombreRepresentante' => 'Enova_Rep1',
+            'dniResponsable' => '44',
             'nombreResponsable' => 'Enova_Resp1'
         ]);
 
@@ -53,12 +57,19 @@ class EmpresasSeeder extends Seeder {
             'cp' => '3333',
             'cif' => '3333',
             'tlf' => '777777777',
-            'email' => 'everis@gmail.com'
+            'email' => 'everis@gmail.com',
+            'dniRepresentante' => '55',
+            'nombreRepresentante' => 'Everis_Rep'
         ]);
         EmpresaPerfiles::create([
             'idEmpresa' => 3,
-            'nombreRepresentante' => 'Everis_Rep1',
+            'dniResponsable' => '66',
             'nombreResponsable' => 'Everis_Resp1'
+        ]);
+        EmpresaPerfiles::create([
+            'idEmpresa' => 3,
+            'dniResponsable' => '77',
+            'nombreResponsable' => 'Everis_Resp2'
         ]);
     }
 
