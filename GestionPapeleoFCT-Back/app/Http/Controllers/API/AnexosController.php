@@ -6,17 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Anexo;
 use PhpOffice\PhpWord\TemplateProcessor;
+use App\Models\Centro;
+use App\Models\Empresa;
 
+class AnexosController extends Controller {
 
-class AnexosController extends Controller
-{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         $anexos = Anexo::all();
         return response()->json(['code' => 200, 'message' => $anexos]);
     }
@@ -27,8 +27,7 @@ class AnexosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         //
     }
 
@@ -38,8 +37,7 @@ class AnexosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 
@@ -50,8 +48,7 @@ class AnexosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         //
     }
 
@@ -61,11 +58,11 @@ class AnexosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
     }
-
+    
+    //------------------------------------------GENERACIÓN DE ANEXOS
 
     /**
      * Genera un ANEXO 0 con los datos del DIRECTOR (BD)
@@ -86,52 +83,24 @@ class AnexosController extends Controller
         $nombreDirector = $nombre . ' ' . $apellidos;
 
         //Recupera los datos del centro
-        $consulta = \DB::select('SELECT * FROM centro');
-        $nombreCentro;
-        $codigoCentro;
-        $localidadCentro;
-        $provinciaCentro;
-        $calleCentro;
-        $cpCentro;
-        $cifCentro;
-        $tlfCentro;
-        $emailCentro;
-        foreach ($consulta as $datos) {
-            $codigoCentro = $datos->codigo;
-            $nombreCentro = $datos->nombre;
-            $provinciaCentro = $datos->provincia;
-            $localidadCentro = $datos->localidad;
-            $calleCentro = $datos->calle;
-            $cpCentro = $datos->cp;
-            $cifCentro = $datos->cif;
-            $tlfCentro = $datos->tlf;
-            $emailCentro = $datos->email;
+        foreach (Centro::all() as $centro) {
+            $codigoCentro = $centro->codigo;
+            $nombreCentro = $centro->nombre;
+            $provinciaCentro = $centro->provincia;
+            $localidadCentro = $centro->localidad;
+            $calleCentro = $centro->calle;
+            $cpCentro = $centro->cp;
+            $cifCentro = $centro->cif;
+            $tlfCentro = $centro->tlf;
+            $emailCentro = $centro->email;
         }
 
-        //Recupera los datos del REPRESENTANTE de la empresa (próximamente)
+        //Recupera los datos del REPRESENTANTE de la empresa (hay que modificar la estructura de la BD)
         $nombreRepresentante = 'Pepito';
         $dniRepresentante = '123A';
 
         //Recupera los datos de la empresa
-        $consulta = \DB::select('SELECT * FROM empresas WHERE id=' . $id);
-        $nombreEmpresa;
-        $localidadEmpresa;
-        $provinciaEmpresa;
-        $calleEmpresa;
-        $cpEmpresa;
-        $cifEmpresa;
-        $tlfEmpresa;
-        $emailEmpresa;
-        foreach ($consulta as $datos) {
-            $nombreEmpresa = $datos->nombre;
-            $localidadEmpresa = $datos->localidad;
-            $provinciaEmpresa = $datos->provincia;
-            $calleEmpresa = $datos->calle;
-            $cpEmpresa = $datos->cp;
-            $cifEmpresa = $datos->cif;
-            $tlfEmpresa = $datos->tlf;
-            $emailEmpresa = $datos->email;
-        }
+        $empresa = Empresa::find($id);
 
         //Pinta el archivo .docx
         $templateProcessor = new TemplateProcessor('word-template/anexo0_convenio.docx');
@@ -148,20 +117,22 @@ class AnexosController extends Controller
         $templateProcessor->setValue('emailCentro', $emailCentro);
         $templateProcessor->setValue('nombreRepresentante', $nombreRepresentante);
         $templateProcessor->setValue('dniRepresentante', $dniRepresentante);
-        $templateProcessor->setValue('nombreEmpresa', $nombreEmpresa);
-        $templateProcessor->setValue('localidadEmpresa', $localidadEmpresa);
-        $templateProcessor->setValue('provinciaEmpresa', $provinciaEmpresa);
-        $templateProcessor->setValue('calleEmpresa', $calleEmpresa);
-        $templateProcessor->setValue('cpEmpresa', $cpEmpresa);
-        $templateProcessor->setValue('cifEmpresa', $cifEmpresa);
-        $templateProcessor->setValue('tlfEmpresa', $tlfEmpresa);
-        $templateProcessor->setValue('emailEmpresa', $emailEmpresa);
-        
+        $templateProcessor->setValue('nombreEmpresa', $empresa->nombre);
+        $templateProcessor->setValue('localidadEmpresa', $empresa->localidad);
+        $templateProcessor->setValue('provinciaEmpresa', $empresa->provincia);
+        $templateProcessor->setValue('calleEmpresa', $empresa->calle);
+        $templateProcessor->setValue('cpEmpresa', $empresa->cp);
+        $templateProcessor->setValue('cifEmpresa', $empresa->cif);
+        $templateProcessor->setValue('tlfEmpresa', $empresa->tlf);
+        $templateProcessor->setValue('emailEmpresa', $empresa->email);
+
         //Guardar
-        $fileName = "Anexo0Empresa" . $nombreEmpresa;
+        $fileName = "Anexo0Empresa" . $empresa->nombre;
         $templateProcessor->saveAs($fileName . '.docx');
         //return response()->download($fileName . '.docx')->deleteFileAfterSend(false);
         return response()->json(['code' => 201, 'message' => $fileName], 201);
     }
+    
+    
 
 }
