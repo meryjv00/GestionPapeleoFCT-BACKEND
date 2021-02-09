@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Anexo;
 use PhpOffice\PhpWord\TemplateProcessor;
+
+use App\Models\Anexo;
+use App\Models\AnexosGenerados;
 use App\Models\Centro;
 use App\Models\Empresa;
 
@@ -130,7 +132,14 @@ class AnexosController extends Controller {
         $fileName = "Anexo0Empresa" . $empresa->nombre;
         $templateProcessor->saveAs($fileName . '.docx');
         //return response()->download($fileName . '.docx')->deleteFileAfterSend(false);
-        return response()->json(['code' => 201, 'message' => $fileName], 201);
+        $anexoGen = AnexosGenerados::create([
+            'nombre' => $fileName,
+            'descargado' => 0
+        ]);
+        
+        return response()->json(['code' => 201, 'message' => $anexoGen->id], 201);
+        
+        
     }
     
     
