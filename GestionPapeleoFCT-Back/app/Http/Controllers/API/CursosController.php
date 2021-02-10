@@ -34,7 +34,11 @@ class CursosController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        $curso = Curso::create($request->all());
+        if (!$curso) {
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido registrar la empresa ' . $curso])], 404);
+        }
+        return response()->json(['code' => 201, 'message' => 'Datos insertados correctamente'], 201);
     }
 
     /**
@@ -66,6 +70,13 @@ class CursosController extends Controller {
      */
     public function destroy($id) {
         //
+    }
+
+    public function getFamilies(){
+        $families = Curso::select('familiaProfesional')
+                                ->distinct()
+                                ->get();
+        return response()->json(['code' => 200, 'message' => $families]);
     }
 
 }
