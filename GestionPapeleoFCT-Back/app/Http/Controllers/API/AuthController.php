@@ -27,13 +27,6 @@ class AuthController extends Controller {
         $user = User::create($validatedData);
         $accessToken = $user->createToken('authToken')->accessToken;
 
-        //$user->roles()->attach($request->input("rol"));
-//        RolUsuario::create([
-//            'role_id' => $request->input("rol"),
-//            'user_dni' => $request->input("dni")
-//        ]);
-
-
         return response()->json(['message' => ['user' => $user, 'access_token' => $accessToken], 'code' => 201], 201);
     }
 
@@ -109,6 +102,8 @@ class AuthController extends Controller {
             $rolDescripcion = "Jefe de estudios";
         } else if ($rol[1]->role_id == 3) {
             $rolDescripcion = "Tutor";
+        } else if ($rol[1]->role_id == 1) {
+            $rolDescripcion = "Director";
         }
         //return response(['user' => auth()->user(), 'access_token' => $accessToken]);
         return response()->json(['message' => ['user' => auth()->user(), 'access_token' => $accessToken, 'datos_user' => $persona, 'rol' => $rolDescripcion], 'code' => 200], 200);

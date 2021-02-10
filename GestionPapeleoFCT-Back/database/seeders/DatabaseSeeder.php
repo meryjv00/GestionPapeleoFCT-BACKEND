@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder {
             ProfesoresSeeder::class,
             CursosSeeder::class,
             AlumnosSeeder::class,
-            CursoAlumnos::class,
             EmpresasSeeder::class,
             CentroSeeder::class
         ]);

@@ -23,3 +23,10 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/intento/{id}', [AnexosController::class, 'anexo0']);
+
+
+Route::get('/importarCSV', function () {
+    return view('importarCSV');
+});
+
+Route::post('/subir',[App\Http\Controllers\miControlador::class, 'subirCSV'])->name('subir');
