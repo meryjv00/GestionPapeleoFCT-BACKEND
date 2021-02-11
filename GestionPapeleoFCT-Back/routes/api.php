@@ -24,6 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('getDirector', [CentroController::class, 'getDirector']);
 Route::post('getCentro', [CentroController::class, 'getCentro']);
 Route::post('updateCentro', [CentroController::class, 'updateCentro']);
 Route::post('login', [AuthController::class, 'login']);

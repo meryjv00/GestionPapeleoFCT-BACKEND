@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Centro;
+use App\Models\RolUsuario;
+use App\Models\User;
+use App\Models\Persona;
 use Illuminate\Http\Request;
 
 class CentroController extends Controller {
@@ -32,6 +35,16 @@ class CentroController extends Controller {
         $centro->tlf = $request->input("tlf");
         $centro->save();
         return response()->json(['message' => 'update correcto', 'code' => 201], 201);
+    }
+    
+    public function getDirector() {
+        if (RolUsuario::where('role_id',1)->count() == 0) {
+            return response()->json(['message' => 'error no se encuentra el director', 'code' => 201], 201);
+        }
+        $id=RolUsuario::where('role_id',1)->first();
+        $user = User::where('id',$id->user_id)->first();
+        $nombre = Persona::where('correo',$user->email)->first();
+        return response()->json(['message' => ['nombre' => $nombre->nombre.' '.$nombre->apellidos, 'email' => $nombre->correo], 'code' => 201], 201);
     }
 
 }
