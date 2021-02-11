@@ -12,7 +12,7 @@ class AuthController extends Controller {
 
     public function register(Request $request) {
 
-        if (User::where('email', $request->input('email'))->count() == 1) {
+        if (User::where('email', $request->input('email'))->where('dni', $request->input('dni'))->count() == 1) {
             return response()->json(['message' => 'Registro incorrecto. Revise las credenciales.', 'code' => 400], 400);
         }
 

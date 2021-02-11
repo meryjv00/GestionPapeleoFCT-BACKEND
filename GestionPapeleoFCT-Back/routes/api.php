@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CentroController;
 use App\Http\Controllers\API\CursosController;
 use App\Http\Controllers\API\PersonaController;
 use App\Http\Controllers\API\AnexosController;
@@ -23,6 +24,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('getDirector', [CentroController::class, 'getDirector']);
+Route::post('getCentro', [CentroController::class, 'getCentro']);
+Route::post('updateCentro', [CentroController::class, 'updateCentro']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('isPersona', [AuthController::class, 'isPersona']);
