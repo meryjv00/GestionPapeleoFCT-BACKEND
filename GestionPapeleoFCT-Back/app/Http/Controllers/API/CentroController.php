@@ -23,17 +23,25 @@ class CentroController extends Controller {
         if (Centro::first()->count() == 0) {
             return response()->json(['message' => 'error no se encuentra el centro', 'code' => 201], 201);
         }
+        
+        $validatedData = $request->validate([
+            'cif' => 'required|primary:centro',
+            'email' => 'email|required|unique:centro',
+            'tlf' => 'required|unique:centro'
+        ]);
+        
         $centro = Centro::first();
-        $centro->cif = $request->input("cif");
-        $centro->codigo = $request->input("codigo");
-        $centro->nombre = $request->input("nombre");
-        $centro->localidad = $request->input("localidad");
-        $centro->provincia = $request->input("provincia");
-        $centro->cp = $request->input("cp");
-        $centro->calle = $request->input("calle");
-        $centro->email = $request->input("email");
-        $centro->tlf = $request->input("tlf");
+        $centro->cif = $validatedData->cif;
+        $centro->codigo = $validatedData->codigo;
+        $centro->nombre = $validatedData->nombre;
+        $centro->localidad = $validatedData->localidad;
+        $centro->provincia = $validatedData->provincia;
+        $centro->cp = $validatedData->cp;
+        $centro->calle = $validatedData->calle;
+        $centro->email = $validatedData->email;
+        $centro->tlf = $validatedData->tlf;
         $centro->save();
+        
         return response()->json(['message' => 'update correcto', 'code' => 201], 201);
     }
     
