@@ -98,13 +98,13 @@ class AuthController extends Controller {
         $rol = RolUsuario::where("user_dni", "=", $persona->dni)->get();
         //return response()->json(['message' => ['rol' => $rol], 'code' => 200], 200);
 
-        if ($rol[1]->role_id == 2) {
+        if($rol[0]->role_id == 1) {
+            $rolDescripcion = "Director";
+        }else if ($rol[1]->role_id == 2) {
             $rolDescripcion = "Jefe de estudios";
         } else if ($rol[1]->role_id == 3) {
             $rolDescripcion = "Tutor";
-        } else if ($rol[1]->role_id == 1) {
-            $rolDescripcion = "Director";
-        }
+        } 
         //return response(['user' => auth()->user(), 'access_token' => $accessToken]);
         return response()->json(['message' => ['user' => auth()->user(), 'access_token' => $accessToken, 'datos_user' => $persona, 'rol' => $rolDescripcion], 'code' => 200], 200);
     }

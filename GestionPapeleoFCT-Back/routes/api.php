@@ -50,7 +50,7 @@ Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
 Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
 
 //ADMINISTRACION
-Route::post('generarCursos', [AdminController::class, 'insertCursos']);
+Route::post('generarProfesores', [AdminController::class, 'insertProfesores']);
 Route::post('generarAlumnos', [AdminController::class, 'insertAlumnos']);
 
 Route::group(['middleware' => 'auth:api'], function() {

@@ -19,22 +19,22 @@ class ProfesoresSeeder extends Seeder {
         $contra = '12345678';
         User::create([
             'dni' => '0X',
-            'email' => 'admin@gmail.com',
+            'email' => 'director@gmail.com',
             'password' => \Hash::make($contra)
         ]);
         Persona::create([
             'dni' => '0X',
-            'apellidos' => 'admin admin',
-            'nombre' => 'admin',
+            'apellidos' => 'apellido1 apellido2',
+            'nombre' => 'nombre',
             'localidad' => 'Puertollano',
             'residencia' => 'Puertollano',
-            'correo' => 'admin@gmail.com',
+            'correo' => 'director@gmail.com',
             'tlf' => '999999999'
         ]);
-        RolUsuario::create([
-            'role_id' => 5,
-            'user_dni' => '0X'
-        ]);
+//        RolUsuario::create([
+//            'role_id' => 5,
+//            'user_dni' => '0X'
+//        ]);
         RolUsuario::create([
             'role_id' => 1,
             'user_dni' => '0X'
