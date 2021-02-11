@@ -87,9 +87,17 @@ class CursosController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $destroy = Curso::destroy($id);
+        if (!$destroy) {
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido eliminar el curso ' . $id])], 404);
+        } else {
+            return response()->json(['code' => 201, 'message' => 'Curso eliminado correctamente'], 201);
+        }
     }
 
+    /**
+     * Metodo para obtener las familias profesionales de los cursos
+     */
     public function getFamilies(){
         $families = Curso::select('familiaProfesional')
                                 ->distinct()
