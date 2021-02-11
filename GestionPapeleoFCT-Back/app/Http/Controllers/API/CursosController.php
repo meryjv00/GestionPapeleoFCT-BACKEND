@@ -59,7 +59,25 @@ class CursosController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        //Compruebo si el curso ya existe
+        $curso = Curso::find($id);
+
+        // Si no existe ese curso devolvemos un error.
+        if (!$curso) {
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se encuentra ese curso con ese código.'])], 404);
+        }
+
+        // Se actualiza el curso
+        $curso->update([
+            'cicloFormativo' => $request->input('curso')['cicloFormativo'],
+            'cicloFormativoA' => $request->input('curso')['cicloFormativoA'],
+            'dniTutor' => $request->input('curso')['dniTutor'],
+            'familiaProfesional' => $request->input('curso')['familiaProfesional'],
+            'cursoAcademico' => $request->input('curso')['cursoAcademico'],
+            'nHoras' => $request->input('curso')['nHoras']
+        ]);
+        return response()->json($curso, 200);
+
     }
 
     /**
