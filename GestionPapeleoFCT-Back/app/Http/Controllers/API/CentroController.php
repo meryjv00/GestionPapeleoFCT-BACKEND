@@ -23,13 +23,13 @@ class CentroController extends Controller {
         if (Centro::first()->count() == 0) {
             return response()->json(['message' => 'error no se encuentra el centro', 'code' => 201], 201);
         }
-        
+
         $validatedData = $request->validate([
             'cif' => 'required|primary:centro',
             'email' => 'email|required|unique:centro',
             'tlf' => 'required|unique:centro'
         ]);
-        
+
         $centro = Centro::first();
         $centro->cif = $validatedData->cif;
         $centro->codigo = $validatedData->codigo;
@@ -41,18 +41,37 @@ class CentroController extends Controller {
         $centro->email = $validatedData->email;
         $centro->tlf = $validatedData->tlf;
         $centro->save();
-        
+
         return response()->json(['message' => 'update correcto', 'code' => 201], 201);
     }
-    
+
     public function getDirector() {
-        if (RolUsuario::where('role_id',1)->count() == 0) {
+        if (RolUsuario::where('role_id', 1)->count() == 0) {
             return response()->json(['message' => 'error no se encuentra el director', 'code' => 201], 201);
         }
-        $id=RolUsuario::where('role_id',1)->first();
-        $user = User::where('id',$id->user_id)->first();
-        $nombre = Persona::where('correo',$user->email)->first();
-        return response()->json(['message' => ['nombre' => $nombre->nombre.' '.$nombre->apellidos, 'email' => $nombre->correo], 'code' => 201], 201);
+        $id = RolUsuario::where('role_id', 1)->first();
+        $user = User::where('dni', $id->user_dni)->first();
+        $nombre = Persona::where('correo', $user->email)->first();
+        return response()->json(['message' => ['nombre' => $nombre->nombre . ' ' . $nombre->apellidos, 'email' => $nombre->correo], 'code' => 201], 201);
+    }
+
+    public function addJefeEstudios(Request $req) {
+        RolUsuario::create([
+            'role_id' => 2,
+            'user_dni' => $req->input("dniProf")
+        ]);
+
+        return response()->json(['message' => ['Se ha añadido rol jefe de estudios correctamente'], 'code' => 201], 201);
+    }
+
+    public function getJefesEstudio() {
+        $jefesEstudio = \DB::select('SELECT * FROM personas WHERE dni IN (SELECT user_dni FROM role_user WHERE role_id=2)');
+        return response()->json(['code' => 200, 'message' => $jefesEstudio]);
+    }
+
+    public function deleteJefeEstudio($dniJefe) {
+        RolUsuario::where('role_id', 2)->where('user_dni',$dniJefe)->delete();
+        return response()->json(['code' => 200, 'message' => 'Jefe de estudios deasignado correctamente'], 200);
     }
 
 }

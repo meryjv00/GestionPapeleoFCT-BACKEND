@@ -59,8 +59,12 @@ Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
 Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
 
 //ADMINISTRACION
-Route::post('generarProfesores', [AdminController::class, 'insertProfesores']);
+Route::put('generarProfesores', [AdminController::class, 'insertProfesores']);
 Route::post('generarAlumnos', [AdminController::class, 'insertAlumnos']);
+Route::get('getProfesores', [PersonaController::class, 'getProfesores']);
+Route::post('addJefeEstudios', [CentroController::class, 'addJefeEstudios']);
+Route::get('getJefesEstudio', [CentroController::class, 'getJefesEstudio']);
+Route::delete('deleteJefeEstudio/{dniJefe}', [CentroController::class, 'deleteJefeEstudio']);
 
 Route::group(['middleware' => 'auth:api'], function() {
 
