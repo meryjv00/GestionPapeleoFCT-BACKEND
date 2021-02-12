@@ -23,3 +23,9 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/intento/{id}', [AnexosController::class, 'anexo0']);
+
+
+//Route::get('/importarCSV',[App\Http\Controllers\miControlador::class, 'vistaImports']);
+//Route::post('cambiaCurso',[App\Http\Controllers\miControlador::class, 'cambiaCurso']);
+//Route::post('/subirAlumnos',[App\Http\Controllers\miControlador::class, 'subirAlumnos'])->name('subirAlumnos');
+//Route::post('/subirProfesores',[App\Http\Controllers\miControlador::class, 'subirProfesores'])->name('subirProfesores');

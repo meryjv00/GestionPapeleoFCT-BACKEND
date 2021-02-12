@@ -71,7 +71,7 @@ class AnexosController extends Controller {
      */
     public function anexo0($id) {
         //Recupera el nombre y dni del director del centro
-        $consulta = \DB::select('SELECT * FROM personas WHERE dni LIKE (SELECT dni FROM users WHERE id=(SELECT user_id FROM role_user WHERE role_id=1))');
+        $consulta = \DB::select('SELECT * FROM personas WHERE dni LIKE (SELECT user_dni FROM role_user WHERE role_id=1)');
         $nombre;
         $apellidos;
         $dniDirector;

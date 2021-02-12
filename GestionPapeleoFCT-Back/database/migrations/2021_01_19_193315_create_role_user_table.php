@@ -14,7 +14,7 @@ class CreateRoleUserTable extends Migration {
     public function up() {
         Schema::create('role_user', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id');
-            $table->unsignedBigInteger('user_id');
+            $table->string('user_dni');
             $table->timestamps();
 
             /*
@@ -24,9 +24,9 @@ class CreateRoleUserTable extends Migration {
                     ->references('id')
                     ->on('roles')
                     ->onDelete('cascade');
-            $table->foreign('user_id')
-                    ->references('id')
-                    ->on('users')
+            $table->foreign('user_dni')
+                    ->references('dni')
+                    ->on('personas')
                     ->onDelete('cascade');
         });
     }

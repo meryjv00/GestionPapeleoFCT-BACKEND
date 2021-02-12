@@ -8,6 +8,7 @@ use App\Http\Controllers\API\CursosController;
 use App\Http\Controllers\API\PersonaController;
 use App\Http\Controllers\API\AnexosController;
 use App\Http\Controllers\API\EmpresasController;
+use App\Http\Controllers\AdminController;
 
 /*
   |--------------------------------------------------------------------------
@@ -56,6 +57,10 @@ Route::put('updateEmpresa/{id}', [EmpresasController::class, 'update']);
 Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
 
 Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
+
+//ADMINISTRACION
+Route::post('generarProfesores', [AdminController::class, 'insertProfesores']);
+Route::post('generarAlumnos', [AdminController::class, 'insertAlumnos']);
 
 Route::group(['middleware' => 'auth:api'], function() {
 

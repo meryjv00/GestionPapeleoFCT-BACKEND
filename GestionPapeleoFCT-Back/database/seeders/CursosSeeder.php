@@ -13,30 +13,24 @@ class CursosSeeder extends Seeder {
      * @return void
      */
     public function run() {
-        Curso::create([
-            'dniTutor' => '3C',
-            'familiaProfesional' => 'Informática',
-            'cicloFormativo' => 'Desarrollo de aplicaciones web',
-            'cicloFormativoA' => 'DAW',
-            'cursoAcademico' => '2020/2021',
-            'nHoras' => '400'
-        ]);
-        Curso::create([
-            'dniTutor' => '3C',
-            'familiaProfesional' => 'Informática',
-            'cicloFormativo' => 'Desarrollo de aplicaciones multiplataforma',
-            'cicloFormativoA' => 'DAM',
-            'cursoAcademico' => '2020/2021',
-            'nHoras' => '410'
-        ]);
-        Curso::create([
-            'dniTutor' => '4D',
-            'familiaProfesional' => 'Informática',
-            'cicloFormativo' => 'Administración de sistemas informáticos en red',
-            'cicloFormativoA' => 'ASIR',
-            'cursoAcademico' => '2020/2021',
-            'nHoras' => '390'
-        ]);
+        $path = public_path('csv/datUnidades.csv');
+        $lines = file($path);
+        $utf8_lines = array_map('utf8_encode', $lines);
+        $array = array_map('str_getcsv', $utf8_lines);
+
+        for ($i = 1; $i < count($array); $i++) {
+            $familiaProfesional = explode(",", $array[$i][2]);
+            $cicloFormativo = explode(",", $array[$i][3]);
+            $cicloFormativoA = explode(",", $array[$i][1]);
+            Curso::create([
+                'dniTutor' => '0X',
+                'familiaProfesional' => $familiaProfesional[0],
+                'cicloFormativo' => $cicloFormativo[0],
+                'cicloFormativoA' => $cicloFormativoA[0],
+                'cursoAcademico' => '2020/2021',
+                'nHoras' => 400
+            ]);
+        }
     }
 
 }
