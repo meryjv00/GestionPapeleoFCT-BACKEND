@@ -34,7 +34,11 @@ class CursosController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        $curso = Curso::create($request->all());
+        if (!$curso) {
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido registrar la empresa ' . $curso])], 404);
+        }
+        return response()->json(['code' => 201, 'message' => 'Datos insertados correctamente'], 201);
     }
 
     /**
@@ -55,7 +59,25 @@ class CursosController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        //Compruebo si el curso ya existe
+        $curso = Curso::find($id);
+
+        // Si no existe ese curso devolvemos un error.
+        if (!$curso) {
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se encuentra ese curso con ese código.'])], 404);
+        }
+
+        // Se actualiza el curso
+        $curso->update([
+            'cicloFormativo' => $request->input('curso')['cicloFormativo'],
+            'cicloFormativoA' => $request->input('curso')['cicloFormativoA'],
+            'dniTutor' => $request->input('curso')['dniTutor'],
+            'familiaProfesional' => $request->input('curso')['familiaProfesional'],
+            'cursoAcademico' => $request->input('curso')['cursoAcademico'],
+            'nHoras' => $request->input('curso')['nHoras']
+        ]);
+        return response()->json($curso, 200);
+
     }
 
     /**
@@ -65,7 +87,22 @@ class CursosController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $destroy = Curso::destroy($id);
+        if (!$destroy) {
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido eliminar el curso ' . $id])], 404);
+        } else {
+            return response()->json(['code' => 201, 'message' => 'Curso eliminado correctamente'], 201);
+        }
+    }
+
+    /**
+     * Metodo para obtener las familias profesionales de los cursos
+     */
+    public function getFamilies(){
+        $families = Curso::select('familiaProfesional')
+                                ->distinct()
+                                ->get();
+        return response()->json(['code' => 200, 'message' => $families]);
     }
 
 }

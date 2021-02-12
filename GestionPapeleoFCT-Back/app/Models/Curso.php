@@ -9,6 +9,15 @@ class Curso extends Model {
 
     use HasFactory;
 
+        protected $fillable = [
+        'cicloFormativo',
+        'cicloFormativoA',
+        'dniTutor',
+        'familiaProfesional',
+        'cursoAcademico',
+        'nHoras',
+    ];
+
     public function cursos() {
         return $this->hasOne(Persona::class, 'dni', 'dniTutor');
     }

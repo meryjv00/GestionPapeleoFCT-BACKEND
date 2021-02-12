@@ -33,8 +33,13 @@ Route::post('isPersona', [AuthController::class, 'isPersona']);
 Route::post('register_persona', [AuthController::class, 'register_persona']);
 
 Route::get('cursos', [CursosController::class, 'index']);
+Route::post('curso', [CursosController::class, 'store']);
+Route::put('curso/{cursoId}', [CursosController::class, 'update']);
+Route::delete('curso/{cursoId}', [CursosController::class, 'destroy']);
 Route::get('cursos/{dniTutor}', [CursosController::class, 'index2']);
 Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
+
+Route::get('cursosFamilies', [CursosController::class, 'getFamilies']);
 
 Route::post('insertAlumno', [PersonaController::class, 'store']);
 Route::put('updateAlumno/{idAlumno}', [PersonaController::class, 'update']);
@@ -53,5 +58,6 @@ Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
 Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
 
 Route::group(['middleware' => 'auth:api'], function() {
+
 });
 
