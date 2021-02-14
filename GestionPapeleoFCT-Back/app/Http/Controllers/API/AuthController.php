@@ -63,6 +63,11 @@ class AuthController extends Controller {
         ];
         $persona = Persona::create($validatedData);
         RolUsuario::create([
+            'role_id' => 5,
+            'user_dni' => $request->input("dni")
+        ]);
+
+        RolUsuario::create([
             'role_id' => $request->input("rol"),
             'user_dni' => $request->input("dni")
         ]);
@@ -100,9 +105,9 @@ class AuthController extends Controller {
         //$user = User::where('email', '=', $request->input('email'))->get();
         $user = \DB::table('users')
                 ->select('dni')
-                ->where('email','=',$request->input('email'))
+                ->where('email', '=', $request->input('email'))
                 ->get();
-        
+
         //Obtener todos los datos del usuario
         $persona = Persona::where("dni", "=", $user[0]->dni)->first();
 

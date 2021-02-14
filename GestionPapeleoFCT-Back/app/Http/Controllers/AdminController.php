@@ -9,7 +9,7 @@ use App\Models\CursoAlumno;
 
 class AdminController extends Controller {
 
-    function insertProfesores(Request $request) {
+    function insertProfesores(Request $request) {        
         //Vaciar profesores
         //!! Sólo pueden vaciarse en caso de que no estén asignados a ningún curso todavía
         \DB::delete('DELETE from personas where dni in (select user_dni from role_user where role_id=?)', [5]);

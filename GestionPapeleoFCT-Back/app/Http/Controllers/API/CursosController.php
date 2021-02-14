@@ -21,7 +21,7 @@ class CursosController extends Controller {
 
     public function index2($dniTutor) {
         //Los cursos pertenecientes a un tutor incluyendo los datos del tutor
-        $cursos = Curso::where('dniTutor','=',$dniTutor)
+        $cursos = Curso::where('dniTutor', '=', $dniTutor)
                 ->with('cursos')
                 ->get();
         return response()->json(['code' => 200, 'message' => $cursos]);
@@ -77,7 +77,6 @@ class CursosController extends Controller {
             'nHoras' => $request->input('curso')['nHoras']
         ]);
         return response()->json($curso, 200);
-
     }
 
     /**
@@ -98,11 +97,31 @@ class CursosController extends Controller {
     /**
      * Metodo para obtener las familias profesionales de los cursos
      */
-    public function getFamilies(){
+    public function getFamilies() {
         $families = Curso::select('familiaProfesional')
-                                ->distinct()
-                                ->get();
+                ->distinct()
+                ->get();
         return response()->json(['code' => 200, 'message' => $families]);
+    }
+
+    public function addTutorCurso(Request $request, $idCurso) {
+        $curso = Curso::find($idCurso);
+
+        // Si no existe ese curso devolvemos un error.
+        if (!$curso) {
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se encuentra ese curso con ese código.'])], 404);
+        }
+
+        $curso->update([
+            'cicloFormativo' => $request->input('curso')['cicloFormativo'],
+            'cicloFormativoA' => $request->input('curso')['cicloFormativoA'],
+            'dniTutor' => $request->input('dniProfesor'),
+            'familiaProfesional' => $request->input('curso')['familiaProfesional'],
+            'cursoAcademico' => $request->input('curso')['cursoAcademico'],
+            'nHoras' => $request->input('curso')['nHoras']
+        ]);
+
+        return response()->json($curso, 200);
     }
 
 }

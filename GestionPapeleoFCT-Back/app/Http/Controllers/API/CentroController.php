@@ -60,6 +60,7 @@ class CentroController extends Controller {
             'role_id' => 2,
             'user_dni' => $req->input("dniProf")
         ]);
+        RolUsuario::where('role_id', 3)->where('user_dni', $req->input("dniProf"))->delete();
 
         return response()->json(['message' => ['Se ha añadido rol jefe de estudios correctamente'], 'code' => 201], 201);
     }
@@ -69,8 +70,17 @@ class CentroController extends Controller {
         return response()->json(['code' => 200, 'message' => $jefesEstudio]);
     }
 
+    public function getTutores() {
+        $jefesEstudio = \DB::select('SELECT * FROM personas WHERE dni IN (SELECT user_dni FROM role_user WHERE role_id=3)');
+        return response()->json(['code' => 200, 'message' => $jefesEstudio]);
+    }
+
     public function deleteJefeEstudio($dniJefe) {
-        RolUsuario::where('role_id', 2)->where('user_dni',$dniJefe)->delete();
+        RolUsuario::where('role_id', 2)->where('user_dni', $dniJefe)->delete();
+        RolUsuario::create([
+            'role_id' => 3,
+            'user_dni' => $dniJefe
+        ]);
         return response()->json(['code' => 200, 'message' => 'Jefe de estudios deasignado correctamente'], 200);
     }
 
