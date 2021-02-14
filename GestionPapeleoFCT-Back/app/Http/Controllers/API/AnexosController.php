@@ -5,11 +5,14 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
-
 use App\Models\Anexo;
 use App\Models\AnexosGenerados;
 use App\Models\Centro;
 use App\Models\Empresa;
+use App\Models\Persona;
+use App\Models\Convenio;
+use App\Models\Curso;
+use App\Models\Fct;
 
 class AnexosController extends Controller {
 
@@ -63,7 +66,24 @@ class AnexosController extends Controller {
     public function destroy($id) {
         //
     }
-    
+
+    //------------------------------------------DESCARGA DE ANEXOS
+
+    /**
+     * Manda descargar un anexo definido por su id (tabla anexosgenerados) y luego lo elimina
+     * @param type $id
+     */
+    public function descargar($id) {
+        $anexo = AnexosGenerados::find($id);
+        //Lo define como 'guardado'
+        $anexo->update([
+            'descargado' => 1
+        ]);
+        //Lo manda descargar y eliminar
+        $anexo = $anexo->nombre;
+        return response()->download($anexo . '.docx')->deleteFileAfterSend(true);
+    }
+
     //------------------------------------------GENERACIÓN DE ANEXOS
 
     /**
@@ -128,20 +148,103 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('tlfEmpresa', $empresa->tlf);
         $templateProcessor->setValue('emailEmpresa', $empresa->email);
 
-        //Guardar
+        //Nombre del archivo
         $fileName = "Anexo0Empresa" . $empresa->nombre;
-        $templateProcessor->saveAs($fileName . '.docx');
-        //return response()->download($fileName . '.docx')->deleteFileAfterSend(false);
+
+        //Guardar registro en BD
         $anexoGen = AnexosGenerados::create([
-            'nombre' => $fileName,
-            'descargado' => 0
+                    'nombre' => $fileName,
+                    'descargado' => 0
         ]);
-        
-        return response()->json(['code' => 201, 'message' => $anexoGen->id], 201);
-        
-        
+        $idAnexo = $anexoGen->id;
+
+        //Guardar
+        $templateProcessor->saveAs($fileName . '.docx');
+
+        //Devuelve el CÓDIGO del anexo generado para su posterior descarga
+        return response()->json(['code' => 201, 'message' => $idAnexo], 201);
     }
-    
-    
+
+    /**
+     * Genera un anexo 1
+     * Recibe el OBJETO datos{numConvenio, idCurso}
+     * Utiliza Persona, Fct, Convenio
+     * @param Request $req
+     * @return type
+     */
+    public function anexo1(Request $req) {
+        //--------------------------DATOS
+        //Convenio
+        $convenio = Convenio::find($req->input('datos')['numConvenio']);
+        if (!$convenio) {
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido encontrar el convenio.'])], 404);
+        }
+        
+        //Curso
+        $curso = Curso::find($req->input('datos')['idCurso']);
+        if (!$curso) {
+            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido encontrar el curso.'])], 404);
+        }
+        
+        //Tutor
+        $tutor = Persona::where('dni','LIKE',$curso->dniTutor)->first();
+
+        //Centro
+        $centro = Centro::all()->last();
+
+        //Empresa
+        $empresa = Empresa::find($convenio->idEmpresa);
+
+        //Alumnos-fct (filas)
+        $alumnosfct = [];
+        $consulta = \DB::select('SELECT personas.nombre, personas.apellidos, personas.dni, personas.localidad, fct_alumno.fechaComienzo, fct_alumno.fechaFin, fct_alumno.nombreResponsable, fct_alumno.horarioDiario, fct_alumno.nHoras '
+                        . 'FROM personas INNER JOIN fct_alumno ON personas.dni = fct_alumno.dniAlumno '
+                        . 'WHERE fct_alumno.idEmpresa = 1 AND personas.dni IN (SELECT dniAlumno FROM curso_alumno WHERE idCurso = 1)');
+        $nombreResponsable;
+        foreach ($consulta as $datos) {
+            $nombreCompleto = $datos->nombre . ' ' . $datos->apellidos;
+            $alumno = array(
+                'nombreCompleto' => $nombreCompleto,
+                'dni' => $datos->dni,
+                'localidad' => $datos->localidad,
+                'horarioDiario' => $datos->horarioDiario,
+                'nHoras' => $datos->nHoras,
+                'fechaComienzo' => $datos->fechaComienzo,
+                'fechaFin' => $datos->fechaFin
+            );
+            $alumnosfct[] = $alumno;
+            $nombreResponsable = $datos->nombreResponsable;
+        }
+
+
+        //--------------------------PROCESO
+        $templateProcessor = new TemplateProcessor('word-template/anexo1_relacion_alumnos.docx');
+
+        //Se insertan los datos en el archivo
+        $templateProcessor->setValue('numConvenio', $convenio->numConvenio);
+        $templateProcessor->setValue('nombreCentro', $centro->nombre);
+        $templateProcessor->setValue('nombreEmpresa', $empresa->nombre);
+        
+        //Nota: El centro de trabajo se supone es la dirección de la empresa (direccion, poblacion)
+        $centroTrabajo = $empresa->calle . ', ' . $empresa->localidad;
+        $templateProcessor->setValue('centroTrabajo', $centroTrabajo);
+        
+        $templateProcessor->setValue('nombreCiclo', $curso->cicloFormativo);
+        
+        $nombreTutor = $tutor->apellidos . ', ' . $tutor->nombre;
+        $templateProcessor->setValue('nombreTutor', $nombreTutor);
+        
+        $templateProcessor->setValue('nombreResponsable', $nombreResponsable);
+        
+        //Inserta las filas de los alumnos de la FCT
+        $templateProcessor->cloneRowAndSetValues('nombreCompleto', $alumnosfct);
+
+        //Guardar
+        $templateProcessor->saveAs('PruebaFilas.docx');
+        return response()->json(['code' => 201, 'message' => 'HOLA, todo ha ido bien'], 201);
+
+        //Descargar (pruebas)
+        //return response()->download('PruebaFilas.docx')->deleteFileAfterSend(false);
+    }
 
 }

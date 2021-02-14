@@ -36,8 +36,8 @@ Route::post('insertAlumno', [PersonaController::class, 'store']);
 Route::put('updateAlumno/{idAlumno}', [PersonaController::class, 'update']);
 Route::delete('deleteAlumno/{idAlumno}', [PersonaController::class, 'destroy']);
 
-Route::get('anexos', [AnexosController::class, 'index']);
 
+//----------------------EMPRESAS
 Route::get('empresas', [EmpresasController::class, 'index']);
 
 Route::post('insertEmpresa', [EmpresasController::class, 'store']);
@@ -46,8 +46,16 @@ Route::put('updateEmpresa/{id}', [EmpresasController::class, 'update']);
 
 Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
 
+//----------------------ANEXOS
+Route::get('anexos', [AnexosController::class, 'index']);
+
 Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
 
+Route::post('getAnexo1', [AnexosController::class, 'anexo1']);
+
+Route::get('descargarAnexo/{id}', [AnexosController::class, 'descargar']);
+
 Route::group(['middleware' => 'auth:api'], function() {
+    
 });
 

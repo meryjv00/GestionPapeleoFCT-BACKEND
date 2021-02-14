@@ -22,4 +22,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+//Para descargar un anexo
+Route::get('/descargar/{id}', [AnexosController::class, 'descargar']);
+
+//Rutas para pruebas, eliminar en produccion
 Route::get('/intento/{id}', [AnexosController::class, 'anexo0']);
+Route::get('/intentoFilas', [AnexosController::class, 'anexo1']);
+Route::get('/intento1', [AnexosController::class, 'anexo1']);
