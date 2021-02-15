@@ -20,7 +20,9 @@ class ProfesoresSeeder extends Seeder {
         User::create([
             'dni' => '0X',
             'email' => 'director@gmail.com',
-            'password' => \Hash::make($contra)
+            'password' => \Hash::make($contra),
+            'activado' => 1,
+            'denegado' => 0
         ]);
         Persona::create([
             'dni' => '0X',

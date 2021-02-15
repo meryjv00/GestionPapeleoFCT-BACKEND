@@ -61,13 +61,14 @@ Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
 //ADMINISTRACION
 Route::put('generarProfesores', [AdminController::class, 'insertProfesores']);
 Route::post('generarAlumnos', [AdminController::class, 'insertAlumnos']);
-Route::get('getProfesores', [PersonaController::class, 'getProfesores']);
 Route::post('addJefeEstudios', [CentroController::class, 'addJefeEstudios']);
-Route::get('getJefesEstudio', [CentroController::class, 'getJefesEstudio']);
-Route::delete('deleteJefeEstudio/{dniJefe}', [CentroController::class, 'deleteJefeEstudio']);
+Route::get('getCuentasAdministrar', [CentroController::class, 'getCuentasAdministrar']);
 Route::put('addTutorCurso/{idCurso}', [CursosController::class, 'addTutorCurso']);
 Route::get('getTutores', [CentroController::class, 'getTutores']);
 Route::get('cursosSinTutor', [CursosController::class, 'cursosSinTutor']);
+Route::put('activarCuenta/{dni}', [CentroController::class, 'activarCuenta']);
+Route::put('denegarAccesoCuenta/{dni}', [CentroController::class, 'denegarAccesoCuenta']);
+Route::post('cambiarRol', [CentroController::class, 'cambiarRol']);
 
 Route::group(['middleware' => 'auth:api'], function() {
 
