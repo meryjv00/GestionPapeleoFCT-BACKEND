@@ -67,6 +67,7 @@ Route::get('getJefesEstudio', [CentroController::class, 'getJefesEstudio']);
 Route::delete('deleteJefeEstudio/{dniJefe}', [CentroController::class, 'deleteJefeEstudio']);
 Route::put('addTutorCurso/{idCurso}', [CursosController::class, 'addTutorCurso']);
 Route::get('getTutores', [CentroController::class, 'getTutores']);
+Route::get('cursosSinTutor', [CursosController::class, 'cursosSinTutor']);
 
 Route::group(['middleware' => 'auth:api'], function() {
 

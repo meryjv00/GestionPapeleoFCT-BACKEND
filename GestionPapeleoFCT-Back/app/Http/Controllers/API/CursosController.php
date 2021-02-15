@@ -124,4 +124,11 @@ class CursosController extends Controller {
         return response()->json($curso, 200);
     }
 
+    public function cursosSinTutor() {
+        $cursos = Curso::with('cursos')
+                ->where('dniTutor','=','0X')
+                ->get();
+        return response()->json(['code' => 200, 'message' => $cursos]);
+    }
+
 }
