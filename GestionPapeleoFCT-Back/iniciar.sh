@@ -30,3 +30,4 @@ echo '-------------------------INICIANDO BD------------------------'
 docker exec api_laravel php artisan migrate
 docker exec api_laravel php artisan db:seed
 docker exec api_laravel php artisan passport:client --personal
+docker exec api_laravel php artisan passport:install
