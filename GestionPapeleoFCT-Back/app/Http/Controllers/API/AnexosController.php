@@ -175,19 +175,19 @@ class AnexosController extends Controller {
     public function anexo1(Request $req) {
         //--------------------------DATOS
         //Convenio
-        $convenio = Convenio::find($req->input('datos')['numConvenio']);
+        $convenio = Convenio::where('numConvenio', 'LIKE', $req->input('datos')['numConvenio'])->first();
         if (!$convenio) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido encontrar el convenio.'])], 404);
         }
-        
+
         //Curso
         $curso = Curso::find($req->input('datos')['idCurso']);
         if (!$curso) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido encontrar el curso.'])], 404);
         }
-        
+
         //Tutor
-        $tutor = Persona::where('dni','LIKE',$curso->dniTutor)->first();
+        $tutor = Persona::where('dni', 'LIKE', $curso->dniTutor)->first();
 
         //Centro
         $centro = Centro::all()->last();
@@ -199,7 +199,7 @@ class AnexosController extends Controller {
         $alumnosfct = [];
         $consulta = \DB::select('SELECT personas.nombre, personas.apellidos, personas.dni, personas.localidad, fct_alumno.fechaComienzo, fct_alumno.fechaFin, fct_alumno.nombreResponsable, fct_alumno.horarioDiario, fct_alumno.nHoras '
                         . 'FROM personas INNER JOIN fct_alumno ON personas.dni = fct_alumno.dniAlumno '
-                        . 'WHERE fct_alumno.idEmpresa = 1 AND personas.dni IN (SELECT dniAlumno FROM curso_alumno WHERE idCurso = 1)');
+                        . 'WHERE fct_alumno.idEmpresa = ' . $empresa->id . ' AND personas.dni IN (SELECT dniAlumno FROM curso_alumno WHERE idCurso = ' . $curso->id . ')');
         $nombreResponsable;
         foreach ($consulta as $datos) {
             $nombreCompleto = $datos->nombre . ' ' . $datos->apellidos;
@@ -224,27 +224,335 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('numConvenio', $convenio->numConvenio);
         $templateProcessor->setValue('nombreCentro', $centro->nombre);
         $templateProcessor->setValue('nombreEmpresa', $empresa->nombre);
-        
+
         //Nota: El centro de trabajo se supone es la dirección de la empresa (direccion, poblacion)
         $centroTrabajo = $empresa->calle . ', ' . $empresa->localidad;
         $templateProcessor->setValue('centroTrabajo', $centroTrabajo);
-        
+
         $templateProcessor->setValue('nombreCiclo', $curso->cicloFormativo);
-        
+
         $nombreTutor = $tutor->apellidos . ', ' . $tutor->nombre;
         $templateProcessor->setValue('nombreTutor', $nombreTutor);
-        
+
         $templateProcessor->setValue('nombreResponsable', $nombreResponsable);
-        
+
         //Inserta las filas de los alumnos de la FCT
         $templateProcessor->cloneRowAndSetValues('nombreCompleto', $alumnosfct);
 
-        //Guardar
-        $templateProcessor->saveAs('PruebaFilas.docx');
-        return response()->json(['code' => 201, 'message' => 'HOLA, todo ha ido bien'], 201);
+        //Nombre del archivo
+        $fileName = "Anexo1Alumnos" . $empresa->nombre;
 
-        //Descargar (pruebas)
-        //return response()->download('PruebaFilas.docx')->deleteFileAfterSend(false);
+        //Guardar registro en BD
+        $anexoGen = AnexosGenerados::create([
+                    'nombre' => $fileName,
+                    'descargado' => 0
+        ]);
+        $idAnexo = $anexoGen->id;
+
+        //Guardar
+        $templateProcessor->saveAs($fileName . '.docx');
+        return response()->json(['code' => 201, 'message' => $idAnexo], 201);
+    }
+
+    /**
+     * Genera un anexo 2
+     * Recibe el OBJETO datos {idAlumno, idEmpresa, idCurso}
+     */
+    public function anexo2(Request $req) {
+        //--------------------------DATOS
+        //Curso
+        $curso = Curso::find($req->get('datos')['idCurso']);
+
+        //Empresa
+        $empresa = Empresa::find($req->get('datos')['idEmpresa']);
+
+        //Alumno
+        $alumno = Persona::find($req->get('datos')['idAlumno']);
+
+        //FCT
+        $fct = Fct::where('idEmpresa', '=', $empresa->id)
+                ->where('dniAlumno', 'LIKE', $alumno->dni)
+                ->first();
+
+        //Centro
+        $centro = Centro::all()->last();
+
+        //Tutor
+        $tutor = Persona::where('dni', 'LIKE', $centro->dniTutor)->first();
+
+        //--------------------------PROCESO
+        //Plantilla
+        $templateProcessor = new TemplateProcessor('word-template/anexo2_programa_formativo.docx');
+
+        //----Se inserta los datos en el archivo
+        //Datos del centro
+        $templateProcessor->setValue('nombreCentro', $centro->nombre);
+        $templateProcessor->setValue('codigoCentro', $centro->codigo);
+
+        //Tutor
+        $nombreTutor = $tutor->nombre . ' ' . $tutor->apellidos;
+        $templateProcessor->setValue('nombreTutor', $nombreTutor);
+
+        //Centro de trabajo
+        $centroTrabajo = $empresa->calle . ', ' . $empresa->localidad;
+        $templateProcessor->setValue('centroTrabajo', $centroTrabajo);
+
+        //Datos de la fct del alumno
+        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
+        $templateProcessor->setValue('fechaComienzo', $fct->fechaComienzo);
+        $templateProcessor->setValue('fechaFin', $fct->fechaFin);
+        $templateProcessor->setValue('nHoras', $fct->nHoras);
+
+        //Datos del curso
+        $templateProcessor->setValue('familiaProfesional', $curso->familiaProfesional);
+        $templateProcessor->setValue('cicloFormativo', $curso->cicloFormativo);
+        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
+
+        //Nombre del archivo
+        $fileName = "Anexo2ProgramaFormativo-" . $alumno->nombre . $alumno->apellidos;
+
+        //Guardar registro en BD
+        $anexoGen = AnexosGenerados::create([
+                    'nombre' => $fileName,
+                    'descargado' => 0
+        ]);
+        $idAnexo = $anexoGen->id;
+
+        //Guardar
+        $templateProcessor->saveAs($fileName . '.docx');
+        return response()->json(['code' => 201, 'message' => $idAnexo], 201);
+    }
+
+    /**
+     * Genera un anexo 3
+     * Recibe el OBJETO datos {idAlumno, idEmpresa, idCurso}
+     * @param Request $req
+     */
+    public function anexo3(Request $req) {
+        //--------------------------DATOS
+        //Curso
+        //$curso = Curso::find($req->get('datos')['idCurso']);
+        $curso = Curso::find(1);
+
+        //Empresa
+        //$empresa = Empresa::find($req->get('datos')['idEmpresa']);
+        $empresa = Empresa::find(1);
+
+        //Alumno
+        //$alumno = Persona::find($req->get('datos')['idAlumno']);
+        $alumno = Persona::find(1);
+
+        //FCT
+        $fct = Fct::where('idEmpresa', '=', $empresa->id)
+                ->where('dniAlumno', 'LIKE', $alumno->dni)
+                ->first();
+
+        //Centro
+        $centro = Centro::all()->last();
+
+        //Tutor
+        $tutor = Persona::where('dni', 'LIKE', $centro->dniTutor)->first();
+
+        //--------------------------PROCESO
+        //Plantilla
+        $templateProcessor = new TemplateProcessor('word-template/anexo3_hoja_semanal.docx');
+
+        //----Se inserta los datos en el archivo
+        //Datos del centro
+        $templateProcessor->setValue('nombreCentro', $centro->nombre);
+        $templateProcessor->setValue('codigoCentro', $centro->codigo);
+
+        //Tutor
+        $nombreTutor = $tutor->nombre . ' ' . $tutor->apellidos;
+        $templateProcessor->setValue('nombreTutor', $nombreTutor);
+
+        //Centro de trabajo
+        $centroTrabajo = $empresa->calle . ', ' . $empresa->localidad;
+        $templateProcessor->setValue('centroTrabajo', $centroTrabajo);
+
+        //Datos de la fct del alumno
+        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
+        $templateProcessor->setValue('fechaComienzo', $fct->fechaComienzo);
+        $templateProcessor->setValue('fechaFin', $fct->fechaFin);
+        $templateProcessor->setValue('nHoras', $fct->nHoras);
+
+        //Datos del curso
+        $templateProcessor->setValue('familiaProfesional', $curso->familiaProfesional);
+        $templateProcessor->setValue('cicloFormativo', $curso->cicloFormativo);
+        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
+
+        //Alumno
+        $nombreAlumno = $alumno->nombre . ' ' . $alumno->apellidos;
+        $templateProcessor->setValue('nombreAlumno', $nombreAlumno);
+
+        //Nombre del archivo
+        $fileName = "Anexo3HojaSemanal-" . $alumno->nombre . $alumno->apellidos;
+
+        //Guardar registro en BD
+        $anexoGen = AnexosGenerados::create([
+                    'nombre' => $fileName,
+                    'descargado' => 0
+        ]);
+        $idAnexo = $anexoGen->id;
+
+        //Guardar
+        $templateProcessor->saveAs($fileName . '.docx');
+        return response()->json(['code' => 201, 'message' => $idAnexo], 201);
+    }
+
+    /**
+     * Genera un anexo 4
+     * Recibe el OBJETO datos {idAlumno, idEmpresa, idCurso}
+     * @param Request $req
+     */
+    public function anexo4(Request $req) {
+        //--------------------------DATOS
+        //Curso
+        //$curso = Curso::find($req->get('datos')['idCurso']);
+        $curso = Curso::find(1);
+
+        //Empresa
+        //$empresa = Empresa::find($req->get('datos')['idEmpresa']);
+        $empresa = Empresa::find(1);
+
+        //Alumno
+        //$alumno = Persona::find($req->get('datos')['idAlumno']);
+        $alumno = Persona::find(1);
+
+        //FCT
+        $fct = Fct::where('idEmpresa', '=', $empresa->id)
+                ->where('dniAlumno', 'LIKE', $alumno->dni)
+                ->first();
+
+        //Centro
+        $centro = Centro::all()->last();
+
+        //Tutor
+        $tutor = Persona::where('dni', 'LIKE', $centro->dniTutor)->first();
+
+        //--------------------------PROCESO
+        //Plantilla
+        $templateProcessor = new TemplateProcessor('word-template/anexo4_evaluacion.docx');
+
+        //----Se inserta los datos en el archivo
+        //Datos del centro
+        $templateProcessor->setValue('nombreCentro', $centro->nombre);
+        $templateProcessor->setValue('codigoCentro', $centro->codigo);
+
+        //Tutor
+        $nombreTutor = $tutor->nombre . ' ' . $tutor->apellidos;
+        $templateProcessor->setValue('nombreTutor', $nombreTutor);
+
+        //Centro de trabajo
+        $centroTrabajo = $empresa->calle . ', ' . $empresa->localidad;
+        $templateProcessor->setValue('centroTrabajo', $centroTrabajo);
+
+        //Datos de la fct del alumno
+        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
+        $templateProcessor->setValue('fechaComienzo', $fct->fechaComienzo);
+        $templateProcessor->setValue('fechaFin', $fct->fechaFin);
+        $templateProcessor->setValue('nHoras', $fct->nHoras);
+
+        //Datos del curso
+        $templateProcessor->setValue('familiaProfesional', $curso->familiaProfesional);
+        $templateProcessor->setValue('cicloFormativo', $curso->cicloFormativo);
+        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
+
+        //Alumno
+        $nombreAlumno = $alumno->nombre . ' ' . $alumno->apellidos;
+        $templateProcessor->setValue('nombreAlumno', $nombreAlumno);
+
+        //Nombre del archivo
+        $fileName = "Anexo4Evaluacion-" . $alumno->nombre . $alumno->apellidos;
+
+        //Guardar registro en BD
+        $anexoGen = AnexosGenerados::create([
+                    'nombre' => $fileName,
+                    'descargado' => 0
+        ]);
+        $idAnexo = $anexoGen->id;
+
+        //Guardar
+        $templateProcessor->saveAs($fileName . '.docx');
+        return response()->json(['code' => 201, 'message' => $idAnexo], 201);
+    }
+
+    /**
+     * Genera un anexo 5
+     * Recibe el OBJETO datos {idAlumno, idEmpresa, idCurso}
+     * @param Request $req
+     */
+    public function anexo5(Request $req) {
+        //--------------------------DATOS
+        //Curso
+        //$curso = Curso::find($req->get('datos')['idCurso']);
+        $curso = Curso::find(1);
+
+        //Empresa
+        //$empresa = Empresa::find($req->get('datos')['idEmpresa']);
+        $empresa = Empresa::find(1);
+
+        //Alumno
+        //$alumno = Persona::find($req->get('datos')['idAlumno']);
+        $alumno = Persona::find(1);
+
+        //FCT
+        $fct = Fct::where('idEmpresa', '=', $empresa->id)
+                ->where('dniAlumno', 'LIKE', $alumno->dni)
+                ->first();
+
+        //Centro
+        $centro = Centro::all()->last();
+
+        //Tutor
+        $tutor = Persona::where('dni', 'LIKE', $centro->dniTutor)->first();
+
+        //--------------------------PROCESO
+        //Plantilla
+        $templateProcessor = new TemplateProcessor('word-template/anexo5_recibi.docx');
+
+        //----Se inserta los datos en el archivo
+        //Datos del centro
+        $templateProcessor->setValue('nombreCentro', $centro->nombre);
+        $templateProcessor->setValue('localidadCentro', $centro->localidad);
+        $templateProcessor->setValue('codigoCentro', $centro->codigo);
+
+        //Tutor
+        $nombreTutor = $tutor->nombre . ' ' . $tutor->apellidos;
+        $templateProcessor->setValue('nombreTutor', $nombreTutor);
+
+        //Datos de la fct del alumno
+        $templateProcessor->setValue('fechaComienzo', $fct->fechaComienzo);
+        $templateProcessor->setValue('fechaFin', $fct->fechaFin);
+        $templateProcessor->setValue('nHoras', $fct->nHoras);
+
+        //Datos del curso
+        $templateProcessor->setValue('familiaProfesional', $curso->familiaProfesional);
+        $templateProcessor->setValue('cicloFormativo', $curso->cicloFormativo);
+
+        //Alumno
+        $nombreAlumno = $alumno->nombre . ' ' . $alumno->apellidos;
+        $templateProcessor->setValue('nombreAlumno', $nombreAlumno);
+        
+        //Empresa
+        $templateProcessor->setValue('nombreEmpresa', $empresa->nombre);
+        $templateProcessor->setValue('localidadEmpresa', $empresa->localidad);
+        $direccionEmpresa = $empresa->calle . ', ' . $empresa->cp . ' ' . $empresa->localidad;
+        $templateProcessor->setValue('direccionEmpresa', $direccionEmpresa);        
+
+        //Nombre del archivo
+        $fileName = "Anexo5Recibi-" . $alumno->nombre . $alumno->apellidos;
+
+        //Guardar registro en BD
+        $anexoGen = AnexosGenerados::create([
+                    'nombre' => $fileName,
+                    'descargado' => 0
+        ]);
+        $idAnexo = $anexoGen->id;
+
+        //Guardar
+        $templateProcessor->saveAs($fileName . '.docx');
+        return response()->json(['code' => 201, 'message' => $idAnexo], 201);
     }
 
 }

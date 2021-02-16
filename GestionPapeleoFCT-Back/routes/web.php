@@ -29,3 +29,4 @@ Route::get('/descargar/{id}', [AnexosController::class, 'descargar']);
 Route::get('/intento/{id}', [AnexosController::class, 'anexo0']);
 Route::get('/intentoFilas', [AnexosController::class, 'anexo1']);
 Route::get('/intento1', [AnexosController::class, 'anexo1']);
+Route::get('/intento3', [AnexosController::class, 'anexo3']);

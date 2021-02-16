@@ -53,6 +53,14 @@ Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
 
 Route::post('getAnexo1', [AnexosController::class, 'anexo1']);
 
+Route::post('getAnexo2', [AnexosController::class, 'anexo2']);
+
+Route::post('getAnexo3', [AnexosController::class, 'anexo3']);
+
+Route::post('getAnexo4', [AnexosController::class, 'anexo4']);
+
+Route::post('getAnexo5', [AnexosController::class, 'anexo5']);
+
 Route::get('descargarAnexo/{id}', [AnexosController::class, 'descargar']);
 
 Route::group(['middleware' => 'auth:api'], function() {
