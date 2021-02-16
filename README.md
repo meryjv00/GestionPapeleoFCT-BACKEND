@@ -1,4 +1,4 @@
-# Gestión del papeleo para FCT - FRONTEND 📋📁
+# Gestión del papeleo para FCT - BACKEND 📋📁
 Aplicación web desarrollada para el centro CIFP Virgen de Gracia que facilita el relleno del papeleo necesario para las FCT a los tutores y jefes de estudio del centro.
 
 ### Repositorios ⏳
