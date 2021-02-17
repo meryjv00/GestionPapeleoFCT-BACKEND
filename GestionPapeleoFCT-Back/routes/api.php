@@ -61,7 +61,6 @@ Route::get('anexos', [AnexosController::class, 'index']);
 
 Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
 
-<<<<<<< HEAD
 Route::post('getAnexo1', [AnexosController::class, 'anexo1']);
 
 Route::post('getAnexo2', [AnexosController::class, 'anexo2']);
@@ -74,17 +73,10 @@ Route::post('getAnexo5', [AnexosController::class, 'anexo5']);
 
 Route::get('descargarAnexo/{id}', [AnexosController::class, 'descargar']);
 
-=======
->>>>>>> develop
 //ADMINISTRACION
 Route::post('generarProfesores', [AdminController::class, 'insertProfesores']);
 Route::post('generarAlumnos', [AdminController::class, 'insertAlumnos']);
 
 Route::group(['middleware' => 'auth:api'], function() {
-<<<<<<< HEAD
     
-=======
-
->>>>>>> develop
 });
-

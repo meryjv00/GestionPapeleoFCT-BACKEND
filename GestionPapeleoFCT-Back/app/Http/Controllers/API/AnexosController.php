@@ -67,7 +67,6 @@ class AnexosController extends Controller {
         //
     }
 
-<<<<<<< HEAD
     //------------------------------------------DESCARGA DE ANEXOS
 
     /**
@@ -85,8 +84,6 @@ class AnexosController extends Controller {
         return response()->download($anexo . '.docx')->deleteFileAfterSend(true);
     }
 
-=======
->>>>>>> develop
     //------------------------------------------GENERACIÓN DE ANEXOS
 
     /**
@@ -117,10 +114,6 @@ class AnexosController extends Controller {
             $tlfCentro = $centro->tlf;
             $emailCentro = $centro->email;
         }
-
-        //Recupera los datos del REPRESENTANTE de la empresa (hay que modificar la estructura de la BD)
-        //$nombreRepresentante = 'Pepito';
-        //$dniRepresentante = '123A';
 
         //Recupera los datos de la empresa
         $empresa = Empresa::find($id);
@@ -332,16 +325,13 @@ class AnexosController extends Controller {
     public function anexo3(Request $req) {
         //--------------------------DATOS
         //Curso
-        //$curso = Curso::find($req->get('datos')['idCurso']);
-        $curso = Curso::find(1);
+        $curso = Curso::find($req->get('datos')['idCurso']);
 
         //Empresa
-        //$empresa = Empresa::find($req->get('datos')['idEmpresa']);
-        $empresa = Empresa::find(1);
+        $empresa = Empresa::find($req->get('datos')['idEmpresa']);
 
         //Alumno
-        //$alumno = Persona::find($req->get('datos')['idAlumno']);
-        $alumno = Persona::find(1);
+        $alumno = Persona::find($req->get('datos')['idAlumno']);
 
         //FCT
         $fct = Fct::where('idEmpresa', '=', $empresa->id)
@@ -409,16 +399,13 @@ class AnexosController extends Controller {
     public function anexo4(Request $req) {
         //--------------------------DATOS
         //Curso
-        //$curso = Curso::find($req->get('datos')['idCurso']);
-        $curso = Curso::find(1);
+        $curso = Curso::find($req->get('datos')['idCurso']);
 
         //Empresa
-        //$empresa = Empresa::find($req->get('datos')['idEmpresa']);
-        $empresa = Empresa::find(1);
+        $empresa = Empresa::find($req->get('datos')['idEmpresa']);
 
         //Alumno
-        //$alumno = Persona::find($req->get('datos')['idAlumno']);
-        $alumno = Persona::find(1);
+        $alumno = Persona::find($req->get('datos')['idAlumno']);
 
         //FCT
         $fct = Fct::where('idEmpresa', '=', $empresa->id)
@@ -486,16 +473,13 @@ class AnexosController extends Controller {
     public function anexo5(Request $req) {
         //--------------------------DATOS
         //Curso
-        //$curso = Curso::find($req->get('datos')['idCurso']);
-        $curso = Curso::find(1);
+        $curso = Curso::find($req->get('datos')['idCurso']);
 
         //Empresa
-        //$empresa = Empresa::find($req->get('datos')['idEmpresa']);
-        $empresa = Empresa::find(1);
+        $empresa = Empresa::find($req->get('datos')['idEmpresa']);
 
         //Alumno
-        //$alumno = Persona::find($req->get('datos')['idAlumno']);
-        $alumno = Persona::find(1);
+        $alumno = Persona::find($req->get('datos')['idAlumno']);
 
         //FCT
         $fct = Fct::where('idEmpresa', '=', $empresa->id)
