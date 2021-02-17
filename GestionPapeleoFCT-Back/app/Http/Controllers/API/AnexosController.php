@@ -93,10 +93,8 @@ class AnexosController extends Controller {
      */
     public function anexo0($id) {
         //Recupera el nombre y dni del director del centro
-        $consulta = \DB::select('SELECT * FROM personas WHERE dni LIKE (SELECT dni FROM users WHERE id=(SELECT user_id FROM role_user WHERE role_id=1))');
-        $nombre;
-        $apellidos;
-        $dniDirector;
+        $consulta = \DB::select('SELECT * FROM personas WHERE dni LIKE (SELECT user_dni FROM role_user WHERE role_id=1)');
+        
         foreach ($consulta as $datos) {
             $nombre = $datos->nombre;
             $apellidos = $datos->apellidos;
@@ -118,8 +116,8 @@ class AnexosController extends Controller {
         }
 
         //Recupera los datos del REPRESENTANTE de la empresa (hay que modificar la estructura de la BD)
-        $nombreRepresentante = 'Pepito';
-        $dniRepresentante = '123A';
+        //$nombreRepresentante = 'Pepito';
+        //$dniRepresentante = '123A';
 
         //Recupera los datos de la empresa
         $empresa = Empresa::find($id);
@@ -137,8 +135,8 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('cifCentro', $cifCentro);
         $templateProcessor->setValue('tlfCentro', $tlfCentro);
         $templateProcessor->setValue('emailCentro', $emailCentro);
-        $templateProcessor->setValue('nombreRepresentante', $nombreRepresentante);
-        $templateProcessor->setValue('dniRepresentante', $dniRepresentante);
+        $templateProcessor->setValue('nombreRepresentante', $empresa->nombreRepresentante);
+        $templateProcessor->setValue('dniRepresentante', $empresa->dniRepresentante);
         $templateProcessor->setValue('nombreEmpresa', $empresa->nombre);
         $templateProcessor->setValue('localidadEmpresa', $empresa->localidad);
         $templateProcessor->setValue('provinciaEmpresa', $empresa->provincia);

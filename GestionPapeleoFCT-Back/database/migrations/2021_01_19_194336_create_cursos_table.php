@@ -14,7 +14,7 @@ class CreateCursosTable extends Migration {
     public function up() {
         Schema::create('cursos', function (Blueprint $table) {
             $table->id();
-            $table->string('dniTutor');
+            $table->string('dniTutor')->nullable();
             $table->foreign('dniTutor')
                     ->references('dni')
                     ->on('users')
