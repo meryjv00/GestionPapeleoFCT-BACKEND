@@ -45,6 +45,7 @@ class AuthController extends Controller {
             $persona->apellidos = $request->input("apellidos");
             $persona->localidad = $request->input("localidad");
             $persona->residencia = $request->input("residencia");
+            $persona->correo = $request->input("correo");
             $persona->tlf = $request->input("tlf");
             $persona->save();
             RolUsuario::create([
@@ -60,7 +61,7 @@ class AuthController extends Controller {
             'nombre' => $request->input("nombre"),
             'localidad' => $request->input("localidad"),
             'residencia' => $request->input("residencia"),
-            'correo' => $request->input("email"),
+            'correo' => $request->input("correo"),
             'tlf' => $request->input("tlf"),
         ];
         $persona = Persona::create($validatedData);

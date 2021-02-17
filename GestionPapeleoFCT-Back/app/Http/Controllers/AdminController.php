@@ -9,16 +9,16 @@ use App\Models\CursoAlumno;
 
 class AdminController extends Controller {
 
-    function insertProfesores(Request $request) {        
+    function insertProfesores(Request $request) {
         //Vaciar profesores
         //!! Sólo pueden vaciarse en caso de que no estén asignados a ningún curso todavía
         \DB::delete('DELETE from personas where dni in (select user_dni from role_user where role_id=?)', [5]);
 
         //Insertar profesores
-        //$request->file('profesores')->storeAs('public/CSV/', 'Profesores.csv');
+        $request->file('csv')->storeAs('public/CSV/', 'Profesores.csv');
         $path = \storage_path('app\public\CSV\Profesores.csv');
         $lines = file($path);
-        $utf8_lines = array_map('utf8_decode', $lines);
+        $utf8_lines = array_map('utf8_encode', $lines);
         $array = array_map('str_getcsv', $utf8_lines);
 
         for ($i = 1; $i < count($array); $i++) {
@@ -47,21 +47,16 @@ class AdminController extends Controller {
         return response()->json(['code' => 201, 'message' => 'Profesores insertados correctamente'], 201);
     }
 
-    function insertAlumnos(Request $request) {
-        //REQUEST
-        $idCursoSeleccionado = $request->get('id');
-        $cicloCursoSeleccionado = $request->get('cicloFormativoA');
-
+    function insertAlumnos(Request $request,$idCurso, $cicloCurso) {        
         //Vaciar alumnos correspondientes al curso seleccionado
-        \DB::delete('delete from personas  where dni in (select dniAlumno from curso_alumno where idCurso=?)', [$idCursoSeleccionado]);
-
-        //Insertar alumnos correspondientes al curso seleccionado
-        //$request->file('alumnos')->storeAs('public/CSV/', $cicloCursoSeleccionado . '.csv');
-
-        $ruta = 'app\public\CSV\\' . $cicloCursoSeleccionado . '.csv';
+        \DB::delete('delete from personas  where dni in (select dniAlumno from curso_alumno where idCurso=?)', [$idCurso]);
+        
+        //Insertar alumnos correspondientes al curso seleccionado   
+        $request->file('csv')->storeAs('public/CSV/', $cicloCurso . '.csv');
+        $ruta = 'app\public\CSV\\' . $cicloCurso . '.csv';
         $path = \storage_path($ruta);
         $lines = file($path);
-        $utf8_lines = array_map('utf8_decode', $lines);
+        $utf8_lines = array_map('utf8_encode', $lines);
         $array = array_map('str_getcsv', $utf8_lines);
 
         for ($i = 1; $i < count($array); $i++) {
@@ -86,7 +81,7 @@ class AdminController extends Controller {
                 'user_dni' => $dni[0]
             ]);
             CursoAlumno::create([
-                'idCurso' => $idCursoSeleccionado,
+                'idCurso' => $idCurso, 
                 'dniAlumno' => $dni[0]
             ]);
         }
