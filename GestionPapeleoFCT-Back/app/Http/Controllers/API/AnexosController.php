@@ -67,6 +67,7 @@ class AnexosController extends Controller {
         //
     }
 
+<<<<<<< HEAD
     //------------------------------------------DESCARGA DE ANEXOS
 
     /**
@@ -84,6 +85,8 @@ class AnexosController extends Controller {
         return response()->download($anexo . '.docx')->deleteFileAfterSend(true);
     }
 
+=======
+>>>>>>> develop
     //------------------------------------------GENERACIÓN DE ANEXOS
 
     /**

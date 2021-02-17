@@ -27,6 +27,15 @@ Route::get('/descargar/{id}', [AnexosController::class, 'descargar']);
 
 //Rutas para pruebas, eliminar en produccion
 Route::get('/intento/{id}', [AnexosController::class, 'anexo0']);
+<<<<<<< HEAD
 Route::get('/intentoFilas', [AnexosController::class, 'anexo1']);
 Route::get('/intento1', [AnexosController::class, 'anexo1']);
 Route::get('/intento3', [AnexosController::class, 'anexo3']);
+=======
+
+
+//Route::get('/importarCSV',[App\Http\Controllers\miControlador::class, 'vistaImports']);
+//Route::post('cambiaCurso',[App\Http\Controllers\miControlador::class, 'cambiaCurso']);
+//Route::post('/subirAlumnos',[App\Http\Controllers\miControlador::class, 'subirAlumnos'])->name('subirAlumnos');
+//Route::post('/subirProfesores',[App\Http\Controllers\miControlador::class, 'subirProfesores'])->name('subirProfesores');
+>>>>>>> develop
