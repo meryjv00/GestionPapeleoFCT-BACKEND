@@ -11,4 +11,9 @@ class EmpresaCurso extends Model {
 
     protected $table = 'empresa_curso';
 
+    protected $fillable = [
+        'idEmpresa',
+        'idCurso'
+    ];
+
 }

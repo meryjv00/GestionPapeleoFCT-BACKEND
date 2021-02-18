@@ -96,4 +96,24 @@ class EmpresasController extends Controller {
         }
     }
 
+    // Funcion para ver las empresas que no estan colaborando actualmente con las prácticas de un curso
+    public function showEmpresaNoCurso($id){
+        // SELECT * FROM empresas WHERE id NOT IN (SELECT idEmpresa FROM empresa_curso WHERE idCurso = $id)
+        $empresas = Empresa::whereNotIn('id', function($query) use ($id){
+            $query->select('idEmpresa')
+                  ->from('empresa_curso')
+                  ->where('idCurso', '=', $id);
+        })->get();
+        return response()->json(['code' => 200, 'message' => $empresas]);
+    }
+
+    // Funcion para ver las empresas que colaboran en las practicas de un curso
+    public function showEmpresasCurso($id){
+        // SELECT * FROM empresas INNER JOIN empresa_curso ON empresas.id = empresa_curso.idEmpresa WHERE empresa_curso.idCurso = $id;
+        $empresas = Empresa::join('empresa_curso', 'empresas.id', '=', 'empresa_curso.idEmpresa',)
+                            ->where('empresa_curso.idCurso', $id)
+                            ->get();
+        return response()->json(['code' => 200, 'message' => $empresas]);
+    }
+
 }
