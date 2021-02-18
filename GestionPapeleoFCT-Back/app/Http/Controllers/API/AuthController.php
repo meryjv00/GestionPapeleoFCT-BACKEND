@@ -84,6 +84,28 @@ class AuthController extends Controller {
         }
     }
 
+    /**
+     * Update profesor
+     * @param Request $request
+     * @return json
+     */
+    public function mod_user(Request $request) {
+        if (Persona::where('dni', $request->input('dni'))->count() != 1) {
+            return response()->json(['message' => 'datos no encontrados', 'code' => 201], 201);
+        }
+
+        $persona = Persona::where('dni', $request->input('dni'))->first();
+        $persona->apellidos = $request->input("apellidos");
+        $persona->nombre = $request->input("nombre");
+        $persona->localidad = $request->input("localidad");
+        $persona->residencia = $request->input("residencia");
+        $persona->correo = $request->input("correo");
+        $persona->tlf = $request->input("tlf");
+        
+        $persona->save();
+        return response()->json(['message' => ['user' => $persona], 'code' => 201], 201);
+    }
+
     public function login(Request $request) {
         $loginData = $request->validate([
             'email' => 'email|required',
@@ -100,9 +122,9 @@ class AuthController extends Controller {
         //$user = User::where('email', '=', $request->input('email'))->get();
         $user = \DB::table('users')
                 ->select('dni')
-                ->where('email','=',$request->input('email'))
+                ->where('email', '=', $request->input('email'))
                 ->get();
-        
+
         //Obtener todos los datos del usuario
         $persona = Persona::where("dni", "=", $user[0]->dni)->first();
 
