@@ -9,7 +9,7 @@ use App\Http\Controllers\API\PersonaController;
 use App\Http\Controllers\API\AnexosController;
 use App\Http\Controllers\API\EmpresasController;
 use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\API\EmpresaCursoController;
 /*
   |--------------------------------------------------------------------------
   | API Routes
@@ -28,6 +28,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('getDirector', [CentroController::class, 'getDirector']);
 Route::post('getCentro', [CentroController::class, 'getCentro']);
 Route::post('updateCentro', [CentroController::class, 'updateCentro']);
+
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('isPersona', [AuthController::class, 'isPersona']);
@@ -38,31 +39,31 @@ Route::post('curso', [CursosController::class, 'store']);
 Route::put('curso/{cursoId}', [CursosController::class, 'update']);
 Route::delete('curso/{cursoId}', [CursosController::class, 'destroy']);
 Route::get('cursos/{dniTutor}', [CursosController::class, 'index2']);
-Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
 
 Route::get('cursosFamilies', [CursosController::class, 'getFamilies']);
 
 Route::post('insertAlumno', [PersonaController::class, 'store']);
 Route::put('updateAlumno/{idAlumno}', [PersonaController::class, 'update']);
 Route::delete('deleteAlumno/{idAlumno}', [PersonaController::class, 'destroy']);
-
-Route::get('anexos', [AnexosController::class, 'index']);
+Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
 
 Route::get('empresas', [EmpresasController::class, 'index']);
 Route::get('empresasNoCurso/{id}', [EmpresasController::class, 'showEmpresaNoCurso']);
 Route::get('empresasCurso/{id}', [EmpresasController::class, 'showEmpresasCurso']);
-
 Route::post('insertEmpresa', [EmpresasController::class, 'store']);
-
 Route::put('updateEmpresa/{id}', [EmpresasController::class, 'update']);
-
 Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
 
 Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
+Route::get('anexos', [AnexosController::class, 'index']);
 
 //ADMINISTRACION
 Route::post('generarProfesores', [AdminController::class, 'insertProfesores']);
 Route::post('generarAlumnos', [AdminController::class, 'insertAlumnos']);
+
+// Relacion con cursos y empresas de prácticas
+Route::post('addEmpresaCurso', [EmpresaCursoController::class, 'store']);
+Route::delete('deleteEmpresaCurso/{idCurso}', [EmpresaCursoController::class, 'destroy']);
 
 Route::group(['middleware' => 'auth:api'], function() {
 
