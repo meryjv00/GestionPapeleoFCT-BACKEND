@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Curso;
+use App\Models\CursoAlumno;
 
 class CursosController extends Controller {
 
@@ -126,9 +127,19 @@ class CursosController extends Controller {
 
     public function cursosSinTutor() {
         $cursos = Curso::with('cursos')
-                ->where('dniTutor','=','0X')
+                ->where('dniTutor', '=', '0X')
                 ->get();
         return response()->json(['code' => 200, 'message' => $cursos]);
+    }
+
+    public function cursosSinAlumnos() {
+        $cursos = \DB::select('SELECT * FROM cursos where id not in(select DISTINCT idCurso FROM curso_alumno)');
+        return response()->json(['code' => 200, 'message' => $cursos]);
+    }
+
+    public function reiniciarAlumnos() {
+        \DB::delete('delete from personas  where dni in (select user_dni from role_user where role_id=?)', [4]);
+        return response()->json(['code' => 200, 'message' => 'Alumnos borrados correctamente']);
     }
 
 }

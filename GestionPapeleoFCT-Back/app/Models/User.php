@@ -23,8 +23,7 @@ class User extends Authenticatable {
         'dni',
         'email',
         'password',
-        'activado',
-        'denegado'
+        'activado'
     ];
 
     /**

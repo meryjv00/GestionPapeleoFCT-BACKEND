@@ -10,8 +10,13 @@ use App\Models\CursoAlumno;
 class AdminController extends Controller {
 
     function insertProfesores(Request $request) {
+        //Si algun usuario ya ha creado cuenta no se podrán insertar de nuevo, ya que se perderían los roles del registro
+        $pers = \DB::select('SELECT * from personas where dni in (select user_dni from role_user where role_id=? or role_id=?)', [3,2]);
+        if(count($pers) > 0){
+            return response()->json(['code' => 201, 'message' => 'No es posible reinsertar los profesores, ya que hay cuentas creadas asociadas'], 201);
+        }
+            
         //Vaciar profesores
-        //!! Sólo pueden vaciarse en caso de que no estén asignados a ningún curso todavía
         \DB::delete('DELETE from personas where dni in (select user_dni from role_user where role_id=?)', [5]);
 
         //Insertar profesores
@@ -44,7 +49,7 @@ class AdminController extends Controller {
                 'user_dni' => $dni[0]
             ]);
         }
-        return response()->json(['code' => 201, 'message' => 'Profesores insertados correctamente'], 201);
+        return response()->json(['code' => 201, 'message' => 'Profesores insertados correctamente.'], 201);
     }
 
     function insertAlumnos(Request $request,$idCurso, $cicloCurso) {        

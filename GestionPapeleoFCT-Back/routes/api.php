@@ -66,9 +66,12 @@ Route::get('getCuentasAdministrar', [CentroController::class, 'getCuentasAdminis
 Route::put('addTutorCurso/{idCurso}', [CursosController::class, 'addTutorCurso']);
 Route::get('getTutores', [CentroController::class, 'getTutores']);
 Route::get('cursosSinTutor', [CursosController::class, 'cursosSinTutor']);
-Route::put('activarCuenta/{dni}', [CentroController::class, 'activarCuenta']);
+Route::put('activarDesactCuenta/{dni}', [CentroController::class, 'activarDesactCuenta']);
 Route::put('denegarAccesoCuenta/{dni}', [CentroController::class, 'denegarAccesoCuenta']);
 Route::post('cambiarRol', [CentroController::class, 'cambiarRol']);
+Route::get('cursosSinAlumnos', [CursosController::class, 'cursosSinAlumnos']);
+Route::get('reiniciarAlumnos', [CursosController::class, 'reiniciarAlumnos']);
+Route::get('getCuentasActivas', [CentroController::class, 'getCuentasActivas']);
 
 Route::group(['middleware' => 'auth:api'], function() {
 

@@ -66,12 +66,23 @@ class CentroController extends Controller {
     }
 
     /**
-     * Obtiene todas las cuentas desactivadas y sin denegar
+     * Obtiene todas las cuentas desactivadas
      * @return type
      */
     public function getCuentasAdministrar() {
-        $jefes = \DB::select('SELECT * FROM personas WHERE dni IN (SELECT user_dni FROM role_user WHERE role_id=2)  AND dni IN (SELECT dni from users where activado = 0 and denegado = 0 )');
-        $tutores = \DB::select('SELECT * FROM personas WHERE dni IN (SELECT user_dni FROM role_user WHERE role_id=3) AND dni IN (SELECT dni from users where activado = 0 and denegado = 0 )');
+        $jefes = \DB::select('SELECT * FROM personas WHERE dni IN (SELECT user_dni FROM role_user WHERE role_id=2)  AND dni IN (SELECT dni from users where activado = 0 )');
+        $tutores = \DB::select('SELECT * FROM personas WHERE dni IN (SELECT user_dni FROM role_user WHERE role_id=3) AND dni IN (SELECT dni from users where activado = 0)');
+
+        return response()->json(['code' => 200, 'message' => [$jefes, $tutores]]);
+    }
+
+    /**
+     * Obtiene todas las cuentas activadas
+     * @return type
+     */
+    public function getCuentasActivas() {
+        $jefes = \DB::select('SELECT * FROM personas WHERE dni IN (SELECT user_dni FROM role_user WHERE role_id=2)  AND dni IN (SELECT dni from users where activado = 1 )');
+        $tutores = \DB::select('SELECT * FROM personas WHERE dni IN (SELECT user_dni FROM role_user WHERE role_id=3) AND dni IN (SELECT dni from users where activado = 1)');
 
         return response()->json(['code' => 200, 'message' => [$jefes, $tutores]]);
     }
@@ -99,10 +110,10 @@ class CentroController extends Controller {
                 'user_dni' => $request->input('dni')
             ]);
         }
-        return response()->json(['code' => 200, 'message' => 'Jefe de estudios deasignado correctamente'], 200);
+        return response()->json(['code' => 200, 'message' => 'Rol cambiado con éxito'], 200);
     }
 
-    public function activarCuenta($dni) {
+    public function activarDesactCuenta($dni) {
         $user = User::where('dni', '=', $dni)
                 ->get();
 
@@ -111,7 +122,11 @@ class CentroController extends Controller {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se encuentra usuario con este dni.'])], 404);
         }
 
-        $user[0]->activado = 1;
+        if ($user[0]->activado == 0) {
+            $user[0]->activado = 1;
+        } else {
+            $user[0]->activado = 0;
+        }
         $user[0]->save();
         return response()->json($user, 200);
     }
@@ -125,9 +140,8 @@ class CentroController extends Controller {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se encuentra usuario con este dni.'])], 404);
         }
 
-        $user[0]->denegado = 1;
-        $user[0]->save();
-        return response()->json($user, 200);
+        $user[0]->delete();
+        return response()->json('Se ha borrado con éxito', 200);
     }
 
 }

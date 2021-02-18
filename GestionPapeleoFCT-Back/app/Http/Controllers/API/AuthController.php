@@ -20,8 +20,7 @@ class AuthController extends Controller {
             'dni' => 'required|unique:users',
             'email' => 'email|required|unique:users',
             'password' => 'required',
-            'activado' => 'required',
-            'denegado' => 'required'
+            'activado' => 'required'
         ]);
 
         $validatedData['password'] = \Hash::make($request->input("password"));

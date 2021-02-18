@@ -21,8 +21,7 @@ class ProfesoresSeeder extends Seeder {
             'dni' => '0X',
             'email' => 'director@gmail.com',
             'password' => \Hash::make($contra),
-            'activado' => 1,
-            'denegado' => 0
+            'activado' => 1
         ]);
         Persona::create([
             'dni' => '0X',
@@ -33,10 +32,6 @@ class ProfesoresSeeder extends Seeder {
             'correo' => 'director@gmail.com',
             'tlf' => '999999999'
         ]);
-//        RolUsuario::create([
-//            'role_id' => 5,
-//            'user_dni' => '0X'
-//        ]);
         RolUsuario::create([
             'role_id' => 1,
             'user_dni' => '0X'
