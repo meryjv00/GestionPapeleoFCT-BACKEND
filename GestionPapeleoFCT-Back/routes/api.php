@@ -32,6 +32,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('isPersona', [AuthController::class, 'isPersona']);
 Route::post('register_persona', [AuthController::class, 'register_persona']);
+Route::post('mod_user', [AuthController::class, 'mod_user']);
 
 Route::get('cursos', [CursosController::class, 'index']);
 Route::post('curso', [CursosController::class, 'store']);

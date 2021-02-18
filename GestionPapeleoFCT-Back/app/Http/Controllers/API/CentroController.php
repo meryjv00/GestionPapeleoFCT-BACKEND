@@ -25,8 +25,8 @@ class CentroController extends Controller {
         }
         
         $validatedData = $request->validate([
-            'cif' => 'required|primary:centro',
-            'email' => 'email|required|unique:centro',
+            'codigo' => 'required|primary:centro',
+            'email' => 'required|unique:centro',
             'tlf' => 'required|unique:centro'
         ]);
         
@@ -50,9 +50,9 @@ class CentroController extends Controller {
             return response()->json(['message' => 'error no se encuentra el director', 'code' => 201], 201);
         }
         $id=RolUsuario::where('role_id',1)->first();
-        $user = User::where('id',$id->user_id)->first();
-        $nombre = Persona::where('correo',$user->email)->first();
-        return response()->json(['message' => ['nombre' => $nombre->nombre.' '.$nombre->apellidos, 'email' => $nombre->correo], 'code' => 201], 201);
+        $user = User::where('dni',$id->user_dni)->first();
+        $persona = Persona::where('correo',$user['email'])->first();
+        return response()->json(['message' => ['nombre' => $persona->nombre.' '.$persona->apellidos, 'email' => $persona->correo], 'code' => 201], 201);
     }
 
 }
