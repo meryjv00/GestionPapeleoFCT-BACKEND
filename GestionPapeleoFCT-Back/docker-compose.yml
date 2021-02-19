@@ -22,25 +22,11 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./:/var/www/html
-    #expose:
-    #  - 80
-    ports:
-      - 8000:80
-    depends_on: 
-      - 'mariadb'
-    networks:
-      - laravel
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    links:
-      - 'mariadb:db'
-    depends_on:
-      - mariadb
+      - ./storage:/var/www/html/storage
     ports:
       - 8081:80
+    depends_on: 
+      - 'mariadb'
     networks:
       - laravel
 
