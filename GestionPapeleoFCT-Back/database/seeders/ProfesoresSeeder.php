@@ -20,7 +20,8 @@ class ProfesoresSeeder extends Seeder {
         User::create([
             'dni' => '0X',
             'email' => 'director@gmail.com',
-            'password' => \Hash::make($contra)
+            'password' => \Hash::make($contra),
+            'activado' => 1
         ]);
         Persona::create([
             'dni' => '0X',
@@ -31,10 +32,6 @@ class ProfesoresSeeder extends Seeder {
             'correo' => 'director@gmail.com',
             'tlf' => '999999999'
         ]);
-//        RolUsuario::create([
-//            'role_id' => 5,
-//            'user_dni' => '0X'
-//        ]);
         RolUsuario::create([
             'role_id' => 1,
             'user_dni' => '0X'
@@ -46,7 +43,7 @@ class ProfesoresSeeder extends Seeder {
         //-----------------------------------------------------------------------
 //        $path = public_path('csv/datProfesores.csv');
 //        $lines = file($path);
-//        $utf8_lines = array_map('utf8_decode', $lines);
+//        $utf8_lines = array_map('utf8_encode', $lines);
 //        $array = array_map('str_getcsv', $utf8_lines);
 //
 //        for ($i = 1; $i < count($array); $i++) {
@@ -71,28 +68,6 @@ class ProfesoresSeeder extends Seeder {
 //                'role_id' => 5,
 //                'user_dni' => $dni[0]
 //            ]);
-//
-//            //Director -> Rol 1: Director
-//            if ($dni[0] == '05664525Q') {
-//                RolUsuario::create([
-//                    'role_id' => 1,
-//                    'user_dni' => $dni[0]
-//                ]);
-//            }
-//
-//            //Jefe de estudios -> Rol 2: Jefe de estudios
-//            if ($dni[0] == '05679252T') {
-//                RolUsuario::create([
-//                    'role_id' => 2,
-//                    'user_dni' => $dni[0]
-//                ]);
-//                User::create([
-//                    'dni' => $dni[0],
-//                    'email' => $correo[0],
-//                    'password' => \Hash::make($contra)
-//                ]);
-//            }
-//
 //        }
     }
 

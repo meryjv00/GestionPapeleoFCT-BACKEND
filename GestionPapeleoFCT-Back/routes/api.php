@@ -77,7 +77,18 @@ Route::get('descargarAnexo/{id}', [AnexosController::class, 'descargar']);
 
 //ADMINISTRACION
 Route::post('generarProfesores', [AdminController::class, 'insertProfesores']);
-Route::post('generarAlumnos', [AdminController::class, 'insertAlumnos']);
+Route::post('generarAlumnos/{idCurso}/{cicloCurso}', [AdminController::class, 'insertAlumnos']);
+Route::post('addJefeEstudios', [CentroController::class, 'addJefeEstudios']);
+Route::get('getCuentasAdministrar', [CentroController::class, 'getCuentasAdministrar']);
+Route::put('addTutorCurso/{idCurso}', [CursosController::class, 'addTutorCurso']);
+Route::get('getTutores', [CentroController::class, 'getTutores']);
+Route::get('cursosSinTutor', [CursosController::class, 'cursosSinTutor']);
+Route::put('activarDesactCuenta/{dni}', [CentroController::class, 'activarDesactCuenta']);
+Route::put('denegarAccesoCuenta/{dni}', [CentroController::class, 'denegarAccesoCuenta']);
+Route::post('cambiarRol', [CentroController::class, 'cambiarRol']);
+Route::get('cursosSinAlumnos', [CursosController::class, 'cursosSinAlumnos']);
+Route::get('reiniciarAlumnos', [CursosController::class, 'reiniciarAlumnos']);
+Route::get('getCuentasActivas', [CentroController::class, 'getCuentasActivas']);
 
 // Relacion con cursos y empresas de prácticas
 Route::post('addEmpresaCurso', [EmpresaCursoController::class, 'store']);

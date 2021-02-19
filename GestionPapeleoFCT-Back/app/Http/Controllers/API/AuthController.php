@@ -19,11 +19,12 @@ class AuthController extends Controller {
         $validatedData = $request->validate([
             'dni' => 'required|unique:users',
             'email' => 'email|required|unique:users',
-            'password' => 'required'
+            'password' => 'required',
+            'activado' => 'required'
         ]);
 
         $validatedData['password'] = \Hash::make($request->input("password"));
-
+        
         $user = User::create($validatedData);
         $accessToken = $user->createToken('authToken')->accessToken;
 
@@ -43,6 +44,7 @@ class AuthController extends Controller {
             $persona->apellidos = $request->input("apellidos");
             $persona->localidad = $request->input("localidad");
             $persona->residencia = $request->input("residencia");
+            $persona->correo = $request->input("correo");
             $persona->tlf = $request->input("tlf");
             $persona->save();
             RolUsuario::create([
@@ -58,10 +60,15 @@ class AuthController extends Controller {
             'nombre' => $request->input("nombre"),
             'localidad' => $request->input("localidad"),
             'residencia' => $request->input("residencia"),
-            'correo' => $request->input("email"),
+            'correo' => $request->input("correo"),
             'tlf' => $request->input("tlf"),
         ];
         $persona = Persona::create($validatedData);
+        RolUsuario::create([
+            'role_id' => 5,
+            'user_dni' => $request->input("dni")
+        ]);
+
         RolUsuario::create([
             'role_id' => $request->input("rol"),
             'user_dni' => $request->input("dni")
@@ -117,9 +124,19 @@ class AuthController extends Controller {
             return response()->json(['message' => 'Login incorrecto. Revise las credenciales.', 'code' => 400], 400);
         }
 
+        //Comprobar que la cuenta este activada
+        $usu = User::where('email','=',$request->input('email'))
+                ->where('activado','=',1)
+                ->get();
+    
+        if(count($usu) == 0){
+            return response()->json(['message' => 'Cuenta desactivada, contacte con el director.', 'code' => 400], 400);
+        }
+        
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
 
-        //$user = User::where('email', '=', $request->input('email'))->get();
+        //Buscamos el dni del email introducido para posteriormente buscarlo en personas; ya que puede tener un correo diferente al registrarse
+        //que el que tiene registrado en la BD
         $user = \DB::table('users')
                 ->select('dni')
                 ->where('email', '=', $request->input('email'))
@@ -130,7 +147,6 @@ class AuthController extends Controller {
 
         //Obtener el rol del usuario
         $rol = RolUsuario::where("user_dni", "=", $persona->dni)->get();
-        //return response()->json(['message' => ['rol' => $rol], 'code' => 200], 200);
 
         if ($rol[0]->role_id == 1) {
             $rolDescripcion = "Director";
@@ -139,7 +155,6 @@ class AuthController extends Controller {
         } else if ($rol[1]->role_id == 3) {
             $rolDescripcion = "Tutor";
         }
-        //return response(['user' => auth()->user(), 'access_token' => $accessToken]);
         return response()->json(['message' => ['user' => auth()->user(), 'access_token' => $accessToken, 'datos_user' => $persona, 'rol' => $rolDescripcion], 'code' => 200], 200);
     }
 

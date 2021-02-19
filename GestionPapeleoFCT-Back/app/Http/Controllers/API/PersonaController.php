@@ -108,4 +108,10 @@ class PersonaController extends Controller {
         return response()->json(['code' => 200, 'message' => 'Persona borrada'], 200);
     }
 
+    public function getProfesores() {
+        $profesores = \DB::select('SELECT * FROM personas WHERE dni IN (SELECT user_dni FROM role_user WHERE role_id=5)');
+
+        return response()->json(['code' => 200, 'message' => $profesores]);
+    }
+
 }
