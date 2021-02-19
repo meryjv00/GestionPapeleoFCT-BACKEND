@@ -47,6 +47,8 @@ Route::post('insertAlumno', [PersonaController::class, 'store']);
 Route::put('updateAlumno/{idAlumno}', [PersonaController::class, 'update']);
 Route::delete('deleteAlumno/{idAlumno}', [PersonaController::class, 'destroy']);
 Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
+Route::get('alumnosCursoSinEmpresa/{idCurso}', [PersonaController::class, 'alumnosCursoSinEmpresa']);
+Route::get('alumnosCursoPracticas/{idCurso}/{idEmpresa}', [PersonaController::class, 'alumnosCursoPracticas']);
 
 Route::get('anexos', [AnexosController::class, 'index']);
 

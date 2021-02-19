@@ -108,4 +108,33 @@ class PersonaController extends Controller {
         return response()->json(['code' => 200, 'message' => 'Persona borrada'], 200);
     }
 
+    // Método que devuelve los alumnos de un curso que tienen empresa para las practicas
+    public function alumnosCursoSinEmpresa($idCurso){
+                
+        // SELECT * FROM personas p INNER JOIN curso_alumno ca ON p.dni = ca.dniAlumno WHERE ca.idCurso = $idCurso AND p.dni NOT IN (SELECT dniAlumno FROM fct_alumno);
+
+        $personas = Persona::join('curso_alumno', 'personas.dni', '=', 'curso_alumno.dniAlumno',)
+                            ->where('curso_alumno.idCurso', $idCurso)
+                            ->whereNotIn('personas.dni', function($query) {
+                                        $query->select('dniAlumno')->from('fct_alumno');
+                            })->get();
+
+        return response()->json(['code' => 200, 'message' => $personas]);
+    }
+
+    // Método para seleccioanr los alumnos en practicas en una empresa
+    public function alumnosCursoPracticas($idCurso, $idEmpresa){
+                
+        // SELECT * FROM personas p INNER JOIN curso_alumno ca ON p.dni = ca.dniAlumno WHERE ca.idCurso = $idCurso AND p.dni IN (SELECT dniAlumno FROM fct_alumno WHERE idEmpresa = $idEmpresa);
+        $personas = Persona::join('curso_alumno', 'personas.dni', '=', 'curso_alumno.dniAlumno',)
+                            ->where('curso_alumno.idCurso', $idCurso)
+                            ->whereIn('personas.dni', function($query) use ($idEmpresa){
+                                        $query->select('dniAlumno')
+                                              ->from('fct_alumno')
+                                              ->where('idEmpresa', $idEmpresa);
+                            })->get();
+        return response()->json(['code' => 200, 'message' => $personas]);
+    }
+    
+
 }
