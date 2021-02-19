@@ -10,6 +10,8 @@ use App\Http\Controllers\API\AnexosController;
 use App\Http\Controllers\API\EmpresasController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\API\EmpresaCursoController;
+use App\Http\Controllers\API\FctController;
+
 /*
   |--------------------------------------------------------------------------
   | API Routes
@@ -84,6 +86,10 @@ Route::post('generarAlumnos', [AdminController::class, 'insertAlumnos']);
 // Relacion con cursos y empresas de prácticas
 Route::post('addEmpresaCurso', [EmpresaCursoController::class, 'store']);
 Route::delete('deleteEmpresaCurso/{idCurso}', [EmpresaCursoController::class, 'destroy']);
+
+// Rutas Fct
+Route::post('addAlumnoPracticas', [FctController::class, 'store']);
+Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
 
 Route::group(['middleware' => 'auth:api'], function() {
     
