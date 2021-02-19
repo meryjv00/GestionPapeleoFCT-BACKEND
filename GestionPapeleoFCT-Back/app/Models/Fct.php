@@ -17,7 +17,7 @@ class Fct extends Model {
     protected $fillable = [
         'idEmpresa',
         'dniAlumno',
-        'nombreResponsable',
+        //'nombreResponsable',
         'horarioDiario',
         'nHoras',
         'fechaComienzo',

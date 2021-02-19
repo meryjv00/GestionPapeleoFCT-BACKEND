@@ -110,6 +110,7 @@ class EmpresasController extends Controller {
     // Funcion para ver las empresas que colaboran en las practicas de un curso
     public function showEmpresasCurso($id){
         // SELECT * FROM empresas INNER JOIN empresa_curso ON empresas.id = empresa_curso.idEmpresa WHERE empresa_curso.idCurso = $id;
+        
         $empresas = Empresa::join('empresa_curso', 'empresas.id', '=', 'empresa_curso.idEmpresa',)
                             ->where('empresa_curso.idCurso', $id)
                             ->get();

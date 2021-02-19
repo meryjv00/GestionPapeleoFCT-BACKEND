@@ -10,6 +10,8 @@ use App\Http\Controllers\API\AnexosController;
 use App\Http\Controllers\API\EmpresasController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\API\EmpresaCursoController;
+use App\Http\Controllers\API\FctController;
+
 /*
   |--------------------------------------------------------------------------
   | API Routes
@@ -47,6 +49,8 @@ Route::post('insertAlumno', [PersonaController::class, 'store']);
 Route::put('updateAlumno/{idAlumno}', [PersonaController::class, 'update']);
 Route::delete('deleteAlumno/{idAlumno}', [PersonaController::class, 'destroy']);
 Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
+Route::get('alumnosCursoSinEmpresa/{idCurso}', [PersonaController::class, 'alumnosCursoSinEmpresa']);
+Route::get('alumnosCursoPracticas/{idCurso}/{idEmpresa}', [PersonaController::class, 'alumnosCursoPracticas']);
 
 Route::get('anexos', [AnexosController::class, 'index']);
 
@@ -93,6 +97,10 @@ Route::get('getCuentasActivas', [CentroController::class, 'getCuentasActivas']);
 // Relacion con cursos y empresas de prácticas
 Route::post('addEmpresaCurso', [EmpresaCursoController::class, 'store']);
 Route::delete('deleteEmpresaCurso/{idCurso}', [EmpresaCursoController::class, 'destroy']);
+
+// Rutas Fct
+Route::post('addAlumnoPracticas', [FctController::class, 'store']);
+Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
 
 Route::group(['middleware' => 'auth:api'], function() {
     
