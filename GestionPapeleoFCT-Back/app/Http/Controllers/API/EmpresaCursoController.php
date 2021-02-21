@@ -12,7 +12,7 @@ class EmpresaCursoController extends Controller
     // Método para añadir una nueva empresa a las practicas de un curso
     public function store(Request $request) {
         $empresaCurso = EmpresaCurso::create($request->all());
-        if (count($empresaCurso) == 0) {
+        if (!$empresaCurso) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido registrar la empresa' . $empresaCurso])], 404);
         }
         return response()->json(['code' => 201, 'message' => 'Datos insertados correctamente'], 201);
