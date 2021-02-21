@@ -25,10 +25,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::group(['middleware' => ['cors']], function () {
+    Route::post('login', [AuthController::class, 'login']);
+});
+
 Route::post('getDirector', [CentroController::class, 'getDirector']);
 Route::post('getCentro', [CentroController::class, 'getCentro']);
 Route::post('updateCentro', [CentroController::class, 'updateCentro']);
-Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('isPersona', [AuthController::class, 'isPersona']);
 Route::post('register_persona', [AuthController::class, 'register_persona']);
