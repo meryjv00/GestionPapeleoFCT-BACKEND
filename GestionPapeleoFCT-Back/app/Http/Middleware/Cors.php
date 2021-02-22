@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Laravel\Passport\Passport;
 use Illuminate\Http\Request;
 
 class Cors

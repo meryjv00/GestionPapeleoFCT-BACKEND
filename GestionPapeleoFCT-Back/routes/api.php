@@ -9,6 +9,7 @@ use App\Http\Controllers\API\PersonaController;
 use App\Http\Controllers\API\AnexosController;
 use App\Http\Controllers\API\EmpresasController;
 use App\Http\Controllers\AdminController;
+use Laravel\Passport\Passport;
 
 /*
   |--------------------------------------------------------------------------
@@ -27,6 +28,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['cors']], function () {
     Route::post('login', [AuthController::class, 'login']);
+    Passport::routes();
 });
 
 Route::post('getDirector', [CentroController::class, 'getDirector']);
