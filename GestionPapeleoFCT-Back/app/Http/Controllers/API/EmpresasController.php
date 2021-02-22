@@ -76,7 +76,9 @@ class EmpresasController extends Controller {
             'cp' => $request->input('empresa')['cp'],
             'cif' => $request->input('empresa')['cif'],
             'tlf' => $request->input('empresa')['tlf'],
-            'email' => $request->input('empresa')['email']
+            'email' => $request->input('empresa')['email'],
+            'dniRepresentante' => $request->input('empresa')['dniRepresentante'],
+            'nombreRepresentante' => $request->input('empresa')['nombreRepresentante']
         ]);
         return response()->json($empresa, 200);
     }
