@@ -19,13 +19,13 @@ class EmpresaCursoController extends Controller
     }
 
     // Método para eliminar una empresa de las practicas de un curso
-    public function destroy($id){
-        $empresaCurso = EmpresaCurso::find($id);
-
-        if (!$empresaCurso) {
+    public function destroy($idEmpresa,$idCurso){
+        $empresaCurso = EmpresaCurso::where('idEmpresa','=',$idEmpresa)->where('idCurso','=',$idCurso)->get();
+        
+        if (count($empresaCurso) == 0) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se encuentra ninguna empresa asociada a ese curso'])], 404);
         }
-        $empresaCurso->delete();
+        $empresaCurso[0]->delete();
         return response()->json(['code' => 200, 'message' => 'La empresa ha sido eliminado del curso'], 200);
     }
 

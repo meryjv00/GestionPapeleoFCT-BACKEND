@@ -12,8 +12,8 @@ class AuthController extends Controller {
 
     public function register(Request $request) {
 
-        if (User::where('email', $request->input('email'))->where('dni', $request->input('dni'))->count() == 1) {
-            return response()->json(['message' => 'Registro incorrecto. Revise las credenciales.', 'code' => 400], 400);
+        if (User::where('email','=',$request->input('email'))->count() == 1 || User::where('dni','=',$request->input('dni'))->count() == 1) {
+            return response()->json(['message' => ['correcto' => false, 'message' => 'Registro incorrecto. Revise las credenciales'], 'code' => 400], 400);
         }
 
         $validatedData = $request->validate([
@@ -24,11 +24,11 @@ class AuthController extends Controller {
         ]);
 
         $validatedData['password'] = \Hash::make($request->input("password"));
-        
+
         $user = User::create($validatedData);
         $accessToken = $user->createToken('authToken')->accessToken;
 
-        return response()->json(['message' => ['user' => $user, 'access_token' => $accessToken], 'code' => 201], 201);
+        return response()->json(['message' => ['correcto' => true, 'user' => $user, 'access_token' => $accessToken], 'code' => 201], 201);
     }
 
     /**
@@ -108,7 +108,7 @@ class AuthController extends Controller {
         $persona->residencia = $request->input("residencia");
         $persona->correo = $request->input("correo");
         $persona->tlf = $request->input("tlf");
-        
+
         $persona->save();
         return response()->json(['message' => ['user' => $persona], 'code' => 201], 201);
     }
@@ -125,14 +125,14 @@ class AuthController extends Controller {
         }
 
         //Comprobar que la cuenta este activada
-        $usu = User::where('email','=',$request->input('email'))
-                ->where('activado','=',1)
+        $usu = User::where('email', '=', $request->input('email'))
+                ->where('activado', '=', 1)
                 ->get();
-    
-        if(count($usu) == 0){
+
+        if (count($usu) == 0) {
             return response()->json(['message' => 'Cuenta desactivada, contacte con el director.', 'code' => 400], 400);
         }
-        
+
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
 
         //Buscamos el dni del email introducido para posteriormente buscarlo en personas; ya que puede tener un correo diferente al registrarse

@@ -23,7 +23,11 @@ class CreateFctAlumnoTable extends Migration {
                     ->references('dni')
                     ->on('personas')
                     ->onDelete('cascade');
-            $table->string('nombreResponsable');
+            $table->string('dniResponsable');
+            $table->foreign('dniResponsable')
+                    ->references('dniResponsable')
+                    ->on('empresas_perfiles')
+                    ->onDelete('cascade');
             $table->string('horarioDiario');
             $table->integer('nHoras');
             $table->date('fechaComienzo');

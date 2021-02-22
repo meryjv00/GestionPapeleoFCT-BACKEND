@@ -21,7 +21,7 @@ class AdminController extends Controller {
 
         //Insertar profesores
         $request->file('csv')->storeAs('public/CSV/', 'Profesores.csv');
-        $path = \storage_path('app\public\CSV\Profesores.csv');
+        $path = \storage_path('app/public/CSV/Profesores.csv');
         $lines = file($path);
         $utf8_lines = array_map('utf8_encode', $lines);
         $array = array_map('str_getcsv', $utf8_lines);
@@ -58,7 +58,7 @@ class AdminController extends Controller {
         
         //Insertar alumnos correspondientes al curso seleccionado   
         $request->file('csv')->storeAs('public/CSV/', $cicloCurso . '.csv');
-        $ruta = 'app\public\CSV\\' . $cicloCurso . '.csv';
+        $ruta = 'app/public/CSV/' . $cicloCurso . '.csv';
         $path = \storage_path($ruta);
         $lines = file($path);
         $utf8_lines = array_map('utf8_encode', $lines);

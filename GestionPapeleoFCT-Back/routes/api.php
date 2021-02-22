@@ -96,7 +96,7 @@ Route::get('getCuentasActivas', [CentroController::class, 'getCuentasActivas']);
 
 // Relacion con cursos y empresas de prácticas
 Route::post('addEmpresaCurso', [EmpresaCursoController::class, 'store']);
-Route::delete('deleteEmpresaCurso/{idCurso}', [EmpresaCursoController::class, 'destroy']);
+Route::delete('deleteEmpresaCurso/{idEmpresa}/{idCurso}', [EmpresaCursoController::class, 'destroy']);
 
 // Rutas Fct
 Route::post('addAlumnoPracticas', [FctController::class, 'store']);
