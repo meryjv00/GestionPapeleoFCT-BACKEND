@@ -14,6 +14,7 @@ class EmpresasController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
+        //$emrpesas = Empresa::with('empresas')->get();
         $empresas = Empresa::all();
         return response()->json(['code' => 200, 'message' => $empresas]);
     }
