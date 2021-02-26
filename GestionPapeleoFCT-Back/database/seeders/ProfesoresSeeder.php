@@ -30,7 +30,8 @@ class ProfesoresSeeder extends Seeder {
             'localidad' => 'Puertollano',
             'residencia' => 'Puertollano',
             'correo' => 'director@gmail.com',
-            'tlf' => '999999999'
+            'tlf' => '999999999',
+            'foto' => 0      
         ]);
         RolUsuario::create([
             'role_id' => 1,

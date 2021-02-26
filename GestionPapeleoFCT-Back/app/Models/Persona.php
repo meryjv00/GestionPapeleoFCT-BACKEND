@@ -17,5 +17,6 @@ class Persona extends Model {
         'residencia',
         'correo',
         'tlf',
+        'foto',
     ];
 }

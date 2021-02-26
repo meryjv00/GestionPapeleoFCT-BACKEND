@@ -42,7 +42,8 @@ class AdminController extends Controller {
                 'localidad' => $localidad[0],
                 'residencia' => $residencia[0],
                 'correo' => $correo[0],
-                'tlf' => $tlf[0]
+                'tlf' => $tlf[0],
+                'foto' => 0
             ]);
             RolUsuario::create([
                 'role_id' => 5,
@@ -79,7 +80,8 @@ class AdminController extends Controller {
                 'localidad' => $localidad[0],
                 'residencia' => $residencia[0],
                 'correo' => $correo[0],
-                'tlf' => $tlf[0]
+                'tlf' => $tlf[0],
+                'foto' => 0
             ]);
             RolUsuario::create([
                 'role_id' => 4,

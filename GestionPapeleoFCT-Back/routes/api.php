@@ -102,6 +102,9 @@ Route::delete('deleteEmpresaCurso/{idEmpresa}/{idCurso}', [EmpresaCursoControlle
 Route::post('addAlumnoPracticas', [FctController::class, 'store']);
 Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
 
+//Perfil
+Route::post('cambiarFoto/{dni}', [PersonaController::class, 'cambiarFoto']);
+
 Route::group(['middleware' => 'auth:api'], function() {
     
 });

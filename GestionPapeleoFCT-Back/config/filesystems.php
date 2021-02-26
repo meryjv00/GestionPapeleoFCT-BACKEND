@@ -51,6 +51,11 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
         ],
+        
+        'daniel' =>[
+            'driver' => 'local',
+            'root' => public_path() . '/IMG',
+        ],
 
     ],
 
