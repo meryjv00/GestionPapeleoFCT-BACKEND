@@ -21,6 +21,7 @@ class CreatePersonasTable extends Migration {
             $table->string('residencia');
             $table->string('correo');
             $table->string('tlf');
+            $table->integer('foto');
             $table->timestamps();
         });
     }

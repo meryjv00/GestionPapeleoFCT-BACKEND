@@ -12,7 +12,7 @@ class AuthController extends Controller {
 
     public function register(Request $request) {
 
-        if (User::where('email','=',$request->input('email'))->count() == 1 || User::where('dni','=',$request->input('dni'))->count() == 1) {
+        if (User::where('email', '=', $request->input('email'))->count() == 1 || User::where('dni', '=', $request->input('dni'))->count() == 1) {
             return response()->json(['message' => ['correcto' => false, 'message' => 'Registro incorrecto. Revise las credenciales'], 'code' => 400], 400);
         }
 
@@ -62,6 +62,7 @@ class AuthController extends Controller {
             'residencia' => $request->input("residencia"),
             'correo' => $request->input("correo"),
             'tlf' => $request->input("tlf"),
+            'foto' => 0
         ];
         $persona = Persona::create($validatedData);
         RolUsuario::create([
