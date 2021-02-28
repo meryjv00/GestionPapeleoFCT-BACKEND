@@ -23,7 +23,7 @@ class Empresa extends Model {
         'nombreRepresentante'
     ];
     
-    public function empresas() {
+    public function responsables() {
         return $this->hasMany(EmpresaPerfiles::class, 'idEmpresa', 'id');
     }
 

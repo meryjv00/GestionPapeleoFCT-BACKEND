@@ -60,6 +60,7 @@ Route::get('empresasCurso/{id}', [EmpresasController::class, 'showEmpresasCurso'
 Route::post('insertEmpresa', [EmpresasController::class, 'store']);
 Route::put('updateEmpresa/{id}', [EmpresasController::class, 'update']);
 Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
+Route::post('addResponsableEmpresa/{idEmpresa}', [EmpresasController::class, 'addResponsable']);
 
 //----------------------ANEXOS
 Route::get('anexos', [AnexosController::class, 'index']);

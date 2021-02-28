@@ -14,8 +14,8 @@ class EmpresasController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //$emrpesas = Empresa::with('empresas')->get();
-        $empresas = Empresa::all();
+        $empresas = Empresa::with('responsables')->get();
+        //$empresas = Empresa::all();
         return response()->json(['code' => 200, 'message' => $empresas]);
     }
 
@@ -118,6 +118,11 @@ class EmpresasController extends Controller {
                             ->where('empresa_curso.idCurso', $id)
                             ->get();
         return response()->json(['code' => 200, 'message' => $empresas]);
+    }
+    
+    //Añade un representante a una empresa determinada
+    public function addResponsable(Request $req, $idEmpresa) {
+        
     }
 
 }
