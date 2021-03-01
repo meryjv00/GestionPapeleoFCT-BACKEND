@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AnexosController;
+use App\Http\Controllers\API\EmpresasController;
 
 /*
 |--------------------------------------------------------------------------

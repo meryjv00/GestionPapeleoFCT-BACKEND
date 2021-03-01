@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Empresa;
+use App\Models\EmpresaPerfiles;
 
 class EmpresasController extends Controller {
 
@@ -100,29 +101,53 @@ class EmpresasController extends Controller {
     }
 
     // Funcion para ver las empresas que no estan colaborando actualmente con las prácticas de un curso
-    public function showEmpresaNoCurso($id){
+    public function showEmpresaNoCurso($id) {
         // SELECT * FROM empresas WHERE id NOT IN (SELECT idEmpresa FROM empresa_curso WHERE idCurso = $id)
-        $empresas = Empresa::whereNotIn('id', function($query) use ($id){
-            $query->select('idEmpresa')
-                  ->from('empresa_curso')
-                  ->where('idCurso', '=', $id);
-        })->get();
+        $empresas = Empresa::whereNotIn('id', function($query) use ($id) {
+                    $query->select('idEmpresa')
+                            ->from('empresa_curso')
+                            ->where('idCurso', '=', $id);
+                })->get();
         return response()->json(['code' => 200, 'message' => $empresas]);
     }
 
     // Funcion para ver las empresas que colaboran en las practicas de un curso
-    public function showEmpresasCurso($id){
+    public function showEmpresasCurso($id) {
         // SELECT * FROM empresas INNER JOIN empresa_curso ON empresas.id = empresa_curso.idEmpresa WHERE empresa_curso.idCurso = $id;
-        
+
         $empresas = Empresa::join('empresa_curso', 'empresas.id', '=', 'empresa_curso.idEmpresa',)
-                            ->where('empresa_curso.idCurso', $id)
-                            ->get();
+                ->where('empresa_curso.idCurso', $id)
+                ->get();
         return response()->json(['code' => 200, 'message' => $empresas]);
     }
-    
+
     //Añade un representante a una empresa determinada
-    public function addResponsable(Request $req, $idEmpresa) {
+    public function addResponsable(Request $req) {
+        $idEmpresa = $req->input('responsable')['idEmpresa'];
+        $dni = $req->input('responsable')['dni'];
+        $nombre = $req->input('responsable')['nombre'];
+
+        $nuevoPerfil = EmpresaPerfiles::create([
+                    'idEmpresa' => $idEmpresa,
+                    'dniResponsable' => $dni,
+                    'nombreResponsable' => $nombre
+        ]);
+
+        if (!$nuevoPerfil) {
+            return response()->json(['errors' => array(['code' => 500, 'message' => 'No se ha podido registrar el responsable '])], 500);
+        }
+
+        $dni = $req->input('responsable')['dni'];
+        return response()->json(['code' => 201, 'message' => $dni], 201);
+    }
+
+    //Elimina un responsable recibiendo su dni
+    public function deleteResponsable(Request $req) {
+        $dni = $req->input('dniResponsable');
         
+        EmpresaPerfiles::destroy($dni);
+        
+        return response()->json(['code' => 201, 'message' => $dni], 201);
     }
 
 }

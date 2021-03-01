@@ -52,15 +52,16 @@ Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
 Route::get('alumnosCursoSinEmpresa/{idCurso}', [PersonaController::class, 'alumnosCursoSinEmpresa']);
 Route::get('alumnosCursoPracticas/{idCurso}/{idEmpresa}', [PersonaController::class, 'alumnosCursoPracticas']);
 
-Route::get('anexos', [AnexosController::class, 'index']);
 
+//----------------------EMPRESAS Y RESPONSABLES
 Route::get('empresas', [EmpresasController::class, 'index']);
 Route::get('empresasNoCurso/{id}', [EmpresasController::class, 'showEmpresaNoCurso']);
 Route::get('empresasCurso/{id}', [EmpresasController::class, 'showEmpresasCurso']);
 Route::post('insertEmpresa', [EmpresasController::class, 'store']);
 Route::put('updateEmpresa/{id}', [EmpresasController::class, 'update']);
 Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
-Route::post('addResponsableEmpresa/{idEmpresa}', [EmpresasController::class, 'addResponsable']);
+Route::post('addResponsableEmpresa', [EmpresasController::class, 'addResponsable']);
+Route::post('deleteResponsableEmpresa', [EmpresasController::class, 'deleteResponsable']);
 
 //----------------------ANEXOS
 Route::get('anexos', [AnexosController::class, 'index']);
