@@ -22,5 +22,9 @@ class Empresa extends Model {
         'dniRepresentante',
         'nombreRepresentante'
     ];
+    
+    public function responsables() {
+        return $this->hasMany(EmpresaPerfiles::class, 'idEmpresa', 'id');
+    }
 
 }

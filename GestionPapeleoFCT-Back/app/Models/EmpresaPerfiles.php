@@ -10,5 +10,13 @@ class EmpresaPerfiles extends Model {
     use HasFactory;
 
     protected $table = 'empresas_perfiles';
+    
+    protected $primaryKey = 'dniResponsable';
+    
+    protected $fillable = [
+        'idEmpresa',
+        'dniResponsable',
+        'nombreResponsable'
+    ];
 
 }
