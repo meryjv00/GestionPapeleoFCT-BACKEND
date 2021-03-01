@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Persona;
 use App\Models\RolUsuario;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Curso;
 
 class AuthController extends Controller {
 
     public function register(Request $request) {
 
-        if (User::where('email','=',$request->input('email'))->count() == 1 || User::where('dni','=',$request->input('dni'))->count() == 1) {
+        if (User::where('email', '=', $request->input('email'))->count() == 1 || User::where('dni', '=', $request->input('dni'))->count() == 1) {
             return response()->json(['message' => ['correcto' => false, 'message' => 'Registro incorrecto. Revise las credenciales'], 'code' => 400], 400);
         }
 
@@ -97,29 +99,90 @@ class AuthController extends Controller {
      * @return json
      */
     public function mod_user(Request $request) {
-        if (Persona::where('dni', $request->input('dni'))->count() != 1) {
+        if (Persona::where('dni', $request->input('olddni'))->count() != 1) {
             return response()->json(['message' => 'datos no encontrados', 'code' => 201], 201);
         }
-
-        $persona = Persona::where('dni', $request->input('dni'))->first();
+        $persona = Persona::where('dni', $request->input('olddni'))->first();
         $persona->apellidos = $request->input("apellidos");
         $persona->nombre = $request->input("nombre");
         $persona->localidad = $request->input("localidad");
         $persona->residencia = $request->input("residencia");
         $persona->correo = $request->input("correo");
         $persona->tlf = $request->input("tlf");
-
         $persona->save();
+        if ($request->input('olddni') != $request->input('dni')) {
+            if (User::where('dni', '=', $request->input('olddni'))->count() == 1) {
+                $user = User::where('dni', '=', $request->input('olddni'))->first();
+                $cursos = Curso::where('dniTutor', '=', $request->input('olddni'))->get();
+                $rol = RolUsuario::where('user_dni', '=', $request->input('olddni'))->first();
+                RolUsuario::where('user_dni', $request->input('olddni'))->delete();
+                foreach ($cursos as $curso) {
+                    $curso->dniTutor = null;
+                    $curso->save();
+                }
+                $user->dni = $request->input('dni');
+                $user->save();
+                foreach ($cursos as $curso) {
+                    $curso->dniTutor = $request->input('dni');
+                    $curso->save();
+                }
+                $persona->dni = $request->input('dni');
+                $persona->save();
+                RolUsuario::create([
+                    'role_id' => $rol->role_id,
+                    'user_dni' => $request->input('dni')
+                ]);
+            }
+        }
         return response()->json(['message' => ['user' => $persona], 'code' => 201], 201);
     }
 
+    /**
+     * Función para cambiar contraseña
+     * @param Request $request
+     * @return type
+     */
+    public function mod_user_pass(Request $request) {
+        $user = User::where('email', $request->input('email'))->first();
+
+        if (\Hash::check($request->input("password"), $user->passwprd)) {
+            return response()->json(['message' => 'Contraseña incorrectas. Revise las credenciales.', 'code' => 400], 400);
+        }
+
+        $user->password = \Hash::make($request->input("newpassword"));
+        $user->save();
+
+        return response()->json(['message' => ['user' => $user], 'code' => 201], 201);
+    }
+
+    /**
+     * función para modificar email
+     * @param Request $request
+     * @return type
+     */
+    public function mod_user_email(Request $request) {
+        if (User::where('email', $request->input('email'))->count() != 1) {
+            return response()->json(['message' => 'Revise las credenciales.', 'code' => 400], 400);
+        }
+
+        if (User::where('email', $request->input('newemail'))->count() == 1) {
+            return response()->json(['message' => 'El email ya existe', 'code' => 400], 400);
+        }
+
+        $user = User::where('email', $request->input('email'))->first();
+        $user->email = $request->input("newemail");
+        $user->save();
+
+        return response()->json(['message' => ['user' => $user], 'code' => 201], 201);
+    }
+
     public function login(Request $request) {
+
         $loginData = $request->validate([
             'email' => 'email|required',
             'password' => 'required'
         ]);
-
-        if (!auth()->attempt($loginData)) {
+        if (!auth()->attempt($loginData, true)) {
             //return response(['message' => 'Login incorrecto. Revise las credenciales.'], 400);
             return response()->json(['message' => 'Login incorrecto. Revise las credenciales.', 'code' => 400], 400);
         }
@@ -128,13 +191,11 @@ class AuthController extends Controller {
         $usu = User::where('email', '=', $request->input('email'))
                 ->where('activado', '=', 1)
                 ->get();
-
         if (count($usu) == 0) {
             return response()->json(['message' => 'Cuenta desactivada, contacte con el director.', 'code' => 400], 400);
         }
 
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
-
         //Buscamos el dni del email introducido para posteriormente buscarlo en personas; ya que puede tener un correo diferente al registrarse
         //que el que tiene registrado en la BD
         $user = \DB::table('users')

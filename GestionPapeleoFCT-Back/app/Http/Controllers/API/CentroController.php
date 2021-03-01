@@ -16,7 +16,7 @@ class CentroController extends Controller {
             return response()->json(['message' => 'error no se encuentra el centro', 'code' => 201], 201);
         }
         $centro = Centro::first();
-        return response()->json(['message' => ['centro' => $centro], 'code' => 201], 201);
+        return response()->json(['message' => ['loguin' =>[auth()->check()],'centro' => $centro], 'code' => 201], 201);
     }
 
     public function updateCentro(Request $request) {
