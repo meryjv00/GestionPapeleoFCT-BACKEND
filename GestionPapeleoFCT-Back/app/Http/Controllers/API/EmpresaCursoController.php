@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\FctController;
 
 use Illuminate\Http\Request;
 use App\Models\EmpresaCurso;
@@ -25,6 +26,7 @@ class EmpresaCursoController extends Controller
         if (count($empresaCurso) == 0) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se encuentra ninguna empresa asociada a ese curso'])], 404);
         }
+        FctController::destroyAlumnosCurso($idEmpresa,$idCurso);
         $empresaCurso[0]->delete();
         return response()->json(['code' => 200, 'message' => 'La empresa ha sido eliminado del curso'], 200);
     }

@@ -10,6 +10,7 @@ use App\Http\Controllers\API\AnexosController;
 use App\Http\Controllers\API\EmpresasController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\API\EmpresaCursoController;
+use App\Http\Controllers\API\EmpresaPerfilesController;
 use App\Http\Controllers\API\FctController;
 
 /*
@@ -101,6 +102,10 @@ Route::delete('deleteEmpresaCurso/{idEmpresa}/{idCurso}', [EmpresaCursoControlle
 // Rutas Fct
 Route::post('addAlumnoPracticas', [FctController::class, 'store']);
 Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
+
+// Rutas Responsables de las empresas
+Route::get('responsablesEmpresas', [EmpresaPerfilesController::class, 'index']);
+Route::get('responsablesEmpresas/{idEmpresa}', [EmpresaPerfilesController::class, 'showResponsabesEmpresa']);
 
 //Perfil
 Route::post('cambiarFoto/{dni}', [PersonaController::class, 'cambiarFoto']);

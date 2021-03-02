@@ -22,4 +22,17 @@ class FctController extends Controller
         $practicas->delete();
         return response()->json(['code' => 200, 'message' => $practicas], 200);
     }
+
+
+    // Método para eliminar todos los alumnos con practicas en una empresa
+    public static function destroyAlumnosCurso($idEmpresa, $idCurso){
+        // DELETE FROM `fct_alumno` WHERE idEmpresa = $idEmpresa AND dniAlumno IN (SELECT dniAlumno FROM `curso_alumno` WHERE idCurso = $idCurso);
+        $deleteAlumno = Fct::where('idEmpresa', $idEmpresa)
+                            ->whereIn('dniAlumno', function($query) use ($idCurso){
+                                $query->select('dniAlumno')
+                                      ->from('curso_alumno')
+                                      ->where('idCurso', $idCurso);
+                        })->delete();
+    }
+
 }
