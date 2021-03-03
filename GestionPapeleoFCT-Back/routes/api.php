@@ -102,6 +102,8 @@ Route::delete('deleteEmpresaCurso/{idEmpresa}/{idCurso}', [EmpresaCursoControlle
 // Rutas Fct
 Route::post('addAlumnoPracticas', [FctController::class, 'store']);
 Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
+Route::get('alumnoFct/{dniAlumno}', [FctController::class, 'getAlumntoFct']);
+Route::put('updateAlumnoPracticas/{dniAlumno}', [FctController::class, 'updateAlumnoFct']);
 
 // Rutas Responsables de las empresas
 Route::get('responsablesEmpresas', [EmpresaPerfilesController::class, 'index']);
