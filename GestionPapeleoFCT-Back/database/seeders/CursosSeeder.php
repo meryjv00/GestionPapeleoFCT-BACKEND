@@ -13,7 +13,7 @@ class CursosSeeder extends Seeder {
      * @return void
      */
     public function run() {
-        $path = public_path('csv/datUnidades.csv');
+        $path = public_path('csv/datUnidades2.csv');
         $lines = file($path);
         $utf8_lines = array_map('utf8_encode', $lines);
         $array = array_map('str_getcsv', $utf8_lines);
