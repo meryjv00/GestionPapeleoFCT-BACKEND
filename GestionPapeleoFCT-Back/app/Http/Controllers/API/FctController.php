@@ -10,7 +10,8 @@ class FctController extends Controller
 {
     // Método para guardar un alumnos en sus practicas
     public function store(Request $request) {
-        $offer = Fct::create($request->all());
+        $practicas = Fct::create($request->all());
+        return response()->json(['code' => 200, 'message' => $practicas]);
     }
 
     // Método para eliminar un alumno de las practicas
