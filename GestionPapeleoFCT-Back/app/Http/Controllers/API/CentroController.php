@@ -106,7 +106,7 @@ class CentroController extends Controller {
                 'user_dni' => $request->input('dni')
             ]);
         }
-        return response()->json(['code' => 200, 'message' => 'Rol cambiado con éxito'], 200);
+        return response()->json(['code' => 200, 'message' => 'Rol cambiado con éxit'], 200);
     }
 
     public function activarDesactCuenta($dni) {

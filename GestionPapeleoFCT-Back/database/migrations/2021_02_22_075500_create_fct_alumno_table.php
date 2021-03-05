@@ -33,6 +33,7 @@ class CreateFctAlumnoTable extends Migration {
             $table->date('fechaComienzo');
             $table->date('fechaFin');
             $table->integer('desplazamiento');
+            $table->integer('semiPresencial')->default(0);
             $table->timestamps();
         });
     }
