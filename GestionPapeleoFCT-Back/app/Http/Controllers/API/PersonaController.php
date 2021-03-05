@@ -143,12 +143,16 @@ class PersonaController extends Controller {
     }
 
     public function cambiarFoto(Request $request, $dni) {
-        $request->file('img')->storeAs('', $dni . '.png','daniel');
-        //bd
-        
-        $ruta = 'app/public/IMG/' . $dni . '.png';
-        $path = \storage_path($ruta);
-        return response()->json(['code' => 201, 'message' => $path], 201);
+        $request->file('img')->storeAs('', $dni . '.png', 'daniel');
+        //bd actualizar
+        $persona = Persona::where('dni', '=', $dni)->get();
+
+        if (count($persona) >= 1) {
+            $persona[0]->foto = 1;
+            // Guardamos en base de datos
+            $persona[0]->save();
+        }
+        return response()->json(['code' => 201, 'message' => $persona[0]], 201);
     }
 
 }
