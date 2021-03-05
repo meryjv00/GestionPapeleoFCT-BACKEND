@@ -126,8 +126,9 @@ class CursosController extends Controller {
     }
 
     public function cursosSinTutor() {
+        $director = \DB::select('SELECT * FROM personas WHERE dni IN (SELECT user_dni FROM role_user WHERE role_id=1)');
         $cursos = Curso::with('cursos')
-                ->where('dniTutor', '=', '0X')
+                ->where('dniTutor', '=', $director[0]->dni)
                 ->get();
         return response()->json(['code' => 200, 'message' => $cursos]);
     }
