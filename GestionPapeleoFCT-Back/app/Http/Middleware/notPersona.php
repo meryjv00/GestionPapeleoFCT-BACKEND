@@ -4,10 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Session;
 
-class IsLogin {
-
+class notPersona
+{
     /**
      * Handle an incoming request.
      *
@@ -15,12 +14,12 @@ class IsLogin {
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next) {
-        if (auth()->check()) {
+    public function handle(Request $request, Closure $next)
+    {
+        if (Persona::where('dni', $request->input('dni'))->count() == 0) {
             return $next($request);
         } else {
-            abort(518, 'Error. Permiso denegado el usuario no esta logueado ');
+            abort(518);
         }
     }
-
 }

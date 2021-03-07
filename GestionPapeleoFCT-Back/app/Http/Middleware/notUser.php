@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Session;
 
-class IsLogin {
+class notUser {
 
     /**
      * Handle an incoming request.
@@ -16,11 +15,13 @@ class IsLogin {
      * @return mixed
      */
     public function handle(Request $request, Closure $next) {
-        if (auth()->check()) {
+        $data = $request->validate([
+            'email' => 'email|required'
+        ]);
+        if (User::where('email', $data['email'])->count() == 0) {
             return $next($request);
         } else {
-            abort(518, 'Error. Permiso denegado el usuario no esta logueado ');
+            abort(518, 'Error el usuario ya existe');
         }
     }
-
 }
