@@ -18,14 +18,14 @@ class ProfesoresSeeder extends Seeder {
         //DIRECTOR DEL CENTRO
         $contra = '12345678';
         User::create([
-            'dni' => '0X',
+            'dni' => '99999999X',
             'email' => 'director@gmail.com',
             'password' => \Hash::make($contra),
             'activado' => 1
         ]);
         Persona::create([
-            'dni' => '0X',
-            'apellidos' => 'apellido1 apellido2',
+            'dni' => '99999999X',
+            'apellidos' => 'apellidouno apellidodos',
             'nombre' => 'nombre',
             'localidad' => 'Puertollano',
             'residencia' => 'Puertollano',
@@ -35,7 +35,7 @@ class ProfesoresSeeder extends Seeder {
         ]);
         RolUsuario::create([
             'role_id' => 1,
-            'user_dni' => '0X'
+            'user_dni' => '99999999X'
         ]);
 
 
