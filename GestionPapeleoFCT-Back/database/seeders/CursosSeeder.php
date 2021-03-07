@@ -23,7 +23,7 @@ class CursosSeeder extends Seeder {
             $cicloFormativo = explode(",", $array[$i][3]);
             $cicloFormativoA = explode(",", $array[$i][1]);
             Curso::create([
-                'dniTutor' => '0X',
+                'dniTutor' => '99999999X',
                 'familiaProfesional' => $familiaProfesional[0],
                 'cicloFormativo' => $cicloFormativo[0],
                 'cicloFormativoA' => $cicloFormativoA[0],
