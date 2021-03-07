@@ -43,6 +43,17 @@ class Kernel extends HttpKernel
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+        'isUser' =>[ \App\Http\Middleware\IsUserControl::class],
+        'isPersona' =>[ \App\Http\Middleware\IsPersonaControl::class],
+        'notUser' =>[ \App\Http\Middleware\notUser::class],
+        'notPersona' =>[ \App\Http\Middleware\notPersona::class],
+        'auth' =>[\App\Http\Middleware\Authenticate::class],
+        'auth.basic' =>[\Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class],
+        'isTutor' =>[\App\Http\Middleware\isTutor::class],
+        'isProfe' =>[\App\Http\Middleware\isProfe::class],
+        'isJeEst' =>[\App\Http\Middleware\isJeEst::class],
+        'isDirect' =>[\App\Http\Middleware\isDirect::class],
+        'isLogin' => [\App\Http\Middleware\IsLogin::class],
     ];
 
     /**
@@ -62,7 +73,14 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'isUser' => \App\Http\Middleware\IsUserControl::class,
         'isLogin' => \App\Http\Middleware\IsLogin::class,
+        'isUser' => \App\Http\Middleware\IsUserControl::class,
+        'isPersona' => \App\Http\Middleware\IsPersonaControl::class,
+        'notUser' => \App\Http\Middleware\notUser::class,
+        'notPersona' => \App\Http\Middleware\notPersona::class,
+        'isTutor' => \App\Http\Middleware\isTutor::class,
+        'isProfe' => \App\Http\Middleware\isProfe::class,
+        'isJeEst' => \App\Http\Middleware\isJeEst::class,
+        'isDirect' => \App\Http\Middleware\isDirect::class,
     ];
 }

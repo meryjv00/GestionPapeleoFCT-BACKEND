@@ -178,12 +178,12 @@ class AuthController extends Controller {
     }
 
     public function login(Request $request) {
-
         $loginData = $request->validate([
             'email' => 'email|required',
             'password' => 'required'
         ]);
-        if (!auth()->attempt($loginData, true)) {
+        
+        if (!auth()->attempt($loginData,true)) {
             //return response(['message' => 'Login incorrecto. Revise las credenciales.'], 400);
             return response()->json(['message' => 'Login incorrecto. Revise las credenciales.', 'code' => 400], 400);
         }
@@ -199,17 +199,16 @@ class AuthController extends Controller {
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
         //Buscamos el dni del email introducido para posteriormente buscarlo en personas; ya que puede tener un correo diferente al registrarse
         //que el que tiene registrado en la BD
-        $user = \DB::table('users')
-                ->select('dni')
+        $user = User::select('dni')
                 ->where('email', '=', $request->input('email'))
                 ->get();
-
+        //cambiando aqui***********************************************
         //Obtener todos los datos del usuario
         $persona = Persona::where("dni", "=", $user[0]->dni)->first();
 
         //Obtener el rol del usuario
         $rol = RolUsuario::where("user_dni", "=", $persona->dni)->get();
-
+    
         if ($rol[0]->role_id == 1) {
             $rolDescripcion = "Director";
         } else if ($rol[1]->role_id == 2) {
@@ -219,5 +218,4 @@ class AuthController extends Controller {
         }
         return response()->json(['message' => ['user' => auth()->user(), 'access_token' => $accessToken, 'datos_user' => $persona, 'rol' => $rolDescripcion], 'code' => 200], 200);
     }
-
 }

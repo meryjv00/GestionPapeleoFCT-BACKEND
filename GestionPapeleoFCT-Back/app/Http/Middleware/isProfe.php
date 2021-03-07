@@ -4,9 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Session;
+use App\Models\RolUsuario;
 
-class IsLogin {
+class isProfe {
 
     /**
      * Handle an incoming request.
@@ -16,11 +16,12 @@ class IsLogin {
      * @return mixed
      */
     public function handle(Request $request, Closure $next) {
-        if (auth()->check()) {
+        $user = auth()->user();
+        $rol = RolUsuario::where("user_dni", "=", $user->dni)->get();
+        if ($rol[0]->role_id == 5 || $rol[0]->role_id == 3 || $rol[0]->role_id == 2 || $rol[0]->role_id == 1) {
             return $next($request);
         } else {
-            abort(518, 'Error. Permiso denegado el usuario no esta logueado ');
+            abort(518, 'Error el usuario no es Profesor');
         }
     }
-
 }

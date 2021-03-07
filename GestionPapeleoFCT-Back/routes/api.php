@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\API\EmpresaCursoController;
 use App\Http\Controllers\API\EmpresaPerfilesController;
 use App\Http\Controllers\API\FctController;
+use App\Http\Controllers\EmailController;
 
 /*
   |--------------------------------------------------------------------------
@@ -29,83 +30,76 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('getDirector', [CentroController::class, 'getDirector']);
-Route::post('getCentro', [CentroController::class, 'getCentro']);
-Route::post('updateCentro', [CentroController::class, 'updateCentro']);
 
+Route::post('register', [AuthController::class, 'register'])->middleware('notUser');
+Route::post('register_persona', [AuthController::class, 'register_persona'])->middleware('notPersona');
 Route::post('login', [AuthController::class, 'login']);
-Route::post('register', [AuthController::class, 'register']);
 Route::post('isPersona', [AuthController::class, 'isPersona']);
-Route::post('register_persona', [AuthController::class, 'register_persona']);
-Route::post('mod_user', [AuthController::class, 'mod_user']);
 
-Route::get('cursos', [CursosController::class, 'index']);
-Route::post('curso', [CursosController::class, 'store']);
-Route::put('curso/{cursoId}', [CursosController::class, 'update']);
-Route::delete('curso/{cursoId}', [CursosController::class, 'destroy']);
-Route::get('cursos/{dniTutor}', [CursosController::class, 'index2']);
+Route::group(['middleware' => 'auth:api'], function() {
 
-Route::get('cursosFamilies', [CursosController::class, 'getFamilies']);
+    Route::post('env', [EmailController::class, 'enviar']);
+    Route::post('updateCentro', [CentroController::class, 'updateCentro'])->middleware('isDirect');
+    Route::get('getDirector', [CentroController::class, 'getDirector']);
+    Route::get('getCentro', [CentroController::class, 'getCentro'])->middleware('isLogin');
 
-Route::post('insertAlumno', [PersonaController::class, 'store']);
-Route::put('updateAlumno/{idAlumno}', [PersonaController::class, 'update']);
-Route::delete('deleteAlumno/{idAlumno}', [PersonaController::class, 'destroy']);
-Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
-Route::get('alumnosCursoSinEmpresa/{idCurso}', [PersonaController::class, 'alumnosCursoSinEmpresa']);
-Route::get('alumnosCursoPracticas/{idCurso}/{idEmpresa}', [PersonaController::class, 'alumnosCursoPracticas']);
+    Route::group(['middleware' => 'isTutor'], function() {
 
-Route::get('anexos', [AnexosController::class, 'index']);
+        // Relacion con cursos y empresas de prácticas
+        Route::post('addEmpresaCurso', [EmpresaCursoController::class, 'store']);
+        Route::delete('deleteEmpresaCurso/{idEmpresa}/{idCurso}', [EmpresaCursoController::class, 'destroy']);
 
-Route::get('empresas', [EmpresasController::class, 'index']);
-Route::get('empresasNoCurso/{id}', [EmpresasController::class, 'showEmpresaNoCurso']);
-Route::get('empresasCurso/{id}', [EmpresasController::class, 'showEmpresasCurso']);
-Route::post('insertEmpresa', [EmpresasController::class, 'store']);
-Route::put('updateEmpresa/{id}', [EmpresasController::class, 'update']);
-Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
+        // Rutas Fct
+        Route::post('addAlumnoPracticas', [FctController::class, 'store']);
+        Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
 
-//----------------------ANEXOS
-Route::get('anexos', [AnexosController::class, 'index']);
+        Route::get('empresas', [EmpresasController::class, 'index']);
+        Route::get('empresasNoCurso/{id}', [EmpresasController::class, 'showEmpresaNoCurso']);
+        Route::get('empresasCurso/{id}', [EmpresasController::class, 'showEmpresasCurso']);
+        Route::post('insertEmpresa', [EmpresasController::class, 'store']);
+        Route::put('updateEmpresa/{id}', [EmpresasController::class, 'update']);
+        Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
 
-Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
-Route::get('anexos', [AnexosController::class, 'index']);
 
-Route::post('getAnexo1', [AnexosController::class, 'anexo1']);
+        Route::get('cursosFamilies', [CursosController::class, 'getFamilies']);
 
-Route::post('getAnexo2', [AnexosController::class, 'anexo2']);
+        Route::post('insertAlumno', [PersonaController::class, 'store']);
+        Route::put('updateAlumno/{idAlumno}', [PersonaController::class, 'update']);
+        Route::delete('deleteAlumno/{idAlumno}', [PersonaController::class, 'destroy']);
+        Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
+        Route::get('alumnosCursoSinEmpresa/{idCurso}', [PersonaController::class, 'alumnosCursoSinEmpresa']);
+        Route::get('alumnosCursoPracticas/{idCurso}/{idEmpresa}', [PersonaController::class, 'alumnosCursoPracticas']);
+    });
+    Route::group(['middleware' => 'isProfe'], function() {
+        Route::get('cursos', [CursosController::class, 'index']);
+        Route::post('curso', [CursosController::class, 'store']);
+        Route::put('curso/{cursoId}', [CursosController::class, 'update']);
+        Route::delete('curso/{cursoId}', [CursosController::class, 'destroy']);
+        Route::get('cursos/{dniTutor}', [CursosController::class, 'index2']);
 
-Route::post('getAnexo3', [AnexosController::class, 'anexo3']);
+        //----------------------ANEXOS
+        Route::get('anexos', [AnexosController::class, 'index']);
 
-Route::post('getAnexo4', [AnexosController::class, 'anexo4']);
+        Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
+        Route::get('anexos', [AnexosController::class, 'index']);
 
-Route::post('getAnexo5', [AnexosController::class, 'anexo5']);
+        Route::post('getAnexo1', [AnexosController::class, 'anexo1']);
 
-Route::get('descargarAnexo/{id}', [AnexosController::class, 'descargar']);
+        Route::post('getAnexo2', [AnexosController::class, 'anexo2']);
 
-//ADMINISTRACION
-Route::post('generarProfesores', [AdminController::class, 'insertProfesores']);
-Route::post('generarAlumnos/{idCurso}/{cicloCurso}', [AdminController::class, 'insertAlumnos']);
-Route::post('addJefeEstudios', [CentroController::class, 'addJefeEstudios']);
-Route::get('getCuentasAdministrar', [CentroController::class, 'getCuentasAdministrar']);
-Route::put('addTutorCurso/{idCurso}', [CursosController::class, 'addTutorCurso']);
-Route::get('getTutores', [CentroController::class, 'getTutores']);
-Route::get('cursosSinTutor', [CursosController::class, 'cursosSinTutor']);
-Route::put('activarDesactCuenta/{dni}', [CentroController::class, 'activarDesactCuenta']);
-Route::put('denegarAccesoCuenta/{dni}', [CentroController::class, 'denegarAccesoCuenta']);
-Route::post('cambiarRol', [CentroController::class, 'cambiarRol']);
-Route::get('cursosSinAlumnos', [CursosController::class, 'cursosSinAlumnos']);
-Route::get('reiniciarAlumnos', [CursosController::class, 'reiniciarAlumnos']);
-Route::get('getCuentasActivas', [CentroController::class, 'getCuentasActivas']);
+        Route::post('getAnexo3', [AnexosController::class, 'anexo3']);
 
-// Relacion con cursos y empresas de prácticas
-Route::post('addEmpresaCurso', [EmpresaCursoController::class, 'store']);
-Route::delete('deleteEmpresaCurso/{idEmpresa}/{idCurso}', [EmpresaCursoController::class, 'destroy']);
+        Route::post('getAnexo4', [AnexosController::class, 'anexo4']);
 
+        Route::post('getAnexo5', [AnexosController::class, 'anexo5']);
 // Rutas Fct
 Route::post('addAlumnoPracticas', [FctController::class, 'store']);
 Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
 Route::get('alumnoFct/{dniAlumno}', [FctController::class, 'getAlumntoFct']);
 Route::put('updateAlumnoPracticas/{dniAlumno}', [FctController::class, 'updateAlumnoFct']);
 
+        Route::get('descargarAnexo/{id}', [AnexosController::class, 'descargar']);
+    });
 // Rutas Responsables de las empresas
 Route::get('responsablesEmpresas', [EmpresaPerfilesController::class, 'index']);
 Route::get('responsablesEmpresas/{idEmpresa}', [EmpresaPerfilesController::class, 'showResponsabesEmpresa']);
@@ -113,6 +107,30 @@ Route::get('responsablesEmpresas/{idEmpresa}', [EmpresaPerfilesController::class
 //Perfil
 Route::post('cambiarFoto/{dni}', [PersonaController::class, 'cambiarFoto']);
 
-Route::group(['middleware' => 'auth:api'], function() {
-    
+    Route::group(['middleware' => 'isJeEst'], function() {
+        // ADMINISTRACION
+        Route::post('generarProfesores', [AdminController::class, 'insertProfesores']);
+        Route::post('generarAlumnos/{idCurso}/{cicloCurso}', [AdminController::class, 'insertAlumnos']);
+        Route::post('addJefeEstudios', [CentroController::class, 'addJefeEstudios']);
+        Route::get('getCuentasAdministrar', [CentroController::class, 'getCuentasAdministrar']);
+        Route::put('addTutorCurso/{idCurso}', [CursosController::class, 'addTutorCurso']);
+        Route::get('getTutores', [CentroController::class, 'getTutores']);
+        Route::get('cursosSinTutor', [CursosController::class, 'cursosSinTutor']);
+        Route::put('activarDesactCuenta/{dni}', [CentroController::class, 'activarDesactCuenta']);
+        Route::put('denegarAccesoCuenta/{dni}', [CentroController::class, 'denegarAccesoCuenta']);
+        Route::post('cambiarRol', [CentroController::class, 'cambiarRol']);
+        Route::get('cursosSinAlumnos', [CursosController::class, 'cursosSinAlumnos']);
+        Route::get('reiniciarAlumnos', [CursosController::class, 'reiniciarAlumnos']);
+        Route::get('getCuentasActivas', [CentroController::class, 'getCuentasActivas']);
+    });
+
+
+
+// Perfil
+    Route::post('mod_user', [AuthController::class, 'mod_user']); // olddni -> dni, dni -> newdni
+    Route::group(['middleware' => 'isUser'], function() {
+        Route::put('mod_user_email', [AuthController::class, 'mod_user_email']);
+        Route::put('mod_user_pass', [AuthController::class, 'mod_user_pass']);
+    });
+    Route::post('cambiarFoto/{dni}', [PersonaController::class, 'cambiarFoto']);
 });
