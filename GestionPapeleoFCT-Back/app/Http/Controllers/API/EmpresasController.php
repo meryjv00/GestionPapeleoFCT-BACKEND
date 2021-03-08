@@ -38,8 +38,8 @@ class EmpresasController extends Controller {
                     'cif' => $empresa['cif'],
                     'tlf' => $empresa['tlf'],
                     'email' => $empresa['email'],
-                    'dniRepresentante' => '',
-                    'nombreRepresentante' => ''
+                    'dniRepresentante' => $empresa['dniRepresentante'],
+                    'nombreRepresentante' => $empresa['nombreRepresentante']
         ]);
         if (!$empresaBD) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido registrar la empresa ' . $empresa])], 404);

@@ -11,7 +11,7 @@ class EmpresaPerfiles extends Model {
 
     protected $table = 'empresas_perfiles';
     
-    protected $primaryKey = 'dniResponsable';
+    //protected $primaryKey = 'dniResponsable';
     
     protected $fillable = [
         'idEmpresa',
