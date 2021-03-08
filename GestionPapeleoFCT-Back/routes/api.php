@@ -61,6 +61,8 @@ Route::get('empresasCurso/{id}', [EmpresasController::class, 'showEmpresasCurso'
 Route::post('insertEmpresa', [EmpresasController::class, 'store']);
 Route::put('updateEmpresa/{id}', [EmpresasController::class, 'update']);
 Route::post('deleteEmpresa/{id}', [EmpresasController::class, 'destroy']);
+Route::post('addResponsableEmpresa', [EmpresasController::class, 'addResponsable']);
+Route::post('deleteResponsableEmpresa', [EmpresasController::class, 'deleteResponsable']);
 
 //----------------------ANEXOS
 Route::get('anexos', [AnexosController::class, 'index']);
