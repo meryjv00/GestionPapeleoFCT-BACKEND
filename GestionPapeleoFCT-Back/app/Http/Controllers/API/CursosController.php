@@ -72,7 +72,6 @@ class CursosController extends Controller {
         $curso->update([
             'cicloFormativo' => $request->input('curso')['cicloFormativo'],
             'cicloFormativoA' => $request->input('curso')['cicloFormativoA'],
-            'dniTutor' => $request->input('curso')['dniTutor'],
             'familiaProfesional' => $request->input('curso')['familiaProfesional'],
             'cursoAcademico' => $request->input('curso')['cursoAcademico'],
             'nHoras' => $request->input('curso')['nHoras']
