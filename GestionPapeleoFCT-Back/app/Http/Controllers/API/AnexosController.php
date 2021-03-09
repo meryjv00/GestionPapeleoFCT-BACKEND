@@ -177,13 +177,9 @@ class AnexosController extends Controller {
      */
     public function anexo1(Request $req) {
         //--------------------------DATOS
-        //Convenio
-        $convenio = Convenio::where('numConvenio', 'LIKE', $req->input('datos')['numConvenio'])->first();
-
-        if (!$convenio) {
-            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido encontrar el convenio.'])], 404);
-        }
-
+        //Empresa
+        $empresa = Empresa::find($req->input('datos')['idEmpresa']);
+        
         //Curso
         $curso = Curso::find($req->input('datos')['idCurso']);
 
@@ -197,8 +193,6 @@ class AnexosController extends Controller {
         //Centro
         $centro = Centro::all()->last();
 
-        //Empresa
-        $empresa = Empresa::find($convenio->idEmpresa);
 
         $nombreRepresentante = $empresa->nombreRepresentante;
 
@@ -227,7 +221,6 @@ class AnexosController extends Controller {
         $templateProcessor = new TemplateProcessor('word-template/anexo1_relacion_alumnos.docx');
 
         //Se insertan los datos en el archivo
-        $templateProcessor->setValue('numConvenio', $convenio->numConvenio);
         $templateProcessor->setValue('nombreCentro', $centro->nombre);
         $templateProcessor->setValue('nombreEmpresa', $empresa->nombre);
 

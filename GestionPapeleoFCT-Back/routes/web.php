@@ -25,3 +25,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //Para descargar un anexo
 Route::get('/descargar/{id}', [AnexosController::class, 'descargar']);
+
+Route::get('/test', [AnexosController::class, 'anexo6']);
