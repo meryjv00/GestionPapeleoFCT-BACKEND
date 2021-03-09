@@ -22,6 +22,7 @@ class CreateCursoAlumnoTable extends Migration {
             $table->foreign('dniAlumno')
                     ->references('dni')
                     ->on('personas')
+                    ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->timestamps();
         });

@@ -65,7 +65,7 @@ class PersonaController extends Controller {
         $cursoAlumno->dniAlumno = $persona['dni'];
         $cursoAlumno->save();
 
-        return response()->json(['code' => 201, 'message' => 'Datos insertados correctamente', 'alumno' => $persona], 201);
+        return response()->json(['code' => 201, 'message' => 'Datos insertados correctamente', 'alumno' => $personaBD], 201);
     }
 
     /**
