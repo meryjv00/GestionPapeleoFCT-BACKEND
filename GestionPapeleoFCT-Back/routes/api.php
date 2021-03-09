@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Http\Request;
@@ -14,6 +13,7 @@ use App\Http\Controllers\API\EmpresaCursoController;
 use App\Http\Controllers\API\EmpresaPerfilesController;
 use App\Http\Controllers\API\FctController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\RecPassword;
 
 /*
   |--------------------------------------------------------------------------
@@ -35,6 +35,9 @@ Route::post('register', [AuthController::class, 'register'])->middleware('notUse
 Route::post('register_persona', [AuthController::class, 'register_persona'])->middleware('notPersona');
 Route::post('login', [AuthController::class, 'login']);
 Route::post('isPersona', [AuthController::class, 'isPersona']);
+Route::post('RecPass', [EmailController::class, 'RecPass']);
+Route::put('mod_pass', [RecPassword::class, 'modPass']);
+Route::post('is_us_mod_pass', [RecPassword::class, 'isUser']);
 
 Route::group(['middleware' => 'auth:api'], function() {
 
@@ -45,11 +48,11 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::group(['middleware' => 'isTutor'], function() {
 
-        // Relacion con cursos y empresas de prácticas
+// Relacion con cursos y empresas de prácticas
         Route::post('addEmpresaCurso', [EmpresaCursoController::class, 'store']);
         Route::delete('deleteEmpresaCurso/{idEmpresa}/{idCurso}', [EmpresaCursoController::class, 'destroy']);
 
-        // Rutas Fct
+// Rutas Fct
         Route::post('addAlumnoPracticas', [FctController::class, 'store']);
         Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
 
@@ -77,7 +80,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::delete('curso/{cursoId}', [CursosController::class, 'destroy']);
         Route::get('cursos/{dniTutor}', [CursosController::class, 'index2']);
 
-        //----------------------ANEXOS
+//----------------------ANEXOS
         Route::get('anexos', [AnexosController::class, 'index']);
 
         Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
@@ -93,22 +96,22 @@ Route::group(['middleware' => 'auth:api'], function() {
 
         Route::post('getAnexo5', [AnexosController::class, 'anexo5']);
 // Rutas Fct
-Route::post('addAlumnoPracticas', [FctController::class, 'store']);
-Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
-Route::get('alumnoFct/{dniAlumno}', [FctController::class, 'getAlumntoFct']);
-Route::put('updateAlumnoPracticas/{dniAlumno}', [FctController::class, 'updateAlumnoFct']);
+        Route::post('addAlumnoPracticas', [FctController::class, 'store']);
+        Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
+        Route::get('alumnoFct/{dniAlumno}', [FctController::class, 'getAlumntoFct']);
+        Route::put('updateAlumnoPracticas/{dniAlumno}', [FctController::class, 'updateAlumnoFct']);
 
         Route::get('descargarAnexo/{id}', [AnexosController::class, 'descargar']);
     });
 // Rutas Responsables de las empresas
-Route::get('responsablesEmpresas', [EmpresaPerfilesController::class, 'index']);
-Route::get('responsablesEmpresas/{idEmpresa}', [EmpresaPerfilesController::class, 'showResponsabesEmpresa']);
+    Route::get('responsablesEmpresas', [EmpresaPerfilesController::class, 'index']);
+    Route::get('responsablesEmpresas/{idEmpresa}', [EmpresaPerfilesController::class, 'showResponsabesEmpresa']);
 
 //Perfil
-Route::post('cambiarFoto/{dni}', [PersonaController::class, 'cambiarFoto']);
+    Route::post('cambiarFoto/{dni}', [PersonaController::class, 'cambiarFoto']);
 
     Route::group(['middleware' => 'isJeEst'], function() {
-        // ADMINISTRACION
+// ADMINISTRACION
         Route::post('generarProfesores', [AdminController::class, 'insertProfesores']);
         Route::post('generarAlumnos/{idCurso}/{cicloCurso}', [AdminController::class, 'insertAlumnos']);
         Route::post('addJefeEstudios', [CentroController::class, 'addJefeEstudios']);
