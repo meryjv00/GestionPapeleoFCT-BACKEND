@@ -25,5 +25,9 @@ class Fct extends Model {
         'desplazamiento',
         'semiPresencial'
     ];
+    
+    public function fcts(){
+        return $this->hasOne(EmpresaPerfiles::class, 'dniResponsable', 'dniResponsable');
+    }
 
 }
