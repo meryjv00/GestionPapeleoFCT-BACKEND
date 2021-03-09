@@ -93,6 +93,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('getAnexo4', [AnexosController::class, 'anexo4']);
 
         Route::post('getAnexo5', [AnexosController::class, 'anexo5']);
+        
+        Route::post('getAnexo6', [AnexosController::class, 'anexo6']);
+        
+        Route::post('getAnexo7', [AnexosController::class, 'anexo7']);
+        
 // Rutas Fct
         Route::post('addAlumnoPracticas', [FctController::class, 'store']);
         Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);

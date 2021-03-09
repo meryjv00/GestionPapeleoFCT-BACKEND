@@ -16,6 +16,7 @@
         "laravel/passport": "^10.1",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
+        "phpoffice/phpspreadsheet": "^1.17",
         "phpoffice/phpword": "^0.17.0"
     },
     "require-dev": {
