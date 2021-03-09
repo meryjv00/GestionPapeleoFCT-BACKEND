@@ -142,4 +142,11 @@ class CursosController extends Controller {
         return response()->json(['code' => 200, 'message' => 'Alumnos borrados correctamente']);
     }
 
+    public function updateAnio(Request $request) {
+        \DB::table('cursos')
+                ->update(['cursoAcademico' => $request->get('anio')]);
+        
+        return response()->json(['code' => 200, 'message' => 'Año actualizado correctamente']);
+    }
+
 }
