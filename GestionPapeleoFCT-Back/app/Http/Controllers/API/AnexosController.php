@@ -169,13 +169,17 @@ class AnexosController extends Controller {
     public function anexo1(Request $req) {
         //--------------------------DATOS
         //Convenio
-        $convenio = Convenio::where('numConvenio', 'LIKE', $req->input('datos')['numConvenio'])->first();
+        //$convenio = Convenio::where('numConvenio', 'LIKE', $req->input('datos')['numConvenio'])->first();
+        $convenio = Convenio::where('numConvenio', 'LIKE', '12345')->first();
+        
         if (!$convenio) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido encontrar el convenio.'])], 404);
         }
 
         //Curso
-        $curso = Curso::find($req->input('datos')['idCurso']);
+        //$curso = Curso::find($req->input('datos')['idCurso']);
+        $curso = Curso::find(8);
+        
         if (!$curso) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido encontrar el curso.'])], 404);
         }
@@ -188,13 +192,15 @@ class AnexosController extends Controller {
 
         //Empresa
         $empresa = Empresa::find($convenio->idEmpresa);
+        
+        $nombreRepresentante = $empresa->nombreRepresentante;
 
         //Alumnos-fct (filas)
         $alumnosfct = [];
-        $consulta = \DB::select('SELECT personas.nombre, personas.apellidos, personas.dni, personas.localidad, fct_alumno.fechaComienzo, fct_alumno.fechaFin, fct_alumno.nombreResponsable, fct_alumno.horarioDiario, fct_alumno.nHoras '
+        $consulta = \DB::select('SELECT personas.nombre, personas.apellidos, personas.dni, personas.localidad, fct_alumno.fechaComienzo, fct_alumno.fechaFin, fct_alumno.horarioDiario, fct_alumno.nHoras '
                         . 'FROM personas INNER JOIN fct_alumno ON personas.dni = fct_alumno.dniAlumno '
                         . 'WHERE fct_alumno.idEmpresa = ' . $empresa->id . ' AND personas.dni IN (SELECT dniAlumno FROM curso_alumno WHERE idCurso = ' . $curso->id . ')');
-        $nombreResponsable;
+        
         foreach ($consulta as $datos) {
             $nombreCompleto = $datos->nombre . ' ' . $datos->apellidos;
             $alumno = array(
@@ -207,7 +213,6 @@ class AnexosController extends Controller {
                 'fechaFin' => $datos->fechaFin
             );
             $alumnosfct[] = $alumno;
-            $nombreResponsable = $datos->nombreResponsable;
         }
 
 
@@ -228,7 +233,7 @@ class AnexosController extends Controller {
         $nombreTutor = $tutor->apellidos . ', ' . $tutor->nombre;
         $templateProcessor->setValue('nombreTutor', $nombreTutor);
 
-        $templateProcessor->setValue('nombreResponsable', $nombreResponsable);
+        $templateProcessor->setValue('nombreRepresentante', $nombreRepresentante);
 
         //Inserta las filas de los alumnos de la FCT
         $templateProcessor->cloneRowAndSetValues('nombreCompleto', $alumnosfct);
