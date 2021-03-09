@@ -51,8 +51,8 @@ Route::group(['middleware' => 'auth:api'], function() {
         // Rutas Fct
         Route::post('addAlumnoPracticas', [FctController::class, 'store']);
         Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
-Route::post('addResponsableEmpresa', [EmpresasController::class, 'addResponsable']);
-Route::post('deleteResponsableEmpresa', [EmpresasController::class, 'deleteResponsable']);
+        Route::post('addResponsableEmpresa', [EmpresasController::class, 'addResponsable']);
+        Route::post('deleteResponsableEmpresa', [EmpresasController::class, 'deleteResponsable']);
 
         Route::get('empresas', [EmpresasController::class, 'index']);
         Route::get('empresasNoCurso/{id}', [EmpresasController::class, 'showEmpresaNoCurso']);
@@ -94,6 +94,7 @@ Route::post('deleteResponsableEmpresa', [EmpresasController::class, 'deleteRespo
 
         Route::post('getAnexo5', [AnexosController::class, 'anexo5']);
 // Rutas Fct
+Route::get('countAlumnoPracticas/{idCurso}', [FctController::class, 'countAlumnoPracticas']);
 Route::post('addAlumnoPracticas', [FctController::class, 'store']);
 Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
 Route::get('alumnoFct/{dniAlumno}', [FctController::class, 'getAlumntoFct']);
