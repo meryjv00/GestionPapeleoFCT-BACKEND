@@ -169,16 +169,14 @@ class AnexosController extends Controller {
     public function anexo1(Request $req) {
         //--------------------------DATOS
         //Convenio
-        //$convenio = Convenio::where('numConvenio', 'LIKE', $req->input('datos')['numConvenio'])->first();
-        $convenio = Convenio::where('numConvenio', 'LIKE', '12345')->first();
+        $convenio = Convenio::where('numConvenio', 'LIKE', $req->input('datos')['numConvenio'])->first();
         
         if (!$convenio) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido encontrar el convenio.'])], 404);
         }
-
+        
         //Curso
-        //$curso = Curso::find($req->input('datos')['idCurso']);
-        $curso = Curso::find(8);
+        $curso = Curso::find($req->input('datos')['idCurso']);
         
         if (!$curso) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido encontrar el curso.'])], 404);
@@ -239,7 +237,7 @@ class AnexosController extends Controller {
         $templateProcessor->cloneRowAndSetValues('nombreCompleto', $alumnosfct);
 
         //Nombre del archivo
-        $fileName = "Anexo1Alumnos" . $empresa->nombre;
+        $fileName = "Anexo1Alumnos-" . $empresa->nombre . '-' . $curso->cicloFormativoA;
 
         //Guardar registro en BD
         $anexoGen = AnexosGenerados::create([
@@ -255,24 +253,26 @@ class AnexosController extends Controller {
 
     /**
      * Genera un anexo 2
-     * Recibe el OBJETO datos {idAlumno, idEmpresa, idCurso}
+     * Recibe el OBJETO datos {idEmpresa, idCurso}
      */
     public function anexo2(Request $req) {
         //--------------------------DATOS
         //Curso
         $curso = Curso::find($req->get('datos')['idCurso']);
+        //$curso = Curso::find(8);
 
         //Empresa
         $empresa = Empresa::find($req->get('datos')['idEmpresa']);
+        //$empresa = Empresa::find(1);
 
-        //Alumno
-        $alumno = Persona::find($req->get('datos')['idAlumno']);
 
         //FCT
-        $fct = Fct::where('idEmpresa', '=', $empresa->id)
+        /*
+        $fct = Fct::with('fcts')
+                ->where('idEmpresa', '=', $empresa->id)
                 ->where('dniAlumno', 'LIKE', $alumno->dni)
-                ->first();
-
+                ->get();*/
+        
         //Centro
         $centro = Centro::all()->last();
 
@@ -297,18 +297,16 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('centroTrabajo', $centroTrabajo);
 
         //Datos de la fct del alumno
-        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
-        $templateProcessor->setValue('fechaComienzo', $fct->fechaComienzo);
-        $templateProcessor->setValue('fechaFin', $fct->fechaFin);
-        $templateProcessor->setValue('nHoras', $fct->nHoras);
+        $templateProcessor->setValue('nombreRepresentante', $empresa->nombreRepresentante);
+        $templateProcessor->setValue('cursoAcademico', $curso->cursoAcademico);
+        $templateProcessor->setValue('nHoras', $curso->nHoras);
 
         //Datos del curso
         $templateProcessor->setValue('familiaProfesional', $curso->familiaProfesional);
         $templateProcessor->setValue('cicloFormativo', $curso->cicloFormativo);
-        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
 
         //Nombre del archivo
-        $fileName = "Anexo2ProgramaFormativo-" . $alumno->nombre . $alumno->apellidos;
+        $fileName = "Anexo2ProgramaFormativo-" . $empresa->nombre . '-' . $curso->cicloFormativoA;
 
         //Guardar registro en BD
         $anexoGen = AnexosGenerados::create([
@@ -320,6 +318,7 @@ class AnexosController extends Controller {
         //Guardar
         $templateProcessor->saveAs($fileName . '.docx');
         return response()->json(['code' => 201, 'message' => $idAnexo], 201);
+        
     }
 
     /**
@@ -382,7 +381,7 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('nombreAlumno', $nombreAlumno);
 
         //Nombre del archivo
-        $fileName = "Anexo3HojaSemanal-" . $alumno->nombre . $alumno->apellidos;
+        $fileName = "Anexo3HojaSemanal - " . $alumno->nombre . $alumno->apellidos;
 
         //Guardar registro en BD
         $anexoGen = AnexosGenerados::create([
