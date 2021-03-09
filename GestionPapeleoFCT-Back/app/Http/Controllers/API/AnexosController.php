@@ -551,13 +551,11 @@ class AnexosController extends Controller {
 
     /**
      * Genera un anexo 6
-     * Recibe el OBJETO datos {idEmpresa, idCurso}
+     * Recibe el OBJETO datos { idCurso }
      * @param Request $req
      */
     public function anexo6(Request $req) {
         //--------------------------DATOS
-        $idEmpresa = $req->get('datos')['idEmpresa'];
-        
         //Curso
         $curso = Curso::find($req->get('datos')['idCurso']);
 
@@ -568,9 +566,9 @@ class AnexosController extends Controller {
         $tutor = Persona::where('dni', 'LIKE', $curso->dniTutor)->first();
         $nombreTutor = $tutor->nombre . ' ' . $tutor->apellidos;
 
-        //Nombres de los alumnos que pertenecen a ese curso, hacen practicas en esa empresa y TIENEN desplazamiento
+        //Nombres de los alumnos que pertenecen a ese curso y TIENEN desplazamiento
         $consulta = \DB::select('SELECT nombre, apellidos FROM personas WHERE dni IN '
-                        . '(SELECT dniAlumno FROM fct_alumno WHERE idEmpresa=' . $idEmpresa . ' AND desplazamiento=1 AND dniAlumno IN '
+                        . '(SELECT dniAlumno FROM fct_alumno WHERE  desplazamiento=1 AND dniAlumno IN '
                         . '(SELECT dniAlumno FROM curso_alumno WHERE idCurso=' . $curso->id . '))');
 
         $alumnosDesplazamiento = [];
@@ -591,6 +589,7 @@ class AnexosController extends Controller {
         $worksheet->getCell('J1')->setValue($centro->codigo);   //Codigo del centro
         $worksheet->getCell('B2')->setValue($nombreTutor);  //Nombre del tutor
         $worksheet->getCell('B3')->setValue($curso->cicloFormativo);    //Ciclo formativo
+        $worksheet->getCell('J3')->setValue($curso->nHoras);    //Numero de horas
         
         //Se insertan los alumnos
         foreach ($alumnosDesplazamiento as $i => $alumno) {
@@ -619,13 +618,11 @@ class AnexosController extends Controller {
 
     /**
      * Genera un anexo 7
-     * Recibe el OBJETO datos {idEmpresa, idCurso}
+     * Recibe el OBJETO datos { idCurso }
      * @param Request $req
      */
     public function anexo7(Request $req) {
         //--------------------------DATOS
-        $idEmpresa = $req->get('datos')['idEmpresa'];
-
         //Curso
         $curso = Curso::find($req->get('datos')['idCurso']);
 
@@ -635,9 +632,9 @@ class AnexosController extends Controller {
         //Tutor
         $tutor = Persona::where('dni', 'LIKE', $curso->dniTutor)->first();
 
-        //Nombres de los alumnos que pertenecen a ese curso, hacen practicas en esa empresa y TIENEN desplazamiento
+        //Nombres de los alumnos que pertenecen a ese curso y TIENEN desplazamiento
         $consulta = \DB::select('SELECT nombre, apellidos FROM personas WHERE dni IN '
-                        . '(SELECT dniAlumno FROM fct_alumno WHERE idEmpresa=' . $idEmpresa . ' AND desplazamiento=1 AND dniAlumno IN '
+                        . '(SELECT dniAlumno FROM fct_alumno WHERE desplazamiento=1 AND dniAlumno IN '
                         . '(SELECT dniAlumno FROM curso_alumno WHERE idCurso=' . $curso->id . '))');
 
         $alumnosDesplazamiento = [];
@@ -664,6 +661,7 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('cursoAcademico', $curso->cursoAcademico);
         $templateProcessor->setValue('cicloFormativo', $curso->cicloFormativo);
         $templateProcessor->setValue('familiaProfesional', $curso->familiaProfesional);
+        $templateProcessor->setValue('nHoras', $curso->nHoras);
 
         //Tutor
         $nombreTutor = $tutor->nombre . ' ' . $tutor->apellidos;

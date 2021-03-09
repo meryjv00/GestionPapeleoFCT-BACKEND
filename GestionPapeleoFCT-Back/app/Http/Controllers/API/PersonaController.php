@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Persona;
 use App\Models\CursoAlumno;
+use App\Models\Fct;
 
 class PersonaController extends Controller {
 
@@ -139,6 +140,12 @@ class PersonaController extends Controller {
                             ->from('fct_alumno')
                             ->where('idEmpresa', $idEmpresa);
                         })->get();
+
+        foreach ($personas as $persona) {
+            $desplazamiento = Fct::where('dniAlumno', 'LIKE', $persona->dni)->first();
+            $persona['desplazamiento'] = $desplazamiento->desplazamiento;
+        }
+
         return response()->json(['code' => 200, 'message' => $personas]);
     }
 
