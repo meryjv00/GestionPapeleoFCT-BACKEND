@@ -14,6 +14,29 @@ class EmpresasSeeder extends Seeder {
      * @return void
      */
     public function run() {
+        /**
+        $path = public_path('csv/2021.03.09 Empresas.csv');
+        $lines = file($path);
+        $utf8_lines = array_map('utf8_encode', $lines);
+        $array = array_map('str_getcsv', $utf8_lines);
+
+        for ($i = 1; $i < count($array); $i++) {
+            Empresa::create([
+                'nombre' => explode(",", $array[$i][5]),
+                'provincia' => explode(",", $array[$i][5]),
+                'localidad' => explode(",", $array[$i][5]),
+                'calle' => explode(",", $array[$i][5]),
+                'cp' => explode(",", $array[$i][5]),
+                'cif' => explode(",", $array[$i][5]),
+                'tlf' => explode(",", $array[$i][5]),
+                'email' => explode(",", $array[$i][5]),
+                'dniRepresentante' => explode(",", $array[$i][5]),
+                'nombreRepresentante' => explode(",", $array[$i][5])
+            ]);
+        }
+         * 
+         */
+        
         Empresa::create([
             'nombre' => 'Indra',
             'provincia' => 'Ciudad Real',
