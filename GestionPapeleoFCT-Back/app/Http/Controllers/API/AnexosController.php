@@ -170,12 +170,14 @@ class AnexosController extends Controller {
         //--------------------------DATOS
         //Convenio
         $convenio = Convenio::where('numConvenio', 'LIKE', $req->input('datos')['numConvenio'])->first();
+        
         if (!$convenio) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido encontrar el convenio.'])], 404);
         }
-
+        
         //Curso
         $curso = Curso::find($req->input('datos')['idCurso']);
+        
         if (!$curso) {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido encontrar el curso.'])], 404);
         }
@@ -188,13 +190,15 @@ class AnexosController extends Controller {
 
         //Empresa
         $empresa = Empresa::find($convenio->idEmpresa);
+        
+        $nombreRepresentante = $empresa->nombreRepresentante;
 
         //Alumnos-fct (filas)
         $alumnosfct = [];
-        $consulta = \DB::select('SELECT personas.nombre, personas.apellidos, personas.dni, personas.localidad, fct_alumno.fechaComienzo, fct_alumno.fechaFin, fct_alumno.nombreResponsable, fct_alumno.horarioDiario, fct_alumno.nHoras '
+        $consulta = \DB::select('SELECT personas.nombre, personas.apellidos, personas.dni, personas.localidad, fct_alumno.fechaComienzo, fct_alumno.fechaFin, fct_alumno.horarioDiario, fct_alumno.nHoras '
                         . 'FROM personas INNER JOIN fct_alumno ON personas.dni = fct_alumno.dniAlumno '
                         . 'WHERE fct_alumno.idEmpresa = ' . $empresa->id . ' AND personas.dni IN (SELECT dniAlumno FROM curso_alumno WHERE idCurso = ' . $curso->id . ')');
-        $nombreResponsable;
+        
         foreach ($consulta as $datos) {
             $nombreCompleto = $datos->nombre . ' ' . $datos->apellidos;
             $alumno = array(
@@ -207,7 +211,6 @@ class AnexosController extends Controller {
                 'fechaFin' => $datos->fechaFin
             );
             $alumnosfct[] = $alumno;
-            $nombreResponsable = $datos->nombreResponsable;
         }
 
 
@@ -228,13 +231,13 @@ class AnexosController extends Controller {
         $nombreTutor = $tutor->apellidos . ', ' . $tutor->nombre;
         $templateProcessor->setValue('nombreTutor', $nombreTutor);
 
-        $templateProcessor->setValue('nombreResponsable', $nombreResponsable);
+        $templateProcessor->setValue('nombreRepresentante', $nombreRepresentante);
 
         //Inserta las filas de los alumnos de la FCT
         $templateProcessor->cloneRowAndSetValues('nombreCompleto', $alumnosfct);
 
         //Nombre del archivo
-        $fileName = "Anexo1Alumnos" . $empresa->nombre;
+        $fileName = "Anexo1Alumnos-" . $empresa->nombre . '-' . $curso->cicloFormativoA;
 
         //Guardar registro en BD
         $anexoGen = AnexosGenerados::create([
@@ -250,24 +253,26 @@ class AnexosController extends Controller {
 
     /**
      * Genera un anexo 2
-     * Recibe el OBJETO datos {idAlumno, idEmpresa, idCurso}
+     * Recibe el OBJETO datos {idEmpresa, idCurso}
      */
     public function anexo2(Request $req) {
         //--------------------------DATOS
         //Curso
         $curso = Curso::find($req->get('datos')['idCurso']);
+        //$curso = Curso::find(8);
 
         //Empresa
         $empresa = Empresa::find($req->get('datos')['idEmpresa']);
+        //$empresa = Empresa::find(1);
 
-        //Alumno
-        $alumno = Persona::find($req->get('datos')['idAlumno']);
 
         //FCT
-        $fct = Fct::where('idEmpresa', '=', $empresa->id)
+        /*
+        $fct = Fct::with('fcts')
+                ->where('idEmpresa', '=', $empresa->id)
                 ->where('dniAlumno', 'LIKE', $alumno->dni)
-                ->first();
-
+                ->get();*/
+        
         //Centro
         $centro = Centro::all()->last();
 
@@ -292,18 +297,16 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('centroTrabajo', $centroTrabajo);
 
         //Datos de la fct del alumno
-        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
-        $templateProcessor->setValue('fechaComienzo', $fct->fechaComienzo);
-        $templateProcessor->setValue('fechaFin', $fct->fechaFin);
-        $templateProcessor->setValue('nHoras', $fct->nHoras);
+        $templateProcessor->setValue('nombreRepresentante', $empresa->nombreRepresentante);
+        $templateProcessor->setValue('cursoAcademico', $curso->cursoAcademico);
+        $templateProcessor->setValue('nHoras', $curso->nHoras);
 
         //Datos del curso
         $templateProcessor->setValue('familiaProfesional', $curso->familiaProfesional);
         $templateProcessor->setValue('cicloFormativo', $curso->cicloFormativo);
-        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
 
         //Nombre del archivo
-        $fileName = "Anexo2ProgramaFormativo-" . $alumno->nombre . $alumno->apellidos;
+        $fileName = "Anexo2ProgramaFormativo-" . $empresa->nombre . '-' . $curso->cicloFormativoA;
 
         //Guardar registro en BD
         $anexoGen = AnexosGenerados::create([
@@ -315,6 +318,7 @@ class AnexosController extends Controller {
         //Guardar
         $templateProcessor->saveAs($fileName . '.docx');
         return response()->json(['code' => 201, 'message' => $idAnexo], 201);
+        
     }
 
     /**
@@ -377,7 +381,7 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('nombreAlumno', $nombreAlumno);
 
         //Nombre del archivo
-        $fileName = "Anexo3HojaSemanal-" . $alumno->nombre . $alumno->apellidos;
+        $fileName = "Anexo3HojaSemanal - " . $alumno->nombre . $alumno->apellidos;
 
         //Guardar registro en BD
         $anexoGen = AnexosGenerados::create([
