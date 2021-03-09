@@ -379,7 +379,7 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('nombreAlumno', $nombreAlumno);
 
         //Nombre del archivo
-        $fileName = "Anexo3HojaSemanal - " . $alumno->nombre . $alumno->apellidos;
+        $fileName = "Anexo3HojaSemanal - " . $alumno->nombre . ' ' . $alumno->apellidos;
 
         //Guardar registro en BD
         $anexoGen = AnexosGenerados::create([
@@ -453,7 +453,7 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('nombreAlumno', $nombreAlumno);
 
         //Nombre del archivo
-        $fileName = "Anexo4Evaluacion-" . $alumno->nombre . $alumno->apellidos;
+        $fileName = "Anexo4Evaluacion-" . $alumno->nombre . ' ' . $alumno->apellidos;
 
         //Guardar registro en BD
         $anexoGen = AnexosGenerados::create([
@@ -528,7 +528,7 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('direccionEmpresa', $direccionEmpresa);
 
         //Nombre del archivo
-        $fileName = "Anexo5Recibi-" . $alumno->nombre . $alumno->apellidos;
+        $fileName = "Anexo5Recibi-" . $alumno->nombre . ' ' . $alumno->apellidos;
 
         //Guardar registro en BD
         $anexoGen = AnexosGenerados::create([
