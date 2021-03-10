@@ -6,8 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Models\User;
 
-use App\Models\User;
-
 class notUser {
 
     /**
