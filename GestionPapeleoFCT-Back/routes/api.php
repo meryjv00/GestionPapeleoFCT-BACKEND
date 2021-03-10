@@ -32,7 +32,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::post('register', [AuthController::class, 'register'])->middleware('notUser');
-Route::post('register_persona', [AuthController::class, 'register_persona'])->middleware('notPersona');
+Route::post('register_persona', [AuthController::class, 'register_persona']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('isPersona', [AuthController::class, 'isPersona']);
 Route::post('RecPass', [EmailController::class, 'RecPass']);

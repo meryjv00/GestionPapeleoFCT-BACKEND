@@ -16,9 +16,7 @@ class EmailController extends Controller {
             'asunto' => $request->input('asunto'),
             'email' => $request->input('email')
         ];
-
-        $email = 'sergiosusin.ssc@gmail.com';
-
+        $email = $datos['email'];
         //Le mando la vista 'Mensahe' como cuerpo del correo.
         \Mail::send('Mensaje', $datos, function($message) use ($email) {
             $message->to($email)->subject('Correo de información');
