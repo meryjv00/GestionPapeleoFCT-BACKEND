@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Persona;
 use App\Models\RolUsuario;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Curso;
 
 class AuthController extends Controller {
@@ -146,7 +145,7 @@ class AuthController extends Controller {
     public function mod_user_pass(Request $request) {
         $user = User::where('email', $request->input('email'))->first();
 
-        if (\Hash::check($request->input("password"), $user->passwprd)) {
+        if (\Hash::check($request->input("password"), $user->password)) {
             return response()->json(['message' => 'Contraseña incorrectas. Revise las credenciales.', 'code' => 400], 400);
         }
 
@@ -195,7 +194,6 @@ class AuthController extends Controller {
         if (count($usu) == 0) {
             return response()->json(['message' => 'Cuenta desactivada, contacte con el director.', 'code' => 400], 400);
         }
-
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
         //Buscamos el dni del email introducido para posteriormente buscarlo en personas; ya que puede tener un correo diferente al registrarse
         //que el que tiene registrado en la BD
