@@ -145,7 +145,7 @@ class AuthController extends Controller {
     public function mod_user_pass(Request $request) {
         $user = User::where('email', $request->input('email'))->first();
 
-        if (\Hash::check($request->input("password"), $user->password)) {
+        if (!\Hash::check($request->input("password"), $user->password)) {
             return response()->json(['message' => 'Contraseña incorrectas. Revise las credenciales.', 'code' => 400], 400);
         }
 
