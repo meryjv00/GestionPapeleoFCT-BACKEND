@@ -45,7 +45,7 @@ class EmpresasController extends Controller {
             return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido registrar la empresa ' . $empresa])], 404);
         }
 
-        return response()->json(['code' => 201, 'message' => 'Datos insertados correctamente'], 201);
+        return response()->json(['code' => 201, 'message' => 'Datos insertados correctamente', 'empresa' => $empresaBD], 201);
     }
 
     /**
