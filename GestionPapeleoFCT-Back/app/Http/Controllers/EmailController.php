@@ -31,7 +31,7 @@ class EmailController extends Controller {
         $request->validate(['email' => 'required|email']);
         $email = $request->input('email');
         if  (User::where('email','=',$email)->count() != 1) {
-            return response()->json(['message' => 'User does not exist', 'code' => 200], 200);;
+            return response()->json(['message' => 'User does not exist', 'code' => 200], 200);
         }
         $tok=Str::random(60);
         
