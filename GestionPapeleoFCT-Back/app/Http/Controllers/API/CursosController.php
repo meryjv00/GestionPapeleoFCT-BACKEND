@@ -76,7 +76,7 @@ class CursosController extends Controller {
             'cursoAcademico' => $request->input('curso')['cursoAcademico'],
             'nHoras' => $request->input('curso')['nHoras']
         ]);
-        return response()->json($curso, 200);
+        return response()->json(['code' => 200, 'message' => $curso], 200);
     }
 
     /**
@@ -88,7 +88,7 @@ class CursosController extends Controller {
     public function destroy($id) {
         $destroy = Curso::destroy($id);
         if (!$destroy) {
-            return response()->json(['errors' => array(['code' => 404, 'message' => 'No se ha podido eliminar el curso ' . $id])], 404);
+            return response()->json(['message' => 'No se ha podido eliminar el curso ' . $id, 'code' => 400], 400);
         } else {
             return response()->json(['code' => 201, 'message' => 'Curso eliminado correctamente'], 201);
         }
