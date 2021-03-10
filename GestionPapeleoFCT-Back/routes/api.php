@@ -13,6 +13,7 @@ use App\Http\Controllers\API\EmpresaCursoController;
 use App\Http\Controllers\API\EmpresaPerfilesController;
 use App\Http\Controllers\API\FctController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\RecPassword;
 
 /*
   |--------------------------------------------------------------------------
@@ -34,6 +35,9 @@ Route::post('register', [AuthController::class, 'register'])->middleware('notUse
 Route::post('register_persona', [AuthController::class, 'register_persona'])->middleware('notPersona');
 Route::post('login', [AuthController::class, 'login']);
 Route::post('isPersona', [AuthController::class, 'isPersona']);
+Route::post('RecPass', [EmailController::class, 'RecPass']);
+Route::put('mod_pass', [RecPassword::class, 'modPass']);
+Route::post('is_us_mod_pass', [RecPassword::class, 'isUser']);
 
 Route::group(['middleware' => 'auth:api'], function() {
 
@@ -44,11 +48,11 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::group(['middleware' => 'isTutor'], function() {
 
-        // Relacion con cursos y empresas de prácticas
+// Relacion con cursos y empresas de prácticas
         Route::post('addEmpresaCurso', [EmpresaCursoController::class, 'store']);
         Route::delete('deleteEmpresaCurso/{idEmpresa}/{idCurso}', [EmpresaCursoController::class, 'destroy']);
 
-        // Rutas Fct
+// Rutas Fct
         Route::post('addAlumnoPracticas', [FctController::class, 'store']);
         Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
         Route::post('addResponsableEmpresa', [EmpresasController::class, 'addResponsable']);
@@ -78,7 +82,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::delete('curso/{cursoId}', [CursosController::class, 'destroy']);
         Route::get('cursos/{dniTutor}', [CursosController::class, 'index2']);
 
-        //----------------------ANEXOS
+//----------------------ANEXOS
         Route::get('anexos', [AnexosController::class, 'index']);
 
         Route::get('getAnexo0/{id}', [AnexosController::class, 'anexo0']);
@@ -114,7 +118,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('cambiarFoto/{dni}', [PersonaController::class, 'cambiarFoto']);
 
     Route::group(['middleware' => 'isJeEst'], function() {
-        // ADMINISTRACION
+// ADMINISTRACION
         Route::post('generarProfesores', [AdminController::class, 'insertProfesores']);
         Route::post('generarAlumnos/{idCurso}/{cicloCurso}', [AdminController::class, 'insertAlumnos']);
         Route::post('addJefeEstudios', [CentroController::class, 'addJefeEstudios']);
