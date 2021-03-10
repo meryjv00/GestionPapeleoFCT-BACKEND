@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('getDirector', [CentroController::class, 'getDirector']);
     Route::get('getCentro', [CentroController::class, 'getCentro'])->middleware('isLogin');
 
-    Route::group(['middleware' => 'isTutor'], function() {
+    //Route::group(['middleware' => 'isTutor'], function() {
 
 // Relacion con cursos y empresas de prácticas
         Route::post('addEmpresaCurso', [EmpresaCursoController::class, 'store']);
@@ -74,7 +74,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::get('alumnos/{idCurso}', [PersonaController::class, 'show']);
         Route::get('alumnosCursoSinEmpresa/{idCurso}', [PersonaController::class, 'alumnosCursoSinEmpresa']);
         Route::get('alumnosCursoPracticas/{idCurso}/{idEmpresa}', [PersonaController::class, 'alumnosCursoPracticas']);
-    });
+    //});
     Route::group(['middleware' => 'isProfe'], function() {
         Route::get('cursos', [CursosController::class, 'index']);
         Route::post('curso', [CursosController::class, 'store']);
