@@ -127,6 +127,7 @@ Route::put('updateAlumnoPracticas/{dniAlumno}', [FctController::class, 'updateAl
         Route::put('addTutorCurso/{idCurso}', [CursosController::class, 'addTutorCurso']);
         Route::get('getTutores', [CentroController::class, 'getTutores']);
         Route::get('cursosSinTutor', [CursosController::class, 'cursosSinTutor']);
+        Route::put('updateAnio', [CursosController::class, 'updateAnio']);
         Route::put('activarDesactCuenta/{dni}', [CentroController::class, 'activarDesactCuenta']);
         Route::put('denegarAccesoCuenta/{dni}', [CentroController::class, 'denegarAccesoCuenta']);
         Route::post('cambiarRol', [CentroController::class, 'cambiarRol']);

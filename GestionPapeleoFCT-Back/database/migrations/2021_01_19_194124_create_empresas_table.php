@@ -20,8 +20,8 @@ class CreateEmpresasTable extends Migration {
             $table->string('calle');
             $table->string('cp');
             $table->string('cif');
-            $table->string('tlf')->unique();
-            $table->string('email')->unique();
+            $table->string('tlf');
+            $table->string('email');
             $table->string('dniRepresentante');
             $table->string('nombreRepresentante');
             $table->timestamps();
