@@ -103,10 +103,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('getAnexo7', [AnexosController::class, 'anexo7']);
         
 // Rutas Fct
-        Route::post('addAlumnoPracticas', [FctController::class, 'store']);
-        Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
-        Route::get('alumnoFct/{dniAlumno}', [FctController::class, 'getAlumntoFct']);
-        Route::put('updateAlumnoPracticas/{dniAlumno}', [FctController::class, 'updateAlumnoFct']);
+Route::get('countAlumnoPracticas/{idCurso}', [FctController::class, 'countAlumnoPracticas']);
+Route::post('addAlumnoPracticas', [FctController::class, 'store']);
+Route::delete('deleteAlumnoPracticas/{dniAlumno}', [FctController::class, 'destroy']);
+Route::get('alumnoFct/{dniAlumno}', [FctController::class, 'getAlumntoFct']);
+Route::put('updateAlumnoPracticas/{dniAlumno}', [FctController::class, 'updateAlumnoFct']);
 
         Route::get('descargarAnexo/{id}', [AnexosController::class, 'descargar']);
     });

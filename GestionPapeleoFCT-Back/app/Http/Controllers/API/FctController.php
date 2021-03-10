@@ -84,4 +84,20 @@ class FctController extends Controller
         return response()->json($request, 200);
     }
 
+    // Método para saber cuantos alumnos hay en practica en cada empresa
+    public function countAlumnoPracticas($idCurso){
+        // SELECT idEmpresa, COUNT(dniAlumno) FROM fct_alumno WHERE dniAlumno IN(SELECT dniAlumno FROM curso_alumno WHERE idCurso=$idCurso) GROUP BY idEmpresa;
+        $countAlumnos = Fct::selectRaw('idEmpresa, count(*) as alumnos')
+                            ->whereIn('dniAlumno', function($query) use ($idCurso) {
+                                $query->select('dniAlumno')
+                                ->from('curso_alumno')
+                                ->where('idCurso', $idCurso);
+                            })
+                            ->groupBy('idEmpresa')
+                            ->get();
+
+
+        // $countAlumnos = \DB::select('SELECT idEmpresa, COUNT(dniAlumno) FROM fct_alumno WHERE dniAlumno IN(SELECT dniAlumno FROM curso_alumno WHERE idCurso='.$idCurso.') GROUP BY idEmpresa');
+        return response()->json(['code' => 200, 'message' => $countAlumnos]);
+    }
 }
