@@ -14,6 +14,7 @@ use App\Models\Empresa;
 use App\Models\Persona;
 use App\Models\Convenio;
 use App\Models\Curso;
+use App\Models\EmpresaPerfiles;
 use App\Models\Fct;
 
 class AnexosController extends Controller {
@@ -261,16 +262,8 @@ class AnexosController extends Controller {
         //--------------------------DATOS
         //Curso
         $curso = Curso::find($req->get('datos')['idCurso']);
-        //$curso = Curso::find(8);
         //Empresa
         $empresa = Empresa::find($req->get('datos')['idEmpresa']);
-        //$empresa = Empresa::find(1);
-        //FCT
-        /*
-          $fct = Fct::with('fcts')
-          ->where('idEmpresa', '=', $empresa->id)
-          ->where('dniAlumno', 'LIKE', $alumno->dni)
-          ->get(); */
 
         //Centro
         $centro = Centro::all()->last();
@@ -340,6 +333,9 @@ class AnexosController extends Controller {
                 ->where('dniAlumno', 'LIKE', $alumno->dni)
                 ->first();
 
+        //Responsable
+        $responsable = EmpresaPerfiles::where('dniResponsable','LIKE',$fct->dniResponsable)->first();
+
         //Centro
         $centro = Centro::all()->last();
 
@@ -364,7 +360,7 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('centroTrabajo', $centroTrabajo);
 
         //Datos de la fct del alumno
-        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
+        $templateProcessor->setValue('nombreResponsable', $responsable->nombreResponsable);
         $templateProcessor->setValue('fechaComienzo', $fct->fechaComienzo);
         $templateProcessor->setValue('fechaFin', $fct->fechaFin);
         $templateProcessor->setValue('nHoras', $fct->nHoras);
@@ -372,7 +368,6 @@ class AnexosController extends Controller {
         //Datos del curso
         $templateProcessor->setValue('familiaProfesional', $curso->familiaProfesional);
         $templateProcessor->setValue('cicloFormativo', $curso->cicloFormativo);
-        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
 
         //Alumno
         $nombreAlumno = $alumno->nombre . ' ' . $alumno->apellidos;
@@ -414,6 +409,9 @@ class AnexosController extends Controller {
                 ->where('dniAlumno', 'LIKE', $alumno->dni)
                 ->first();
 
+        //Responsable
+        $responsable = EmpresaPerfiles::where('dniResponsable','LIKE',$fct->dniResponsable)->first();
+
         //Centro
         $centro = Centro::all()->last();
 
@@ -438,7 +436,7 @@ class AnexosController extends Controller {
         $templateProcessor->setValue('centroTrabajo', $centroTrabajo);
 
         //Datos de la fct del alumno
-        $templateProcessor->setValue('nombreResponsable', $fct->nombreResponsable);
+        $templateProcessor->setValue('nombreResponsable', $responsable->nombreResponsable);
         $templateProcessor->setValue('fechaComienzo', $fct->fechaComienzo);
         $templateProcessor->setValue('fechaFin', $fct->fechaFin);
         $templateProcessor->setValue('nHoras', $fct->nHoras);
