@@ -12,7 +12,7 @@ services:
       MYSQL_PASSWORD: Chubaca2020
       MYSQL_ROOT_PASSWORD: Chubaca2020
     ports:
-      - 3307:3306
+      - 3306:3306
     networks:
       - laravel
         
@@ -24,7 +24,7 @@ services:
     volumes:
       - ./storage:/var/www/html/storage
     ports:
-      - 8081:80
+      - 8000:80
     depends_on: 
       - 'mariadb'
     networks:
