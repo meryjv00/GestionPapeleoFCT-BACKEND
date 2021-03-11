@@ -19,15 +19,15 @@ docker exec api_laravel php -r "unlink('composer-setup.php');"
 
 #Actualiza las dependencias
 echo '-------------------------ACTUALIZANDO DEPENDENCIAS------------------------'
-docker exec api_laravel composer install
+docker exec api_laravel composer update
 
 #Cambia los permisos y genera la clave
 docker exec api_laravel chmod 777 -R .
-docker exec api_laravel php artisan key:generate
+#docker exec api_laravel php artisan key:generate
 
 #Inicia la bd
 echo '-------------------------INICIANDO BD------------------------'
-docker exec api_laravel php artisan migrate
-docker exec api_laravel php artisan db:seed
-docker exec api_laravel php artisan passport:client --personal
-docker exec api_laravel php artisan passport:install
+#docker exec api_laravel php artisan migrate
+#docker exec api_laravel php artisan db:seed
+#docker exec api_laravel php artisan passport:client --personal
+#docker exec api_laravel php artisan passport:install
