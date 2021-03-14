@@ -13,16 +13,16 @@ docker-compose up -d
 
 #Instala composer
 echo '--------------------------INSTALANDO COMPOSER------------------------'
-docker exec api_laravel php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-docker exec api_laravel php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-docker exec api_laravel php -r "unlink('composer-setup.php');"
+docker exec api_laravel_fct php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+docker exec api_laravel_fct php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+docker exec api_laravel_fct php -r "unlink('composer-setup.php');"
 
 #Actualiza las dependencias
 echo '-------------------------ACTUALIZANDO DEPENDENCIAS------------------------'
-docker exec api_laravel composer update
+docker exec api_laravel_fct composer update
 
 #Cambia los permisos y genera la clave
-docker exec api_laravel chmod 777 -R .
+docker exec api_laravel_fct chmod 777 -R .
 #docker exec api_laravel php artisan key:generate
 
 #Inicia la bd
