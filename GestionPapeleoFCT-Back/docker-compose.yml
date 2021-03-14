@@ -16,8 +16,8 @@ services:
     networks:
       - laravel
         
-  api_laravel:
-    container_name: api_laravel
+  api_laravel_fct:
+    container_name: api_laravel_fct
     build:
       context: .
       dockerfile: Dockerfile
