@@ -1,8 +1,8 @@
 version: "3.7"
  
 services: 
-  mariadb:
-    container_name: mariadb
+  mariadb_fct:
+    container_name: mariadb_fct
     image: mariadb:latest
     volumes:
       - ./mariadb/data:/var/lib/mysql
@@ -24,9 +24,9 @@ services:
     volumes:
       - ./storage:/var/www/html/storage
     ports:
-      - 8091:80
+      - 8084:80
     depends_on: 
-      - 'mariadb'
+      - 'mariadb_fct'
     networks:
       - laravel
 
